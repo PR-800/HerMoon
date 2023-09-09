@@ -10,6 +10,8 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import TutorialScreen from "../screens/TutorialScreen";
 
+import HomeScreen from "../screens/HomeScreen"
+
 const PageLoginNavigator = createNativeStackNavigator();
 const MainNavigator = createNativeStackNavigator();
 
@@ -40,7 +42,7 @@ export default function Navigator() {
     return (
         <NavigationContainer>
             <MainNavigator.Navigator>
-                <MainNavigator.Screen name="main" component={MyLoginNavigator}
+                <MainNavigator.Screen name="main" component={HomeScreen}
                     options={{
                         headerShown: false
                     }}
