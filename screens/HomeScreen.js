@@ -10,12 +10,27 @@ const HomeScreen = ({ navigation }) => {
                 <Text style={{ fontSize: 20, fontWeight: 'bold'}}>Leslie Alexander</Text>  
             </View>
 
+            <View style={{marginLeft: -250}}>
+                <Image
+                    source={require('../assets/clock-icon.png')}
+                    style={styles.image}
+                />
+            </View>
+
             <View>
                 <Image
                     source={require('../assets/Profile-icon.png')}
                     style={{ width: 300, height: 300 }}
                 />
             </View>
+
+            <View style={{ marginLeft: 250 }}>
+                <Image
+                    source={require('../assets/edit-icon.png')}
+                    style={styles.image}
+                />
+            </View>
+
             <View style={styles.groupimage}>
                 <Image
                     source={require('../assets/blood-icon.png')}
@@ -39,6 +54,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "white"
     },
     groupimage: {
         flexDirection: 'row', 
@@ -52,7 +68,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10, // ระยะห่างแนวนอนระหว่างรูปภาพ
     },
     leftAlignedText: {
-        marginLeft: -150,
+        marginLeft: -180,
         marginBottom: 20
     },
 });
