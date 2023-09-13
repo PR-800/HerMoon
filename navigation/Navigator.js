@@ -21,11 +21,12 @@ import ProfileScreen from "../screens/ProfileScreen";
 
 const PageLoginNavigator = createNativeStackNavigator();
 const MainNavigator = createNativeStackNavigator();
+const PageHomeNavigator = createNativeStackNavigator();
+
 const BottomNavigator = createBottomTabNavigator();
 
-
-// หน้า login
-function MyLoginNavigator() {
+// หน้าต่าง ๆ ที่มีการเชื่อมกัน
+function MyPageNavigator() {
     return (
         <PageLoginNavigator.Navigator>
             <PageLoginNavigator.Screen name="login" component={LoginScreen}
@@ -43,58 +44,75 @@ function MyLoginNavigator() {
                     headerShown: false
                 }}
             />
+            <PageLoginNavigator.Screen name="homePage" component={MyBottomNavigator} 
+                options={{
+                    headerShown: false
+                }}
+            />
         </PageLoginNavigator.Navigator>
     );
 }
 
+// Tab ตัวเลือกหน้า Home
+function MyBottomNavigator() {
+    return (
+        <BottomNavigator.Navigator>
+            <BottomNavigator.Screen name="Home" component={HomeScreen}
+                options={{
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => {
+                        return <Feather name="home" size={30} color="#8461D5" />;
+                    },
+                    }
+                }
+            />
+            <BottomNavigator.Screen name="Calendar" component={CalendarScreen}
+                options={{
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => {
+                        return <Fontisto name="calendar" size={24} color="#8461D5" />;
+                    },
+                }
+                }
+            />
+            <BottomNavigator.Screen name="Article" component={ArticleInsideScreen}
+                options={{
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => {
+                        return <MaterialIcons name="article" size={30} color="#8461D5" />;
+                    },
+                }
+                }
+            />
+            <BottomNavigator.Screen name="Profile" component={ProfileScreen}
+                options={{
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => {
+                        return <FontAwesome5 name="user" size={30} color="#8461D5" />;
+                    },
+                }
+                }
+            />
+        </BottomNavigator.Navigator>
+    );
+}
+
+//Navigator หลักไว้แสดงผล
 export default function Navigator() {
     return (
         <NavigationContainer>
-            {/* <MainNavigator.Navigator>
-                <MainNavigator.Screen name="main" component={HomeScreen}
+            <MainNavigator.Navigator>
+                <MainNavigator.Screen name="start" component={MyPageNavigator}
                     options={{
                         headerShown: false
                     }}
                 />
-            </MainNavigator.Navigator> */}
-            <BottomNavigator.Navigator>
-                <BottomNavigator.Screen name="Home" component={HomeScreen}
+                {/* <MainNavigator.Screen name="main" component={MyHomeNavigator}
                     options={{
-                        headerShown: false,
-                        tabBarIcon: ({ color, size }) => {
-                            return <Feather name="home" size={30} color="#8461D5" />;
-                        },
-                        }
-                    }
-                />
-                <BottomNavigator.Screen name="Calendar" component={CalendarScreen}
-                    options={{
-                        headerShown: false,
-                        tabBarIcon: ({ color, size }) => {
-                            return <Fontisto name="calendar" size={24} color="#8461D5" />;
-                        },
-                    }
-                    }
-                />
-                <BottomNavigator.Screen name="Article" component={ArticleInsideScreen}
-                    options={{
-                        headerShown: false,
-                        tabBarIcon: ({ color, size }) => {
-                            return <MaterialIcons name="article" size={30} color="#8461D5" />;
-                        },
-                    }
-                    }
-                />
-                <BottomNavigator.Screen name="Profile" component={ProfileScreen}
-                    options={{
-                        headerShown: false,
-                        tabBarIcon: ({ color, size }) => {
-                            return <FontAwesome5 name="user" size={30} color="#8461D5" />;
-                        },
-                    }
-                    }
-                />
-            </BottomNavigator.Navigator>
+                        headerShown: false
+                    }}
+                /> */}
+            </MainNavigator.Navigator>
         </NavigationContainer>
     );
 }

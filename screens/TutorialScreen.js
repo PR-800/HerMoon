@@ -31,7 +31,7 @@ const TutorialScreen = ({navigation, images}) => {
             <Text style={{fontSize: 20}}></Text>
             <Text
                 onPress={() => {
-                    navigation.navigate("login", {});
+                    navigation.navigate("homePage", {});
                 }}
             >x Go to Home (edit navigation here)</Text>
         </View>

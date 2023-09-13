@@ -67,11 +67,16 @@ const styles = StyleSheet.create({
         fontFamily: "monospace",
     },
     image: {
-        width: 150, height: 150, resizeMode: "contain", borderRadius: "50%"
+        width: 150, 
+        height: 150, 
+        resizeMode: "contain", 
+        // borderRadius: "50%",
+        borderRadius: 50
     },
     headers: {
         fontSize: 25,
-        fontWeight: 700,
+        // fontWeight: 700,
+        fontWeight: 'bold',
         fontFamily: "monospace",
     },
     subheader: {
