@@ -71,12 +71,12 @@ const styles = StyleSheet.create({
         height: 150, 
         resizeMode: "contain", 
         // borderRadius: "50%",
-        borderRadius: 50
+        borderRadius: 75
     },
     headers: {
         fontSize: 25,
         // fontWeight: 700,
-        fontWeight: 'bold',
+        fontWeight: '700',
         fontFamily: "monospace",
     },
     subheader: {
