@@ -1,8 +1,15 @@
-import React from "react";
-import { StyleSheet, Text, View, Image } from 'react-native';
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
+
+import MenstrualLevelModel from '../components/MenstrualLevelModel';
+import LinearGradient from 'react-native-linear-gradient';
 
 const HomeScreen = ({ navigation }) => {
+    const [modalVisible, setModalVisible] = useState(false);
 
+    const BloodIcon = () => {
+        setModalVisible(!modalVisible);
+    };
     return (
         <View style={styles.screen}>
             <View style={styles.leftAlignedText}>
@@ -30,12 +37,15 @@ const HomeScreen = ({ navigation }) => {
                     style={styles.image}
                 />
             </View>
-
             <View style={styles.groupimage}>
+                <TouchableOpacity onPress={BloodIcon}>
                 <Image
+                    
                     source={require('../assets/blood-icon.png')}
                     style={styles.image}
-                />
+                    />
+                </TouchableOpacity>
+                <MenstrualLevelModel visible={modalVisible} onClose={BloodIcon} />
                 <Image
                     source={require('../assets/sanitarypad-icon.png')}
                     style={styles.image}
@@ -70,6 +80,47 @@ const styles = StyleSheet.create({
     leftAlignedText: {
         marginLeft: -180,
         marginBottom: 20
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
     },
 });
 
