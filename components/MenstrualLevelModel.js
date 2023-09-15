@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Modal, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 
 const MenstrualLevelModel = ({ visible, onClose }) => {
@@ -10,30 +10,99 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
             visible={visible}>
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text style={styles.modalText}>ระดับความเข้มของสี</Text>
-                    <View >
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                          <RadioButton
-                            value="ฺBright red"
-                            status={checked === 'ฺBright red' ? 'checked' : 'unchecked'} 
-                            onPress={() => setChecked('ฺBright red')} 
+                    <View style={{ margin: 25, flexDirection: 'row', alignItems: 'center' }}>
+                        <Image
+
+                            source={require('../assets/Home/blood01-icon.png')}
+                            style={styles.image}
                         />
-                            <Text>Bright red</Text>  
+                        <Text style={styles.modalText}>ระดับความเข้มของสี</Text>
+                    </View>
+                    <View style={{ backgroundColor: 'white', borderRadius: 40, padding: 20 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <RadioButton
+                                value="ฺBright red"
+                                status={checked === 'ฺBright red' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('ฺBright red')}
+                            />
+                            <Text>สีแดงสด</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value="Apple"
-                                status={checked === 'Apple' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('Apple')}
+                                value="Reddish Orange"
+                                status={checked === 'Reddish Orange' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('Reddish Orange')}
                             />
-                            <Text>Apple</Text>
+                            <Text>สีแดงส้ม</Text>
                         </View>
-                        <Text> {checked}</Text>
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={onClose}>
-                            <Text style={styles.textStyle}>close</Text>
-                        </Pressable>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <RadioButton
+                                value="Dark red"
+                                status={checked === 'Dark red' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('Dark red')}
+                            />
+                            <Text>สีแดงเข้ม</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <RadioButton
+                                value="Pink"
+                                status={checked === 'Pink' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('Pink')}
+                            />
+                            <Text>สีชมพู</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <RadioButton
+                                value="Brown"
+                                status={checked === 'Brown' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('Brown')}
+                            />
+                            <Text>สีน้ำตาล</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <RadioButton
+                                value="Reddish gray"
+                                status={checked === 'Reddish gray' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('Reddish gray')}
+                            />
+                            <Text>สีแดงอมเทาปนและสีเขียว</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <RadioButton
+                                value="Black"
+                                status={checked === 'Black' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('Black')}
+                            />
+                            <Text>สีดำ</Text>
+                        </View>
+                        {/* <Text> {checked} </Text> */}
+                    </View>
+                    <View style={{ marginLeft: 130, marginTop: -60 }}>
+                        <TouchableOpacity>
+                            <Image
+
+                                source={require('../assets/Home/save-icon.png')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ marginLeft: 190, marginTop: -300 }}>
+                        <TouchableOpacity>
+                            <Image
+
+                                source={require('../assets/Home/question-icon.png')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ marginLeft: 110, marginTop: -30 }}>
+                        <TouchableOpacity onPress={onClose}>
+                            <Image
+
+                                source={require('../assets/Home/arrow-left-icon.png')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -45,10 +114,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)'
     },
     modalView: {
         backgroundColor: 'pink',
-        borderRadius: 20,
+        borderRadius: 30,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -59,19 +129,7 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
         width: 300,
-        height:500
-    },
-
-    button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
-    },
-    buttonOpen: {
-        backgroundColor: '#F194FF',
-    },
-    buttonClose: {
-        backgroundColor: '#2196F3',
+        height: 400
     },
     textStyle: {
         color: 'white',
@@ -79,10 +137,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     modalText: {
-        marginBottom: 15,
         textAlign: 'center',
-        fontSize: 20,
-        color: 'white'
+        fontSize: 18,
     },
 })
 

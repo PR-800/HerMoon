@@ -102,16 +102,16 @@ export default function Navigator() {
     return (
         <NavigationContainer>
             <MainNavigator.Navigator>
-                <MainNavigator.Screen name="start" component={MyPageNavigator}
-                    options={{
-                        headerShown: false
-                    }}
-                />
-                {/* <MainNavigator.Screen name="main" component={MyHomeNavigator}
+                {/* <MainNavigator.Screen name="start" component={MyPageNavigator}
                     options={{
                         headerShown: false
                     }}
                 /> */}
+                <MainNavigator.Screen name="main" component={MyBottomNavigator}
+                    options={{
+                        headerShown: false
+                    }}
+                />
             </MainNavigator.Navigator>
         </NavigationContainer>
     );
