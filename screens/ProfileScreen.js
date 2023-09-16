@@ -26,6 +26,7 @@ const ProfileScreen = ({ route, navigation }) => {
             </Text>
             <View style={styles.box} >
                 <Pressable onPress={() => {
+                    navigation.navigate("editProfile", {});
                     return console.log("Edit profile")
                 }}>
                     <Image
@@ -84,12 +85,13 @@ const styles = StyleSheet.create({
     },
     content: {
         fontFamily: "monospace",
-        flex: 1,
+        // flex: 1,
         fontSize: 17,
         margin: 5,
     },
     box: {
         display: "flex",
+        // flex: 1,
         width: 350,
         margin: 40,
         padding: 20,
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
     },
     icon: {
         display: "flex",
-        flex: 1,
+        // flex: 1,
         width: 25,
         height: 25,
     }

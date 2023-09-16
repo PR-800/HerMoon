@@ -19,37 +19,43 @@ import CalendarScreen from "../screens/CalendarScreen";
 import ArticleInsideScreen from "../screens/ArticleInsideScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
-const PageLoginNavigator = createNativeStackNavigator();
+import EditProfileScreen from "../screens/EditProfileScreen";
+
+const PageNavigator = createNativeStackNavigator();
 const MainNavigator = createNativeStackNavigator();
-const PageHomeNavigator = createNativeStackNavigator();
 
 const BottomNavigator = createBottomTabNavigator();
 
 // หน้าต่าง ๆ ที่มีการเชื่อมกัน
 function MyPageNavigator() {
     return (
-        <PageLoginNavigator.Navigator>
-            <PageLoginNavigator.Screen name="login" component={LoginScreen}
+        <PageNavigator.Navigator>
+            <PageNavigator.Screen name="login" component={LoginScreen}
                 options={{
                     headerShown: false
                 }}
             />
-            <PageLoginNavigator.Screen name="register" component={RegisterScreen}
+            <PageNavigator.Screen name="register" component={RegisterScreen}
                 options={{
                     headerShown: false
                 }}
             />
-            <PageLoginNavigator.Screen name="tutorial" component={TutorialScreen}
+            <PageNavigator.Screen name="tutorial" component={TutorialScreen}
                 options={{
                     headerShown: false
                 }}
             />
-            <PageLoginNavigator.Screen name="homePage" component={MyBottomNavigator} 
+            <PageNavigator.Screen name="homePage" component={MyBottomNavigator} 
                 options={{
                     headerShown: false
                 }}
             />
-        </PageLoginNavigator.Navigator>
+            <PageNavigator.Screen name="editProfile" component={EditProfileScreen} 
+                options={{
+                    headerShown: false
+                }}
+            />
+        </PageNavigator.Navigator>
     );
 }
 
@@ -102,11 +108,11 @@ export default function Navigator() {
     return (
         <NavigationContainer>
             <MainNavigator.Navigator>
-                {/* <MainNavigator.Screen name="start" component={MyPageNavigator}
+                <MainNavigator.Screen name="start" component={MyPageNavigator}
                     options={{
                         headerShown: false
                     }}
-                /> */}
+                />
                 <MainNavigator.Screen name="main" component={MyBottomNavigator}
                     options={{
                         headerShown: false
