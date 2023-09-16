@@ -21,57 +21,64 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                     <View style={{ backgroundColor: 'white', borderRadius: 40, padding: 20 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value="ฺBright red"
-                                status={checked === 'ฺBright red' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('ฺBright red')}
+                                value='Bright red'
+                                status={checked === 'Bright red' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('Bright red')}
+                                color='#FF0000'
                             />
                             <Text>สีแดงสด</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value="Reddish Orange"
+                                value='Reddish Orange'
                                 status={checked === 'Reddish Orange' ? 'checked' : 'unchecked'}
                                 onPress={() => setChecked('Reddish Orange')}
+                                color='#FD4400'
                             />
                             <Text>สีแดงส้ม</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value="Dark red"
+                                value='Dark red'
                                 status={checked === 'Dark red' ? 'checked' : 'unchecked'}
                                 onPress={() => setChecked('Dark red')}
+                                color='#BE0A01'
                             />
                             <Text>สีแดงเข้ม</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value="Pink"
+                                value='Pink'
                                 status={checked === 'Pink' ? 'checked' : 'unchecked'}
                                 onPress={() => setChecked('Pink')}
+                                color='#FF97C5'
                             />
                             <Text>สีชมพู</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value="Brown"
+                                value='Brown'
                                 status={checked === 'Brown' ? 'checked' : 'unchecked'}
                                 onPress={() => setChecked('Brown')}
+                                color='#7A601C'
                             />
                             <Text>สีน้ำตาล</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value="Reddish gray"
+                                value='Reddish gray'
                                 status={checked === 'Reddish gray' ? 'checked' : 'unchecked'}
                                 onPress={() => setChecked('Reddish gray')}
+                                color='#576458'
                             />
                             <Text>สีแดงอมเทาปนและสีเขียว</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value="Black"
+                                value='Black'
                                 status={checked === 'Black' ? 'checked' : 'unchecked'}
                                 onPress={() => setChecked('Black')}
+                                color='black'
                             />
                             <Text>สีดำ</Text>
                         </View>
@@ -81,25 +88,25 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                         <TouchableOpacity>
                             <Image
 
-                                source={require('../assets/Home/save-icon.png')}
+                                source={require('../assets/Home/save01-icon.png')}
                                 style={styles.image}
                             />
                         </TouchableOpacity>
                     </View>
                     <View style={{ marginLeft: 190, marginTop: -300 }}>
-                        <TouchableOpacity>
-                            <Image
-
-                                source={require('../assets/Home/question-icon.png')}
-                                style={styles.image}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ marginLeft: 110, marginTop: -30 }}>
                         <TouchableOpacity onPress={onClose}>
                             <Image
 
                                 source={require('../assets/Home/arrow-left-icon.png')}
+                                style={styles.image}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ marginLeft: 110, marginTop: -30}}>
+                        <TouchableOpacity>
+                            <Image
+
+                                source={require('../assets/Home/question-icon.png')}
                                 style={styles.image}
                             />
                         </TouchableOpacity>

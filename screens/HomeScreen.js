@@ -2,14 +2,25 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 
 import MenstrualLevelModel from '../components/MenstrualLevelModel';
-import LinearGradient from 'react-native-linear-gradient';
+import MenstrualVolumeLevelModel from '../components/MenstrualVolumeLevelModel';
+import NotesModel from '../components/NotesModel';
 
 const HomeScreen = ({ navigation }) => {
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisibleBlood, setModalVisibleBlood] = useState(false);
+    const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false);
+    const [modalVisibleNotes, setModalVisibleNotes] = useState(false);
 
     const BloodIcon = () => {
-        setModalVisible(!modalVisible);
+        setModalVisibleBlood(!modalVisibleBlood);
     };
+
+    const SanitaryPadIcon = () => {
+        setModalVisibleSanitaryPad(!modalVisibleSanitaryPad);
+    };
+
+    const NotesIcon = () => {
+        setModalVisibleNotes(!modalVisibleNotes)
+    }
     return (
         <View style={styles.screen}>
             <View style={styles.leftAlignedText}>
@@ -19,21 +30,21 @@ const HomeScreen = ({ navigation }) => {
 
             <View style={{marginLeft: -250}}>
                 <Image
-                    source={require('../assets/clock-icon.png')}
+                    source={require('../assets/Home/clock-icon.png')}
                     style={styles.image}
                 />
             </View>
 
             <View>
                 <Image
-                    source={require('../assets/Profile-icon.png')}
+                    source={require('../assets/Home/Profile-icon.png')}
                     style={{ width: 300, height: 300 }}
                 />
             </View>
 
             <View style={{ marginLeft: 250 }}>
                 <Image
-                    source={require('../assets/edit-icon.png')}
+                    source={require('../assets/Home/edit-icon.png')}
                     style={styles.image}
                 />
             </View>
@@ -41,19 +52,25 @@ const HomeScreen = ({ navigation }) => {
                 <TouchableOpacity onPress={BloodIcon}>
                 <Image
                     
-                    source={require('../assets/blood-icon.png')}
+                    source={require('../assets/Home/blood-icon.png')}
                     style={styles.image}
                     />
                 </TouchableOpacity>
-                <MenstrualLevelModel visible={modalVisible} onClose={BloodIcon} />
+                <MenstrualLevelModel visible={modalVisibleBlood} onClose={BloodIcon} />
+                <TouchableOpacity onPress={SanitaryPadIcon}>
                 <Image
-                    source={require('../assets/sanitarypad-icon.png')}
+                    source={require('../assets/Home/sanitarypad-icon.png')}
                     style={styles.image}
                 />
+                </TouchableOpacity>
+                <MenstrualVolumeLevelModel visible={modalVisibleSanitaryPad} onClose={SanitaryPadIcon} />
+                <TouchableOpacity onPress={NotesIcon}>
                 <Image
-                    source={require('../assets/notes-icon.png')}
+                    source={require('../assets/Home/notes-icon.png')}
                     style={styles.image}
                 />
+                </TouchableOpacity>
+                <NotesModel visible={modalVisibleNotes} onClose={NotesIcon}></NotesModel>
             </View>
         </View>
     );
