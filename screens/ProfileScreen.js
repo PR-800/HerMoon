@@ -31,7 +31,7 @@ const ProfileScreen = ({ route, navigation }) => {
                 }}>
                     <View style={styles.group}>
                         <Image
-                            source={require('../assets/profile/profile.png')}
+                            source={require('../assets/profile/editprofile.png')}
                             style={styles.icon}
                         />
                         <Text style={styles.content}>Edit profile</Text>
@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
     },
     content: {
         fontFamily: "monospace",
-        // flex: 1,
         fontSize: 17,
         margin: 5,
     },
