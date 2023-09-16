@@ -29,32 +29,41 @@ const ProfileScreen = ({ route, navigation }) => {
                     navigation.navigate("editProfile", {});
                     return console.log("Edit profile")
                 }}>
-                    <Image
-                        source={require('../assets/profile/profile.png')}
-                        style={styles.icon}
-                    />
-                    <Text style={styles.content}>Edit profile</Text>
-                </Pressable>
-
+                    <View style={styles.group}>
+                        <Image
+                            source={require('../assets/profile/profile.png')}
+                            style={styles.icon}
+                        />
+                        <Text style={styles.content}>Edit profile</Text>
+                    </View>
+                
+                </Pressable> 
+                
                 <Pressable onPress={() => {
                     return console.log("Notifications")
                 }}>
-                    <Image
-                        source={require('../assets/profile/notification.png')}
-                        style={styles.icon}
-                    />
-                    <Text style={styles.content}>Notifications</Text>
+                    <View style={styles.group}>
+                        <Image
+                            source={require('../assets/profile/notification.png')}
+                            style={styles.icon}
+                        />
+                        <Text style={styles.content}>Notifications</Text>
+                    </View>
                 </Pressable>
 
                 <Pressable onPress={() => {
                     return console.log("Language")
                 }}>
-                    <Image
-                        source={require('../assets/profile/translate.png')}
-                        style={styles.icon}
-                    />
-                    <Text style={styles.content}>Language</Text>
+                    <View style={styles.group}>
+                        <Image
+                            source={require('../assets/profile/translate.png')}
+                            style={styles.icon}
+                        />
+                        <Text style={styles.content}>Language</Text>
+                    </View>
+                    
                 </Pressable>
+
             </View>
         </View>
     )
@@ -113,6 +122,9 @@ const styles = StyleSheet.create({
         // flex: 1,
         width: 25,
         height: 25,
+    },
+    group: {
+        flexDirection: "row",
     }
 });
 
