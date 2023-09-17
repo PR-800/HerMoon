@@ -4,25 +4,25 @@ import { TextInput } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const EditProfileScreen = () => {
+const EditProfileScreen = ({ route, navigation }) => {
 
   const dropDownRef = React.useRef();
   
   const [OpenAge, setOpenAge] = useState(false);
   const [age, setAge] = useState(null);
   const [itemsAge, setItemsAge] = useState([
-    { label: '13-17', value: 'Child' },
-    { label: '18-30', value: 'YoungAdult' },
-    { label: '31-45', value: 'Adult' },
-    { label: 'Above 45', value: 'Old' },
+    { label: '13 - 17 years', value: 'Child' },
+    { label: '18 - 30 years', value: 'YoungAdult' },
+    { label: '31 - 45 years', value: 'Adult' },
+    { label: 'Above 45 years', value: 'Old' },
   ]);
   
   const [valueOpenHour, setValueOpenHour] = useState(false);
   const [valueHour, setValueHour] = useState(null);
   const [itemsHour, setItemsHour] = useState([
     { label: 'Less than 5 hours', value: 'banana' },
-    { label: '5-6 hours', value: 'bat' },
-    { label: '7-9 hours', value: 'apple' },
+    { label: '5 - 6 hours', value: 'bat' },
+    { label: '7 - 9 hours', value: 'apple' },
     { label: 'Above 9 hours', value: 'cat' },
   ]);
 
@@ -30,8 +30,8 @@ const EditProfileScreen = () => {
   const [valueCycle, setValueCycle] = useState(null);
   const [itemsCycle, setItemsCycle] = useState([
     { label: 'Less than 5 hours', value: 'banana' },
-    { label: '5-6 hours', value: 'bat' },
-    { label: '7-9 hours', value: 'apple' },
+    { label: '5 - 6 hours', value: 'bat' },
+    { label: '7 - 9 hours', value: 'apple' },
     { label: 'Above 9 hours', value: 'cat' },
   ]);
 
@@ -46,12 +46,23 @@ const EditProfileScreen = () => {
 
   return (
       <View style={styles.screen}>
-        <Text style={styles.header}>Edit Profile</Text>
+        <View style={styles.headerGroup}>
+          <Pressable onPress={() => {
+                      navigation.navigate("Profile", {});
+                      return console.log("go Profile")
+                  }}>
+            <Image
+              source={require('../assets/profile/arrow-left.png')}
+              style={styles.arrowleft}
+            />
+          </Pressable>
+          <Text style={styles.header}>Edit Profile</Text>
+        </View>
         <TextInput
             style={styles.input}
             label={'Username'}
             underlineColor="transparent"
-            // theme={{ roundness: 15 }} 
+            theme={{ roundness: 15 }} 
             // keyboardType="number-pad"
             // maxLength={2}
             autoCorrect={false}
@@ -67,25 +78,28 @@ const EditProfileScreen = () => {
             label={'Password'}
             underlineColor="transparent"
             autoCompleteType="password"
+            theme={{ roundness: 15 }} 
         />
         <TextInput
             style={styles.input}
             label={'การใช้ยาคุม'}
             underlineColor="transparent"
-            autoCompleteType="password"
+            theme={{ roundness: 15 }} 
         />
         <View style={styles.group}>
           <TextInput
               style={styles.smallinput}
-              label={'Weight'}
+              label={'Weight (kg.)'}
+              keyboardType="number-pad"
               underlineColor="transparent"
-              autoCompleteType="password"
+              theme={{ roundness: 15 }} 
           />
           <TextInput
               style={styles.smallinput}
-              label={'Height'}
+              label={'Height (cm.)'}
+              keyboardType="number-pad"
               underlineColor="transparent"
-              autoCompleteType="password"
+              theme={{ roundness: 15 }} 
           />
         </View>
 
@@ -93,6 +107,7 @@ const EditProfileScreen = () => {
         <TouchableWithoutFeedback onPress={() => dropDownRef.current.close()}>
           <View style={styles.smallDropdown}>
             <DropDownPicker
+            style={styles.dropdownBox}
               placeholder='Age'
               open={OpenAge}
               value={age}
@@ -107,16 +122,14 @@ const EditProfileScreen = () => {
           </TouchableWithoutFeedback>
           <View style={styles.smallDropdown}>
             <DropDownPicker 
-            // style={{backgroundColor:"cyan"}}
+            style={styles.dropdownBox}
             placeholder='Sleep Hours'
               open={valueOpenHour}
               value={valueHour}
+              items={itemsHour}
               setOpen={setValueOpenHour}
               setValue={setValueHour}
-              items={[
-                {label: 'UK', value: 'uk'},
-                {label: 'France', value: 'france'}
-              ]}
+              setItems={setItemsHour}
               dropDownDirection='TOP'
             />
           </View>
@@ -125,6 +138,7 @@ const EditProfileScreen = () => {
         <View style={[styles.group]}>
           <View style={styles.smallDropdown}>
             <DropDownPicker
+            style={styles.dropdownBox}
               placeholder='Cycle'
               open={valueOpenCycle}
               value={valueCycle}
@@ -137,13 +151,18 @@ const EditProfileScreen = () => {
           </View>
           <View style={styles.smallDropdown}>
             <DropDownPicker
+            style={styles.dropdownBox}
             placeholder='Workout Freq'
               open={valueOpenWorkout}
               value={valueWorkout}
-              items={itemsWorkout}
+              // items={itemsWorkout}
               setOpen={setValueOpenWorkout}
               setValue={setValueWorkout}
-              setItems={setItemsWorkout}
+              // setItems={setItemsWorkout}
+              items={[
+                {label: 'UK', value: 'uk'},
+                {label: 'France', value: 'france'}
+              ]}
               dropDownDirection='TOP'
             />
           </View>
@@ -152,7 +171,7 @@ const EditProfileScreen = () => {
 
 
         {/* Submit */}
-        <LinearGradient start={{x: 0, y: 0}} end={{x: 0.3, y: 1}}
+        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
         colors={['#9F79EB', '#FC7D7B',]}
         style={styles.linearGradient}
         >
@@ -171,26 +190,31 @@ const EditProfileScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginVertical: 40,
+    marginTop: 20,
+    backgroundColor: "white",
     alignItems: "center",
   },
   header: {
-    fontSize: 30,
+    display: "flex",
+    fontSize: 25,
     fontWeight: "700",
     lineHeight: 50,
-    marginLeft: 30,
 },
   input: {
-    // borderRadius: 25,
+    borderRadius: 15, 
     width: 350,
     height: 55,
-    margin: 10,
+    margin: 15,
+    overflow : "hidden",
   },
   smallinput: {
     display: "flex",
+    borderRadius: 15, 
     width: 165,
     height: 50,
     margin: 10,
+    marginVertical: 15,
+    overflow : "hidden",
   },
   group: {
     flexDirection: "row",
@@ -198,7 +222,12 @@ const styles = StyleSheet.create({
   smallDropdown: {
     width: 165,
     margin: 10,
-
+    marginVertical: 15,
+  },
+  dropdownBox: {
+    backgroundColor:"#e7e0ec",
+    borderColor: "white",
+    borderRadius: 15,
   },
   linearGradient: {
     width: 350,
@@ -208,6 +237,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  headerGroup: {
+    flexDirection: "row",
+    marginVertical: 40,
+  },
+  arrowleft: {
+    display: "flex",
+    top: 15,
+    right: 90,
+    width: 25,
+    height: 25,
+  }
 });
 
 export default EditProfileScreen

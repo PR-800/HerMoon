@@ -109,7 +109,7 @@ export default function Navigator() {
     return (
         <NavigationContainer>
             <MainNavigator.Navigator>
-                <MainNavigator.Screen name="start" component={MyPageNavigator}
+                <MainNavigator.Screen name="start" component={MyPageNavigator}  //MyPageNavigator  ProfileScreen
                     options={{
                         headerShown: false
                     }}
