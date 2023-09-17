@@ -1,4 +1,3 @@
 module.exports = {
-    asserts: ['./assets/fonts']
+    assets: ['./assets/fonts'],
 }
-// fontFamily: 'Mitr Medium'

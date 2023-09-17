@@ -3,12 +3,25 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 
+// import { useFonts, VarelaRound_400Regular, } from '@expo-google-fonts/varela-round';
+
 const LoginScreen = ({navigation}) => {
+
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
 
+    // let [fontsLoaded, fontError] = useFonts({
+    //     VarelaRound_400Regular,
+    // });
+    
+    // if (!fontsLoaded && !fontError) {
+    //     return null;
+    // }
+
     return (
-        <View style={styles.screen}>
+        <View style={[styles.screen, {
+            // fontFamily: 'VarelaRound_400Regular',
+        }]}>
             <LinearGradient
                 colors={['#FC7D7B', '#9F79EB']}
                 style={styles.gradientBackground}
@@ -18,8 +31,16 @@ const LoginScreen = ({navigation}) => {
                         source={ require('../assets/logo.png') }
                     />
                     <View>
-                        <Text style={styles.headerText}>Her</Text>
-                        <Text style={styles.headerText}>Moon</Text>
+                        <Text style={[styles.headerText, {
+                            // textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                            // textShadowOffset: {width: -1, height: 2},
+                            // textShadowRadius: 15,
+                        }]}>Her</Text>
+                        <Text style={[styles.headerText, {
+                            // textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                            // textShadowOffset: {width: -1, height: 2},
+                            // textShadowRadius: 15,
+                        }]}>Moon</Text>
                     </View>
                 </View>
 
@@ -28,7 +49,7 @@ const LoginScreen = ({navigation}) => {
                     // mode='outlined'
                     theme={{ 
                         roundness: 50, 
-                        colors: { onSurfaceVariant: 'grey'} 
+                        colors: { onSurfaceVariant: 'grey'} ,
                     }} 
                     underlineColor="transparent"
                     activeUnderlineColor="grey"
@@ -60,7 +81,13 @@ const LoginScreen = ({navigation}) => {
                     //     navigation.navigate("tutorial", {});
                     // }}
                 >
-                    <Text style={[styles.text, { left: 80, bottom: 5 }]}>
+                    <Text style={[styles.text, { 
+                            left: 80, 
+                            bottom: 5,
+                            // textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                            // textShadowOffset: {width: -1, height: 2},
+                            // textShadowRadius: 15,
+                        }]}>
                         Forgot password
                     </Text>
                 </TouchableOpacity>
@@ -109,6 +136,7 @@ const styles = StyleSheet.create({
         marginBottom: 40,
     },
     headerText: {
+        // fontFamily: "VarelaRound_400Regular",
         fontSize: 50,
         fontWeight: "bold",
         lineHeight: 50,

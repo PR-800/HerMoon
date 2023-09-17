@@ -1,19 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-// import AliceCarousel from 'react-alice-carousel';
 
-const TutorialScreen = ({navigation, images}) => {
-    // const settings = {
-    //     infinite: true,
-    //     dots: true,
-    //     slidesToShow: 1,
-    //     slidesToScroll: 1,
-    //     lazyLoad: true,
-    //     autoplay: true,
-    //     autoplaySpeed: 2000,
-    // };
-
+const StepOneScreen = ({navigation, images}) => {
     return (
         <View style={styles.screen}>
             <LinearGradient
@@ -25,27 +14,15 @@ const TutorialScreen = ({navigation, images}) => {
                 </View>
 
                 <View style={styles.content}>
-                    <Text>tutorial details</Text>
-                    {/* <AliceCarousel autoPlay autoPlayInterval="3000">
-                        <Image 
-                            source={
-                                require('../assets/icon.png')
-                            }
-                        />
-                        <Image 
-                            source={
-                                require('../assets/icon.png')
-                            }
-                        />
-                    </AliceCarousel> */}
+                    <Text>Step 1</Text>
                 </View>
 
                 <View style={styles.bottom}>
                     <TouchableOpacity 
                         style={styles.button}
-                        onPress={() => {
-                            navigation.navigate("stepOne", {});
-                        }}
+                        // onPress={() => {
+                        //     navigation.navigate("login", {});
+                        // }}
                     >
                         <Text style={styles.textButton}>Start tutorial</Text>
                     </TouchableOpacity>
@@ -80,14 +57,12 @@ const styles = StyleSheet.create({
     top: {
         height: "10%",
         width: "100%",
-        // backgroundColor: 'pink',
         justifyContent: "center",
         alignItems: "center",
     },
     content: {
         height: "70%",
         width: "100%",
-        // backgroundColor: 'grey',
         justifyContent: "center",
         alignItems: "center",
     },
@@ -127,14 +102,9 @@ const styles = StyleSheet.create({
     bottom: {
         height: "20%",
         width: "100%",
-        // backgroundColor: 'red',
         justifyContent: "center",
         alignItems: "center",
     },
-    // sliderimg: {
-    //     width: "100%",
-    //     height: "500px",
-    // }
 });
   
-export default TutorialScreen;
+export default StepOneScreen;
