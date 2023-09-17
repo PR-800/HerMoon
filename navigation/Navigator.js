@@ -16,6 +16,8 @@ import RegisterScreen from "../screens/RegisterScreen";
 import TutorialScreen from "../screens/TutorialScreen";
 
 import StepOneScreen from "../screens/StepOneScreen";
+import StepTwoScreen from "../screens/StepTwoScreen";
+import StepThreeScreen from "../screens/StepThreeScreen";
 
 import HomeScreen from "../screens/HomeScreen"
 import CalendarScreen from "../screens/CalendarScreen";
@@ -50,6 +52,16 @@ function MyPageNavigator() {
                 }}
             />
             <PageNavigator.Screen name="stepOne" component={StepOneScreen}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <PageNavigator.Screen name="stepTwo" component={StepTwoScreen}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <PageNavigator.Screen name="stepThree" component={StepThreeScreen}
                 options={{
                     headerShown: false
                 }}

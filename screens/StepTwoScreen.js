@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const StepOneScreen = ({navigation, images}) => {
+const StepTwoScreen = ({navigation, images}) => {
     return (
         <View style={styles.screen}>
             <LinearGradient
@@ -14,15 +14,24 @@ const StepOneScreen = ({navigation, images}) => {
                 </View>
 
                 <View style={styles.content}>
-                    <Text>Step 1</Text>
+                    <Text>Step 2</Text>
                 </View>
 
                 <View style={styles.bottom}>
                     <View style={styles.buttons}>
                         <TouchableOpacity 
+                            style={styles.backButton}
+                            onPress={() => {
+                                navigation.navigate("stepOne", {});
+                            }}
+                        >
+                            <Text style={styles.textBackButton}>Back</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
                             style={styles.nextButton}
                             onPress={() => {
-                                navigation.navigate("stepTwo", {});
+                                navigation.navigate("stepThree", {});
                             }}
                         >
                             <Text style={styles.textNextButton}>Next</Text>
@@ -66,14 +75,14 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: "bold",
     },
-    nextButton: {
+    backButton: {
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: '#DCBCE5',
         height: 55,
         width: 130,
         borderRadius: 50,
         justifyContent: 'center',
-        left: 105,
+        right: 40,
 
         shadowColor: "#000",
         shadowOffset: {
@@ -83,6 +92,30 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.30,
         shadowRadius: 1,
         elevation: 5,
+    },
+    nextButton: {
+        alignItems: 'center',
+        backgroundColor: 'white',
+        height: 55,
+        width: 130,
+        borderRadius: 50,
+        justifyContent: 'center',
+        left: 40,
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 1,
+        elevation: 5,
+    },
+    textBackButton: {
+        color: "white", 
+        fontWeight: "bold",
+        fontSize: 20,
+        opacity: 1,
     },
     textNextButton: {
         color: "#FF9B80", 
@@ -100,4 +133,4 @@ const styles = StyleSheet.create({
     }
 });
   
-export default StepOneScreen;
+export default StepTwoScreen;
