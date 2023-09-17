@@ -40,6 +40,7 @@ const ProfileScreen = ({ route, navigation }) => {
                 </Pressable> 
                 
                 <Pressable onPress={() => {
+                    navigation.navigate("notification", {});
                     return console.log("Notifications")
                 }}>
                     <View style={styles.group}>
@@ -113,10 +114,11 @@ const ProfileScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
     screen: {
-        marginTop: 50,
+        // marginTop: 50,
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        // backgroundColor: "white",
         fontFamily: "monospace",
     },
     image: {

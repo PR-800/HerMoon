@@ -21,6 +21,7 @@ import ArticleInsideScreen from "../screens/ArticleInsideScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
 import EditProfileScreen from "../screens/EditProfileScreen";
+import NotificationScreen from "../screens/NotificationScreen";
 
 const PageNavigator = createNativeStackNavigator();
 const MainNavigator = createNativeStackNavigator();
@@ -52,6 +53,11 @@ function MyPageNavigator() {
                 }}
             />
             <PageNavigator.Screen name="editProfile" component={EditProfileScreen} 
+                options={{
+                    headerShown: false
+                }}
+            />
+            <PageNavigator.Screen name="notification" component={NotificationScreen} 
                 options={{
                     headerShown: false
                 }}

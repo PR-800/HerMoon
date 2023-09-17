@@ -190,7 +190,7 @@ const EditProfileScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginTop: 20,
+    // marginTop: 20,
     backgroundColor: "white",
     alignItems: "center",
   },
@@ -239,7 +239,8 @@ const styles = StyleSheet.create({
   },
   headerGroup: {
     flexDirection: "row",
-    marginVertical: 40,
+    marginVertical: 30,
+    marginTop: 60,
   },
   arrowleft: {
     display: "flex",
