@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, Modal, TextInput, Image, TouchableOpacity } from 'react-native';;
+import { LinearGradient } from 'expo-linear-gradient';
 
 const NotesModel = ({ visible, onClose }) => {
     const [text, setText] = useState('');
@@ -8,14 +9,14 @@ const NotesModel = ({ visible, onClose }) => {
             transparent={true}
             visible={visible}>
             <View style={styles.centeredView}>
-                <View style={styles.modalView}>
+                <LinearGradient colors={['#BF89FF', '#E8D9F1']} style={styles.modalView}>
                     <View style={{ margin: 25, flexDirection: 'row', alignItems: 'center' }}>
                         <Image
 
-                            source={require('../assets/Home/notes-icon.png')}
+                            source={require('../assets/Home/notes01-icon.png')}
                             style={styles.image}
                         />
-                        <Text style={styles.modalText}> บันทึกข้อมูลเพิ่มเติม</Text>
+                        <Text style={styles.modalText}>  บันทึกข้อมูลเพิ่มเติม</Text>
                     </View>
                     <View style={{ backgroundColor: 'white', borderRadius: 40, paddingBottom: 150, paddingHorizontal: 20, paddingTop: 20 }}>
                         <TextInput
@@ -23,7 +24,6 @@ const NotesModel = ({ visible, onClose }) => {
                             onChangeText={text => setText(text)}
                             value={text}
                             multiline={true}
-                            numberOfLines={10}
                             placeholder="Tap here to continue..."
                         />
                         {/* <Text >You entered: {text}</Text> */}
@@ -54,7 +54,7 @@ const NotesModel = ({ visible, onClose }) => {
                             />
                         </TouchableOpacity>
                     </View>
-                </View>
+                </LinearGradient>
             </View>
         </Modal>)
 }
@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.6)'
     },
     modalView: {
-        backgroundColor: '#BF89FF',
         borderRadius: 30,
         alignItems: 'center',
         shadowColor: '#000',

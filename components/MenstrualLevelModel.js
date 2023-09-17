@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity } from 'react-native';
 import { RadioButton } from 'react-native-paper';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const MenstrualLevelModel = ({ visible, onClose }) => {
     const [checked, setChecked] = React.useState('Apple'); //initial choice
@@ -9,8 +10,8 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
             transparent={true}
             visible={visible}>
             <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <View style={{ margin: 25, flexDirection: 'row', alignItems: 'center' }}>
+                <LinearGradient colors={['#F77D80', '#FFEAEA']} style={styles.modalView}>
+                    <View style={{ margin: 20, flexDirection: 'row', alignItems: 'center' }}>
                         <Image
 
                             source={require('../assets/Home/blood01-icon.png')}
@@ -111,7 +112,7 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                             />
                         </TouchableOpacity>
                     </View>
-                </View>
+                </LinearGradient>
             </View>
         </Modal>)
 }
@@ -124,7 +125,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.6)'
     },
     modalView: {
-        backgroundColor: 'pink',
         borderRadius: 30,
         alignItems: 'center',
         shadowColor: '#000',

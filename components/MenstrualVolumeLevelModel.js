@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity } from 'react-native';
 import { RadioButton } from 'react-native-paper';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
     const [checked, setChecked] = React.useState('Apple'); //initial choice
@@ -9,11 +10,11 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
             transparent={true}
             visible={visible}>
             <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <View style={{ margin: 25, flexDirection: 'row', alignItems: 'center' }}>
+                <LinearGradient colors={['#7ED8FF', '#CCF2FE']} style={styles.modalView}>
+                    <View style={{ margin: 20, flexDirection: 'row', alignItems: 'center' }}>
                         <Image
 
-                            source={require('../assets/Home/sanitarypad-icon.png')}
+                            source={require('../assets/Home/sanitarypad01-icon.png')}
                             style={styles.image}
                         />
                         <Text style={styles.modalText}>ระดับปริมาณของประจำเดือน</Text>
@@ -74,7 +75,7 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
                             />
                         </TouchableOpacity>
                     </View>
-                </View>
+                </LinearGradient>
             </View>
         </Modal>)
 }
@@ -87,7 +88,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.6)'
     },
     modalView: {
-        backgroundColor: '#7ED8FF',
         borderRadius: 30,
         alignItems: 'center',
         shadowColor: '#000',
@@ -109,6 +109,12 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: 'center',
         fontSize: 18,
+    },
+    gradientBackground: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 })
 

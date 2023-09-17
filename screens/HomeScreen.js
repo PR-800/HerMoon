@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import MenstrualLevelModel from '../components/MenstrualLevelModel';
 import MenstrualVolumeLevelModel from '../components/MenstrualVolumeLevelModel';
@@ -21,8 +22,29 @@ const HomeScreen = ({ navigation }) => {
     const NotesIcon = () => {
         setModalVisibleNotes(!modalVisibleNotes)
     }
+
+    const formatDate = (date) => {
+        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+        const formattedDate = new Date(date).toLocaleDateString('en-US', options);
+
+        const [month, day, year] = formattedDate.split(' ');
+
+        const capitalizedMonth = month.toUpperCase();
+
+        return `${day} ${capitalizedMonth} ${year}`;
+    }
+
+    const date = new Date();
+    
     return (
         <View style={styles.screen}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', padding: 20}}>
+            <LinearGradient colors={['#FC7D7B', '#CF7BB1', '#9F79EB']} style={styles.todayText}>
+                <Text style={{ fontSize: 24, color: "white", fontWeight: 'bold' }}>Today</Text>
+            </LinearGradient>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', paddingHorizontal: 40}}>{formatDate(date)}</Text>
+            </View>
+
             <View style={styles.leftAlignedText}>
                 <Text style={{ fontSize: 15, color: "#8461D5", fontWeight: 'bold' }}>welcome</Text>
                 <Text style={{ fontSize: 20, fontWeight: 'bold'}}>Leslie Alexander</Text>  
@@ -139,6 +161,11 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
     },
+    todayText: {
+        paddingHorizontal: 20, 
+        paddingVertical: 10,
+        borderRadius: 30,
+      },
 });
 
 export default HomeScreen;
