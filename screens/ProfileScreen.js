@@ -1,11 +1,16 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, Pressable  } from 'react-native';
 import { Button } from 'react-native-web';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 const ProfileScreen = ({ route, navigation }) => {
     return ( 
         <View style={styles.screen}>
+            {/* <LinearGradient
+                colors={['#FC7D7B', '#9F79EB']}
+                style={styles.gradientBackground}
+            > */}
             <Image
                 source={require('../assets/profile/blank-profile.jpg')}
                 style={styles.image}
@@ -108,6 +113,7 @@ const ProfileScreen = ({ route, navigation }) => {
                 </Pressable>
 
             </View>
+            {/* </LinearGradient> */}
         </View>
     )
 }
@@ -132,6 +138,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: '700',
         fontFamily: "monospace",
+        marginTop: -40
     },
     subheader: {
         fontSize: 17,
@@ -142,6 +149,7 @@ const styles = StyleSheet.create({
         width: 350,
         marginTop: 30,
         padding: 15,
+        backgroundColor: "white",
 
         // shadow
         borderWidth: 1,
@@ -171,7 +179,13 @@ const styles = StyleSheet.create({
     group: {
         flexDirection: "row",
         margin: 7,
-    }
+    },
+    gradientBackground: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
 });
 
 export default ProfileScreen

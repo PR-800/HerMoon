@@ -21,7 +21,7 @@ import StepThreeScreen from "../screens/StepThreeScreen";
 
 import HomeScreen from "../screens/HomeScreen"
 import CalendarScreen from "../screens/CalendarScreen";
-import ArticleInsideScreen from "../screens/ArticleInsideScreen";
+import ArticleScreen from "../screens/ArticleScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
 import EditProfileScreen from "../screens/EditProfileScreen";
@@ -107,7 +107,7 @@ function MyBottomNavigator() {
                 }
                 }
             />
-            <BottomNavigator.Screen name="Article" component={ArticleInsideScreen}
+            <BottomNavigator.Screen name="Article" component={ArticleScreen}
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => {

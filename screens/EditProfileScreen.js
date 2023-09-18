@@ -11,10 +11,11 @@ const EditProfileScreen = ({ route, navigation }) => {
   const [OpenAge, setOpenAge] = useState(false);
   const [age, setAge] = useState(null);
   const [itemsAge, setItemsAge] = useState([
-    { label: '13 - 17 years', value: 'Child' },
-    { label: '18 - 30 years', value: 'YoungAdult' },
-    { label: '31 - 45 years', value: 'Adult' },
-    { label: 'Above 45 years', value: 'Old' },
+    { label: '8 - 14 years', value: 'Child' },
+    { label: '15 - 19 years', value: 'Teenager' },
+    { label: '20 - 40 years', value: 'YoungAdult' },
+    { label: '41 - 50 years', value: 'Adult' },
+    { label: 'Above 50 years', value: 'Old' },
   ]);
   
   const [valueOpenHour, setValueOpenHour] = useState(false);
@@ -166,6 +167,7 @@ const EditProfileScreen = ({ route, navigation }) => {
               dropDownDirection='TOP'
             />
           </View>
+          
         </View>
         
 
@@ -248,7 +250,7 @@ const styles = StyleSheet.create({
     right: 90,
     width: 25,
     height: 25,
-  }
+  },
 });
 
 export default EditProfileScreen
