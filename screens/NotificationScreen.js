@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, Pressable, Switch } from 'react-native';
-import ToggleSwitch from 'toggle-switch-react-native'
-import { Button } from 'react-native-web';
+// import ToggleSwitch from 'toggle-switch-react-native'
+// import { Button } from 'react-native-web';
 
 
 const NotificationScreen = ({ route, navigation }) => {
@@ -72,12 +72,12 @@ const NotificationScreen = ({ route, navigation }) => {
                 thumbColor={"#ff6f00"}
                 value={false}
             />
-      </View>
+            </View>
 
         <Text style={styles.subHead}>
             Others
         </Text>
-        <ToggleSwitch
+        {/* <ToggleSwitch
             isOn={false}
             onColor="#FC7D7B"
             offColor="#9F79EB"
@@ -85,7 +85,7 @@ const NotificationScreen = ({ route, navigation }) => {
             labelStyle={{ color: "black", fontWeight: "800" }}
             size="medium"
             onToggle={isOn => console.log("changed to : ", isOn)}
-        />
+        /> */}
 
         </View>
     )
