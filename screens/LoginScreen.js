@@ -32,14 +32,14 @@ const LoginScreen = ({navigation}) => {
                     />
                     <View>
                         <Text style={[styles.headerText, {
-                            // textShadowColor: 'rgba(0, 0, 0, 0.5)',
-                            // textShadowOffset: {width: -1, height: 2},
-                            // textShadowRadius: 15,
+                            textShadowColor: '#9F79EB',
+                            textShadowOffset: {width: 1, height: 0.5},
+                            textShadowRadius: 35,
                         }]}>Her</Text>
                         <Text style={[styles.headerText, {
-                            // textShadowColor: 'rgba(0, 0, 0, 0.5)',
-                            // textShadowOffset: {width: -1, height: 2},
-                            // textShadowRadius: 15,
+                            textShadowColor: '#9F79EB',
+                            textShadowOffset: {width: 1, height: 0.5},
+                            textShadowRadius: 35,
                         }]}>Moon</Text>
                     </View>
                 </View>

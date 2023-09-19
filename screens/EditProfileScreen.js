@@ -61,7 +61,7 @@ const EditProfileScreen = ({ route, navigation }) => {
         </View>
         <TextInput
             style={styles.input}
-            label={'Username'}
+            label={'Change Name'}
             underlineColor="transparent"
             theme={{ roundness: 15 }} 
             // keyboardType="number-pad"
@@ -76,14 +76,14 @@ const EditProfileScreen = ({ route, navigation }) => {
         />
         <TextInput
             style={styles.input}
-            label={'Password'}
+            label={'Change Password'}
             underlineColor="transparent"
             autoCompleteType="password"
             theme={{ roundness: 15 }} 
         />
         <TextInput
             style={styles.input}
-            label={'การใช้ยาคุม'}
+            label={'Description'}
             underlineColor="transparent"
             theme={{ roundness: 15 }} 
         />

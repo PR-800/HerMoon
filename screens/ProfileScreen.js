@@ -7,10 +7,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 const ProfileScreen = ({ route, navigation }) => {
     return ( 
         <View style={styles.screen}>
-            {/* <LinearGradient
+            <LinearGradient
                 colors={['#FC7D7B', '#9F79EB']}
-                style={styles.gradientBackground}
-            > */}
+                style={[styles.gradientBackground, {}]}
+            >
             <Image
                 source={require('../assets/profile/blank-profile.jpg')}
                 style={styles.image}
@@ -24,10 +24,10 @@ const ProfileScreen = ({ route, navigation }) => {
                 />
             </Pressable>
             <Text style={styles.headers}>
-                Name Surname
+                Name
             </Text>
             <Text style={styles.subheader}>
-                fluk@gmail.component | 012 344 5567
+                Description 1 | Description 2
             </Text>
             <View style={styles.box} >
                 <Pressable onPress={() => {
@@ -113,7 +113,7 @@ const ProfileScreen = ({ route, navigation }) => {
                 </Pressable>
 
             </View>
-            {/* </LinearGradient> */}
+            </LinearGradient>
         </View>
     )
 }
@@ -138,10 +138,20 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: '700',
         fontFamily: "monospace",
-        marginTop: -40
+        marginTop: -30,
+        color: "white",
+
+        textShadowColor: 'rgba(0, 0, 0, 0.5)',
+        textShadowOffset: {width: -1, height: 2},
+        textShadowRadius: 15,
     },
     subheader: {
         fontSize: 17,
+        color: "white",
+
+        textShadowColor: 'rgba(0, 0, 0, 0.5)',
+        textShadowOffset: {width: -1, height: 2},
+        textShadowRadius: 15,
     },
     box: {
         display: "flex",
@@ -154,14 +164,15 @@ const styles = StyleSheet.create({
         // shadow
         borderWidth: 1,
         borderColor: "lightgray",
-        borderRadius: 15,
-        shadowColor: "gray",
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
+        borderRadius: 20,
+        shadowColor: "#000",
         shadowOffset: {
-            height: 1,
-            width: 1
+            width: 0,
+            height: 4,
         },
+        shadowOpacity: 0.30,
+        shadowRadius: 2,
+        elevation: 5,
     },
     content: {
         // fontFamily: "monospace",
@@ -184,7 +195,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        // opacity: 0.5
     },
 });
 
