@@ -5,11 +5,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import MenstrualLevelModel from '../components/MenstrualLevelModel';
 import MenstrualVolumeLevelModel from '../components/MenstrualVolumeLevelModel';
 import NotesModel from '../components/NotesModel';
+import CalendarStrip from 'react-native-slideable-calendar-strip';
 
 const HomeScreen = ({ navigation }) => {
     const [modalVisibleBlood, setModalVisibleBlood] = useState(false);
     const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false);
     const [modalVisibleNotes, setModalVisibleNotes] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
     const BloodIcon = () => {
         setModalVisibleBlood(!modalVisibleBlood);
@@ -35,22 +37,31 @@ const HomeScreen = ({ navigation }) => {
     }
 
     const date = new Date();
-    
+
     return (
         <View style={styles.screen}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', padding: 20}}>
-            <LinearGradient colors={['#FC7D7B', '#CF7BB1', '#9F79EB']} style={styles.todayText}>
-                <Text style={{ fontSize: 24, color: "white", fontWeight: 'bold' }}>Today</Text>
-            </LinearGradient>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', paddingHorizontal: 40}}>{formatDate(date)}</Text>
-            </View>
+            <CalendarStrip
+                
+                selectedDate={selectedDate}
+                onSwipeDown={() => {
+                    alert('onSwipeDown');
+                }}
+                markedDate={['2018-05-04', '2018-05-15', '2018-06-04', '2018-05-01']}
+                weekStartsOn={1} // 0,1,2,3,4,5,6 for S M T W T F S, defaults to 0
+            />
+            {/* <View style={{ flexDirection: 'row', alignItems: 'center', padding: 20 }}>
+                <LinearGradient colors={['#FC7D7B', '#CF7BB1', '#9F79EB']} style={styles.todayText}>
+                    <Text style={{ fontSize: 24, color: "white", fontWeight: 'bold' }}>Today</Text>
+                </LinearGradient>
+                <Text style={{ fontSize: 24, fontWeight: 'bold', paddingHorizontal: 40 }}>{formatDate(date)}</Text>
+            </View> */}
 
-            <View style={styles.leftAlignedText}>
+            <View style={[styles.leftAlignedText, {marginTop: 10}]}>
                 <Text style={{ fontSize: 15, color: "#8461D5", fontWeight: 'bold' }}>welcome</Text>
-                <Text style={{ fontSize: 20, fontWeight: 'bold'}}>Leslie Alexander</Text>  
+                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Leslie Alexander</Text>
             </View>
 
-            <View style={{marginLeft: -250}}>
+            <View style={{ marginLeft: -250 }}>
                 <Image
                     source={require('../assets/Home/clock-icon.png')}
                     style={styles.image}
@@ -72,25 +83,25 @@ const HomeScreen = ({ navigation }) => {
             </View>
             <View style={styles.groupimage}>
                 <TouchableOpacity onPress={BloodIcon}>
-                <Image
-                    
-                    source={require('../assets/Home/blood-icon.png')}
-                    style={styles.image}
+                    <Image
+
+                        source={require('../assets/Home/blood-icon.png')}
+                        style={styles.image}
                     />
                 </TouchableOpacity>
                 <MenstrualLevelModel visible={modalVisibleBlood} onClose={BloodIcon} />
                 <TouchableOpacity onPress={SanitaryPadIcon}>
-                <Image
-                    source={require('../assets/Home/sanitarypad-icon.png')}
-                    style={styles.image}
-                />
+                    <Image
+                        source={require('../assets/Home/sanitarypad-icon.png')}
+                        style={styles.image}
+                    />
                 </TouchableOpacity>
                 <MenstrualVolumeLevelModel visible={modalVisibleSanitaryPad} onClose={SanitaryPadIcon} />
                 <TouchableOpacity onPress={NotesIcon}>
-                <Image
-                    source={require('../assets/Home/notes-icon.png')}
-                    style={styles.image}
-                />
+                    <Image
+                        source={require('../assets/Home/notes-icon.png')}
+                        style={styles.image}
+                    />
                 </TouchableOpacity>
                 <NotesModel visible={modalVisibleNotes} onClose={NotesIcon}></NotesModel>
             </View>
@@ -106,14 +117,14 @@ const styles = StyleSheet.create({
         backgroundColor: "white"
     },
     groupimage: {
-        flexDirection: 'row', 
-        justifyContent: 'center', 
+        flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
         marginTop: 20
     },
     image: {
-        width: 50, 
-        height: 50, 
+        width: 50,
+        height: 50,
         marginHorizontal: 10, // ระยะห่างแนวนอนระหว่างรูปภาพ
     },
     leftAlignedText: {
@@ -162,9 +173,15 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     todayText: {
-        paddingHorizontal: 20, 
+        paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 30,
+    },
+    calendarStrip1: {
+        backgroundColor: 'white',
+        borderBottomWidth: 1,
+        borderColor: 'gray',
+        // และสไตล์อื่น ๆ ที่คุณต้องการ
       },
 });
 
