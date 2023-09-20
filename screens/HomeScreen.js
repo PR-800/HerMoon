@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import MenstrualLevelModel from '../components/MenstrualLevelModel';
 import MenstrualVolumeLevelModel from '../components/MenstrualVolumeLevelModel';
 import NotesModel from '../components/NotesModel';
-import CalendarStrip from 'react-native-slideable-calendar-strip';
+import CalendarStripC from '../components/CalendarStrip';
+import moment from 'moment';
 
 const HomeScreen = ({ navigation }) => {
     const [modalVisibleBlood, setModalVisibleBlood] = useState(false);
     const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false);
     const [modalVisibleNotes, setModalVisibleNotes] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(new Date());
+
+    const date = new Date();
 
     const BloodIcon = () => {
         setModalVisibleBlood(!modalVisibleBlood);
@@ -26,37 +28,27 @@ const HomeScreen = ({ navigation }) => {
     }
 
     const formatDate = (date) => {
-        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+        const options = { day: '2-digit', month: 'long', year: 'numeric' };
         const formattedDate = new Date(date).toLocaleDateString('en-US', options);
-
         const [month, day, year] = formattedDate.split(' ');
-
         const capitalizedMonth = month.toUpperCase();
-
-        return `${day} ${capitalizedMonth} ${year}`;
+        return `${capitalizedMonth} ${year}`;
     }
-
-    const date = new Date();
-
+    
     return (
         <View style={styles.screen}>
-            <CalendarStrip
-                
-                selectedDate={selectedDate}
-                onSwipeDown={() => {
-                    alert('onSwipeDown');
-                }}
-                markedDate={['2018-05-04', '2018-05-15', '2018-06-04', '2018-05-01']}
-                weekStartsOn={1} // 0,1,2,3,4,5,6 for S M T W T F S, defaults to 0
-            />
-            {/* <View style={{ flexDirection: 'row', alignItems: 'center', padding: 20 }}>
-                <LinearGradient colors={['#FC7D7B', '#CF7BB1', '#9F79EB']} style={styles.todayText}>
-                    <Text style={{ fontSize: 24, color: "white", fontWeight: 'bold' }}>Today</Text>
-                </LinearGradient>
-                <Text style={{ fontSize: 24, fontWeight: 'bold', paddingHorizontal: 40 }}>{formatDate(date)}</Text>
-            </View> */}
+            <View style={{ marginTop: 20 }}>
+            <CalendarStripC/>
+            </View>
 
-            <View style={[styles.leftAlignedText, {marginTop: 10}]}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -140 }}>
+                <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{x: 0, y: 0}} end={{x: 1, y: 1}} style={styles.todayText}>
+                    <Text style={{ fontSize: 24, color: "white", fontWeight: 'bold' }}>TODAY</Text>
+                </LinearGradient>
+                <Text style={{ fontSize: 24, fontWeight: 'bold', paddingHorizontal: 22 }}>{formatDate(date)}</Text>
+            </View>
+
+            <View style={[styles.leftAlignedText, { marginTop: 100 }]}>
                 <Text style={{ fontSize: 15, color: "#8461D5", fontWeight: 'bold' }}>welcome</Text>
                 <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Leslie Alexander</Text>
             </View>
@@ -68,14 +60,14 @@ const HomeScreen = ({ navigation }) => {
                 />
             </View>
 
-            <View>
+            <View style={{marginTop: -50}}>
                 <Image
                     source={require('../assets/Home/Profile-icon.png')}
                     style={{ width: 300, height: 300 }}
                 />
             </View>
 
-            <View style={{ marginLeft: 250 }}>
+            <View style={{ marginLeft: 250, marginTop: -20 }}>
                 <Image
                     source={require('../assets/Home/edit-icon.png')}
                     style={styles.image}
@@ -152,37 +144,11 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
-    button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
-    },
-    buttonOpen: {
-        backgroundColor: '#F194FF',
-    },
-    buttonClose: {
-        backgroundColor: '#2196F3',
-    },
-    textStyle: {
-        color: 'white',
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    modalText: {
-        marginBottom: 15,
-        textAlign: 'center',
-    },
     todayText: {
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 30,
     },
-    calendarStrip1: {
-        backgroundColor: 'white',
-        borderBottomWidth: 1,
-        borderColor: 'gray',
-        // และสไตล์อื่น ๆ ที่คุณต้องการ
-      },
 });
 
 export default HomeScreen;
