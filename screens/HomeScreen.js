@@ -7,6 +7,7 @@ import MenstrualVolumeLevelModel from '../components/MenstrualVolumeLevelModel';
 import NotesModel from '../components/NotesModel';
 import CalendarStripC from '../components/CalendarStrip';
 import moment from 'moment';
+import { useFonts } from 'expo-font';
 
 const HomeScreen = ({ navigation }) => {
     const [modalVisibleBlood, setModalVisibleBlood] = useState(false);
@@ -34,15 +35,26 @@ const HomeScreen = ({ navigation }) => {
         const capitalizedMonth = month.toUpperCase();
         return `${capitalizedMonth} ${year}`;
     }
-    
+
+    const [loaded] = useFonts({
+        Montserrat: require('../assets/fonts/Mitr-Medium.ttf'),
+    });
+
+    if (!loaded) {
+        return null;
+    }
+
     return (
         <View style={styles.screen}>
             <View style={{ marginTop: 20 }}>
-            <CalendarStripC/>
-            </View>
 
+                <CalendarStripC />
+            </View>
+            {/* <View style={{ flex: 1 }}>
+                <Text style={{ fontFamily: 'Mitr-Medium', fontSize: 27 }}>Yatra-One สว</Text>
+            </View> */}
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -140 }}>
-                <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{x: 0, y: 0}} end={{x: 1, y: 1}} style={styles.todayText}>
+                <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.todayText}>
                     <Text style={{ fontSize: 24, color: "white", fontWeight: 'bold' }}>TODAY</Text>
                 </LinearGradient>
                 <Text style={{ fontSize: 24, fontWeight: 'bold', paddingHorizontal: 22 }}>{formatDate(date)}</Text>
@@ -55,24 +67,18 @@ const HomeScreen = ({ navigation }) => {
 
             <View style={{ marginLeft: -250 }}>
                 <Image
-                    source={require('../assets/Home/clock-icon.png')}
-                    style={styles.image}
+                    source={require('../assets/Home/noti-icon.png')}
+                    style={[styles.image, { width: 60, height: 60 }]}
                 />
             </View>
 
-            <View style={{marginTop: -50}}>
+            <View style={{ marginTop: -40 }}>
                 <Image
                     source={require('../assets/Home/Profile-icon.png')}
-                    style={{ width: 300, height: 300 }}
+                    style={{ width: 280, height: 280 }}
                 />
             </View>
 
-            <View style={{ marginLeft: 250, marginTop: -20 }}>
-                <Image
-                    source={require('../assets/Home/edit-icon.png')}
-                    style={styles.image}
-                />
-            </View>
             <View style={styles.groupimage}>
                 <TouchableOpacity onPress={BloodIcon}>
                     <Image
@@ -96,6 +102,12 @@ const HomeScreen = ({ navigation }) => {
                     />
                 </TouchableOpacity>
                 <NotesModel visible={modalVisibleNotes} onClose={NotesIcon}></NotesModel>
+                <TouchableOpacity>
+                    <Image
+                        source={require('../assets/Home/history-icon.png')}
+                        style={[styles.image, { width: 58, height: 58 }]}
+                    />
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -112,12 +124,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20
+        marginTop: 40
     },
     image: {
         width: 50,
         height: 50,
-        marginHorizontal: 10, // ระยะห่างแนวนอนระหว่างรูปภาพ
+        marginHorizontal: 5, // ระยะห่างแนวนอนระหว่างรูปภาพ
     },
     leftAlignedText: {
         marginLeft: -180,
