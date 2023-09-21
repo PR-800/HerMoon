@@ -37,7 +37,7 @@ const EditInfo = ({ visible, onClose }) => {
                                         onPress={() => setChecked('Bright red')}
                                         color='#FF0000'
                                     />
-                                    <Text>สีแดงสด</Text>
+                                    <Text style={styles.modalText}>สีแดงสด</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <RadioButton
@@ -46,7 +46,7 @@ const EditInfo = ({ visible, onClose }) => {
                                         onPress={() => setChecked('Reddish Orange')}
                                         color='#FD4400'
                                     />
-                                    <Text>สีแดงส้ม</Text>
+                                    <Text style={styles.modalText}>สีแดงส้ม</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <RadioButton
@@ -55,7 +55,7 @@ const EditInfo = ({ visible, onClose }) => {
                                         onPress={() => setChecked('Dark red')}
                                         color='#BE0A01'
                                     />
-                                    <Text>สีแดงเข้ม</Text>
+                                    <Text style={styles.modalText}>สีแดงเข้ม</Text>
                                 </View>
                             </View>
 
@@ -67,7 +67,7 @@ const EditInfo = ({ visible, onClose }) => {
                                         onPress={() => setChecked('Pink')}
                                         color='#FF97C5'
                                     />
-                                    <Text>สีชมพู</Text>
+                                    <Text style={styles.modalText}>สีชมพู</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <RadioButton
@@ -76,7 +76,7 @@ const EditInfo = ({ visible, onClose }) => {
                                         onPress={() => setChecked('Brown')}
                                         color='#7A601C'
                                     />
-                                    <Text>สีน้ำตาล</Text>
+                                    <Text style={styles.modalText}>สีน้ำตาล</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <RadioButton
@@ -85,7 +85,7 @@ const EditInfo = ({ visible, onClose }) => {
                                         onPress={() => setChecked('Black')}
                                         color='black'
                                     />
-                                    <Text>สีดำ</Text>
+                                    <Text style={styles.modalText}>สีดำ</Text>
                                 </View>
                             </View>
                         </View>
@@ -96,7 +96,7 @@ const EditInfo = ({ visible, onClose }) => {
                                 onPress={() => setChecked('Reddish gray')}
                                 color='#576458'
                             />
-                            <Text>สีแดงอมเทาปนและสีเขียว</Text>
+                            <Text style={styles.modalText}>สีแดงอมเทาปนและสีเขียว</Text>
                         </View>
                         {/* <Text> {checked} </Text> */}
                         <View style={styles.textBox}>
@@ -113,7 +113,7 @@ const EditInfo = ({ visible, onClose }) => {
                                     onPress={() => setCheckedVL('large quantity')}
                                     color='#BE0A01'
                                 />
-                                <Text>ปริมาณมาก</Text>
+                                <Text style={styles.modalText}>ปริมาณมาก</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <RadioButton
@@ -122,7 +122,7 @@ const EditInfo = ({ visible, onClose }) => {
                                     onPress={() => setCheckedVL('moderate quantity')}
                                     color='#FF0000'
                                 />
-                                <Text>ปริมาณปานกลาง (ปกติ)</Text>
+                                <Text style={styles.modalText}>ปริมาณปานกลาง (ปกติ)</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <RadioButton
@@ -131,7 +131,7 @@ const EditInfo = ({ visible, onClose }) => {
                                     onPress={() => setCheckedVL('small quantity')}
                                     color='#F98585'
                                 />
-                                <Text>ปริมาณน้อย</Text>
+                                <Text style={styles.modalText}>ปริมาณน้อย</Text>
                             </View>
                             {/* <Text> {checkedVL} </Text> */}
                         </View>
@@ -141,25 +141,25 @@ const EditInfo = ({ visible, onClose }) => {
                                     source={require('../assets/Home/notes02-icon.png')}
                                 />
                             </View>
-                            <View style={{ backgroundColor: 'white', borderRadius: 40, paddingHorizontal: 20}}>
-<TextInput
-                            style={styles.input}
-                            onChangeText={text => setText(text)}
-                            value={text}
-                            multiline={true}
-                            placeholder="Tap here to continue..."
-                        />
+                            <View style={{ backgroundColor: 'white', borderRadius: 40, paddingHorizontal: 20 }}>
+                                <TextInput
+                                    style={styles.input}
+                                    onChangeText={text => setText(text)}
+                                    value={text}
+                                    multiline={true}
+                                    placeholder="Tap here to continue..."
+                                />
                             </View>
                         </View>
-                        <View style={{ marginLeft: 170}}>
-                        <TouchableOpacity>
-                            <Image
+                        <View style={{ marginLeft: 170 }}>
+                            <TouchableOpacity>
+                                <Image
 
-                                source={require('../assets/Home/save01-icon.png')}
-                                style={styles.image}
-                            />
-                        </TouchableOpacity>
-                    </View>
+                                    source={require('../assets/Home/save01-icon.png')}
+                                    style={styles.image}
+                                />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                     <View style={{ marginLeft: 210, marginTop: -550 }}>
                         <TouchableOpacity onPress={onClose}>
@@ -203,8 +203,8 @@ const styles = StyleSheet.create({
     },
     modalText: {
         textAlign: 'center',
-        fontSize: 18,
-        color: 'white'
+        fontSize: 14,
+        fontFamily: 'MitrRegular'
     },
     textBox: {
         margin: 5,
@@ -216,7 +216,8 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         borderColor: 'pink',
         borderWidth: 1
-    }
+    },
+
 })
 
 export default EditInfo;

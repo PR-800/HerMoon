@@ -34,6 +34,7 @@ const CalendarStripC = () => {
                 calendarHeaderStyle={{
                     fontSize: 50,
                     color: 'white',
+                    fontFamily: 'MitrRegular',
                 }}
                 iconLeftStyle={{ position: "absolute", top: -200 }}
                 iconRightStyle={{ position: "absolute", top: -200 }}

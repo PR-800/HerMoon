@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useFonts } from 'expo-font';
 
 const MenstrualLevelModel = ({ visible, onClose }) => {
     const [checked, setChecked] = React.useState(''); //initial choice
@@ -27,7 +28,7 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                                 onPress={() => setChecked('Bright red')}
                                 color='#FF0000'
                             />
-                            <Text>สีแดงสด</Text>
+                            <Text style={styles.modalText01}>สีแดงสด</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
@@ -36,7 +37,7 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                                 onPress={() => setChecked('Reddish Orange')}
                                 color='#FD4400'
                             />
-                            <Text>สีแดงส้ม</Text>
+                            <Text style={styles.modalText01}>สีแดงส้ม</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
@@ -45,7 +46,7 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                                 onPress={() => setChecked('Dark red')}
                                 color='#BE0A01'
                             />
-                            <Text>สีแดงเข้ม</Text>
+                            <Text style={styles.modalText01}>สีแดงเข้ม</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
@@ -54,7 +55,7 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                                 onPress={() => setChecked('Pink')}
                                 color='#FF97C5'
                             />
-                            <Text>สีชมพู</Text>
+                            <Text style={styles.modalText01}>สีชมพู</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
@@ -63,7 +64,7 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                                 onPress={() => setChecked('Brown')}
                                 color='#7A601C'
                             />
-                            <Text>สีน้ำตาล</Text>
+                            <Text style={styles.modalText01}>สีน้ำตาล</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
@@ -72,7 +73,7 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                                 onPress={() => setChecked('Reddish gray')}
                                 color='#576458'
                             />
-                            <Text>สีแดงอมเทาปนและสีเขียว</Text>
+                            <Text style={styles.modalText01}>สีแดงอมเทาปนและสีเขียว</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
@@ -81,7 +82,7 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                                 onPress={() => setChecked('Black')}
                                 color='black'
                             />
-                            <Text>สีดำ</Text>
+                            <Text style={styles.modalText01}>สีดำ</Text>
                         </View>
                         {/* <Text> {checked} </Text> */}
                     </View>
@@ -146,6 +147,12 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: 'center',
         fontSize: 18,
+        fontFamily: 'MitrMedium'
+    },
+    modalText01: {
+        textAlign: 'center',
+        fontSize: 16,
+        fontFamily: 'MitrRegular'
     },
 })
 

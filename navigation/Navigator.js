@@ -27,6 +27,8 @@ import ProfileScreen from "../screens/ProfileScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 
+import HistoryScreen from "../screens/HistoryScreen";
+
 const PageNavigator = createNativeStackNavigator();
 const MainNavigator = createNativeStackNavigator();
 
@@ -77,6 +79,11 @@ function MyPageNavigator() {
                 }}
             />
             <PageNavigator.Screen name="notification" component={NotificationScreen} 
+                options={{
+                    headerShown: false
+                }}
+            />
+            <PageNavigator.Screen name="History" component={HistoryScreen} 
                 options={{
                     headerShown: false
                 }}

@@ -22,7 +22,7 @@ const CalendarScreen = () => {
     <View style={styles.screen}>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 70, marginLeft: -200 }}>
         <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.todayText}>
-          <Text style={{ fontSize: 24, color: "white", fontWeight: 'bold' }}>CALENDAR</Text>
+          <Text style={{ fontSize: 24, color: "white", fontFamily: 'MitrRegular', }}>Calendar</Text>
         </LinearGradient>
       </View>
       <TimeDatePicker

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import MenstrualLevelModel from '../components/MenstrualLevelModel';
@@ -33,11 +33,12 @@ const HomeScreen = ({ navigation }) => {
         const formattedDate = new Date(date).toLocaleDateString('en-US', options);
         const [month, day, year] = formattedDate.split(' ');
         const capitalizedMonth = month.toUpperCase();
-        return `${capitalizedMonth} ${year}`;
+        return `${month} ${year}`;
     }
 
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
     });
 
     if (!loaded) {
@@ -50,19 +51,15 @@ const HomeScreen = ({ navigation }) => {
 
                 <CalendarStripC />
             </View>
-            {/* <View style={{ flex: 1 }}>
-                <Text style={{ fontFamily: 'Mitr-Medium', fontSize: 27 }}>Yatra-One สว</Text>
-            </View> */}
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -140 }}>
-                <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.todayText}>
-                    <Text style={{ fontSize: 24, color: "white", fontWeight: 'bold' }}>TODAY</Text>
+                <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.todayborder}>
+                    <Text style={styles.modalText01}>Today</Text>
                 </LinearGradient>
-                <Text style={{ fontSize: 24, fontWeight: 'bold', paddingHorizontal: 22 }}>{formatDate(date)}</Text>
+                <Text style={[styles.modalText01, {paddingHorizontal: 22, color: 'black' }]}>{formatDate(date)}</Text>
             </View>
-
             <View style={[styles.leftAlignedText, { marginTop: 100 }]}>
-                <Text style={{ fontSize: 15, color: "#8461D5", fontWeight: 'bold' }}>welcome</Text>
-                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Leslie Alexander</Text>
+                <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>Welcome</Text>
+                <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', }}>Leslie Alexander</Text>
             </View>
 
             <View style={{ marginLeft: -250 }}>
@@ -102,12 +99,16 @@ const HomeScreen = ({ navigation }) => {
                     />
                 </TouchableOpacity>
                 <NotesModel visible={modalVisibleNotes} onClose={NotesIcon}></NotesModel>
-                <TouchableOpacity>
+                <Pressable onPress={() => {
+                    navigation.navigate("History", {});
+                    return console.log("History")
+                }}>
+                
                     <Image
                         source={require('../assets/Home/history-icon.png')}
                         style={[styles.image, { width: 58, height: 58 }]}
                     />
-                </TouchableOpacity>
+                </Pressable>
             </View>
         </View>
     );
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "white"
+        backgroundColor: "white",
     },
     groupimage: {
         flexDirection: 'row',
@@ -156,11 +157,18 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
-    todayText: {
+    todayborder: {
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 30,
     },
+    modalText01: {
+        textAlign: 'center',
+        fontSize: 24,
+        fontFamily: 'MitrRegular',
+        color: 'white'
+    },
+
 });
 
 export default HomeScreen;

@@ -27,7 +27,7 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
                                 onPress={() => setCheckedVL('large quantity')}
                                 color='#BE0A01'
                             />
-                            <Text>ปริมาณมาก</Text>
+                            <Text style={styles.modalText01} >ปริมาณมาก</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
@@ -36,7 +36,7 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
                                 onPress={() => setCheckedVL('moderate quantity')}
                                 color='#FF0000'
                             />
-                            <Text>ปริมาณปานกลาง (ปกติ)</Text>
+                            <Text style={styles.modalText01} >ปริมาณปานกลาง (ปกติ)</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
@@ -45,7 +45,7 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
                                 onPress={() => setCheckedVL('small quantity')}
                                 color='#F98585'
                             />
-                            <Text>ปริมาณน้อย</Text>
+                            <Text style={styles.modalText01} >ปริมาณน้อย</Text>
                         </View>
                         {/* <Text> {checkedVL} </Text> */}
                     </View>
@@ -109,12 +109,18 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: 'center',
         fontSize: 18,
+        fontFamily: 'MitrMedium'
     },
     gradientBackground: {
         width: '100%',
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    modalText01: {
+        textAlign: 'center',
+        fontSize: 16,
+        fontFamily: 'MitrRegular'
     },
 })
 

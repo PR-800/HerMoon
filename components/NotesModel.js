@@ -16,7 +16,7 @@ const NotesModel = ({ visible, onClose }) => {
                             source={require('../assets/Home/notes01-icon.png')}
                             style={styles.image}
                         />
-                        <Text style={styles.modalText}>  บันทึกข้อมูลเพิ่มเติม</Text>
+                        <Text style={styles.modalText}> บันทึกข้อมูลเพิ่มเติม</Text>
                     </View>
                     <View style={{ backgroundColor: 'white', borderRadius: 40, paddingBottom: 150, paddingHorizontal: 20, paddingTop: 20 }}>
                         <TextInput
@@ -88,10 +88,11 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: 'center',
         fontSize: 18,
+        fontFamily: 'MitrMedium'
     },
     input: {
         height: 100,
-        width: 170,
+        width: 180,
       },
 })
 
