@@ -9,7 +9,7 @@ const NotesModel = ({ visible, onClose }) => {
             transparent={true}
             visible={visible}>
             <View style={styles.centeredView}>
-                <LinearGradient colors={['#BF89FF', '#E8D9F1']} style={styles.modalView}>
+                <LinearGradient colors={['#BF89FF', '#E8D9F1']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.modalView}>
                     <View style={{ margin: 25, flexDirection: 'row', alignItems: 'center' }}>
                         <Image
 

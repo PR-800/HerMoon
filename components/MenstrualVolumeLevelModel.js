@@ -4,13 +4,13 @@ import { RadioButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
-    const [checked, setChecked] = React.useState('Apple'); //initial choice
+    const [checkedVL, setCheckedVL] = React.useState(''); //initial choice
     return (
         <Modal
             transparent={true}
             visible={visible}>
             <View style={styles.centeredView}>
-                <LinearGradient colors={['#7ED8FF', '#CCF2FE']} style={styles.modalView}>
+                <LinearGradient colors={['#7ED8FF', '#CCF2FE']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.modalView}>
                     <View style={{ margin: 20, flexDirection: 'row', alignItems: 'center' }}>
                         <Image
 
@@ -23,8 +23,8 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value="large quantity"
-                                status={checked === 'large quantity' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('large quantity')}
+                                status={checkedVL === 'large quantity' ? 'checkedVL' : 'uncheckedVL'}
+                                onPress={() => setCheckedVL('large quantity')}
                                 color='#BE0A01'
                             />
                             <Text>ปริมาณมาก</Text>
@@ -32,8 +32,8 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value="moderate quantity"
-                                status={checked === 'moderate quantity' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('moderate quantity')}
+                                status={checkedVL === 'moderate quantity' ? 'checkedVL' : 'uncheckedVL'}
+                                onPress={() => setCheckedVL('moderate quantity')}
                                 color='#FF0000'
                             />
                             <Text>ปริมาณปานกลาง (ปกติ)</Text>
@@ -41,13 +41,13 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value="small quantity"
-                                status={checked === 'small quantity' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('small quantity')}
+                                status={checkedVL === 'small quantity' ? 'checkedVL' : 'uncheckedVL'}
+                                onPress={() => setCheckedVL('small quantity')}
                                 color='#F98585'
                             />
                             <Text>ปริมาณน้อย</Text>
                         </View>
-                        {/* <Text> {checked} </Text> */}
+                        {/* <Text> {checkedVL} </Text> */}
                     </View>
                     <View style={{ marginLeft: 130, marginTop: -60 }}>
                         <TouchableOpacity>

@@ -1,14 +1,22 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { TimeDatePicker, Modes } from "react-native-time-date-picker";
 import { LinearGradient } from 'expo-linear-gradient';
 
 import moment from 'moment';
 import CalendarStripC from '../components/CalendarStrip';
 
+import EditInfo from '../components/EditInfo';
+
 
 const CalendarScreen = () => {
   const now = moment().valueOf();
+
+  const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
+
+  const EditIcon = () => {
+    setModalVisibleEdit(!modalVisibleEdit);
+  };
 
   return (
     <View style={styles.screen}>
@@ -45,7 +53,7 @@ const CalendarScreen = () => {
           />
         </View>
         <View style={styles.textBox}>
-          <Image style={{marginTop: -5, marginLeft: -5}}
+          <Image style={{ marginTop: -5, marginLeft: -5 }}
             source={require('../assets/Home/sanitarypad02-icon.png')}
           />
         </View>
@@ -54,13 +62,13 @@ const CalendarScreen = () => {
             source={require('../assets/Home/notes02-icon.png')}
           />
         </View>
-        <View>
-          <Image style={{marginLeft: 235, marginVertical: 10}}
+        <TouchableOpacity onPress={EditIcon}>
+          <Image style={{ marginLeft: 235, marginVertical: 10 }}
             source={require('../assets/Home/edit01-icon.png')}
           />
-        </View>
+        </TouchableOpacity>
+        <EditInfo visible={modalVisibleEdit} onClose={EditIcon} />
         <View >
-
         </View>
       </LinearGradient>
     </View>

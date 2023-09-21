@@ -4,13 +4,13 @@ import { RadioButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const MenstrualLevelModel = ({ visible, onClose }) => {
-    const [checked, setChecked] = React.useState('Apple'); //initial choice
+    const [checked, setChecked] = React.useState(''); //initial choice
     return (
         <Modal
             transparent={true}
             visible={visible}>
             <View style={styles.centeredView}>
-                <LinearGradient colors={['#F77D80', '#FFEAEA']} style={styles.modalView}>
+                <LinearGradient colors={['#F77D80', '#FFEAEA']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.modalView}>
                     <View style={{ margin: 20, flexDirection: 'row', alignItems: 'center' }}>
                         <Image
 
