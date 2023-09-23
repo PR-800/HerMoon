@@ -3,25 +3,24 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 
-// import { useFonts, VarelaRound_400Regular, } from '@expo-google-fonts/varela-round';
+import { useFonts } from 'expo-font';
 
 const LoginScreen = ({navigation}) => {
 
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
 
-    // let [fontsLoaded, fontError] = useFonts({
-    //     VarelaRound_400Regular,
-    // });
-    
-    // if (!fontsLoaded && !fontError) {
-    //     return null;
-    // }
+    const [loaded] = useFonts({
+        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+    });
+
+    if (!loaded) {
+        return null;
+    }
 
     return (
-        <View style={[styles.screen, {
-            // fontFamily: 'VarelaRound_400Regular',
-        }]}>
+        <View style={styles.screen}>
             <LinearGradient
                 colors={['#FC7D7B', '#9F79EB']}
                 style={styles.gradientBackground}
@@ -35,6 +34,7 @@ const LoginScreen = ({navigation}) => {
                             textShadowColor: '#9F79EB',
                             textShadowOffset: {width: 1, height: 0.5},
                             textShadowRadius: 35,
+                            marginTop: 15,
                         }]}>Her</Text>
                         <Text style={[styles.headerText, {
                             textShadowColor: '#9F79EB',
@@ -45,8 +45,7 @@ const LoginScreen = ({navigation}) => {
                 </View>
 
                 <TextInput 
-                    style={styles.input} 
-                    // mode='outlined'
+                    style={[styles.input, {}]} 
                     theme={{ 
                         roundness: 50, 
                         colors: { onSurfaceVariant: 'grey'} ,
@@ -62,7 +61,6 @@ const LoginScreen = ({navigation}) => {
 
                 <TextInput 
                     style={styles.input} 
-                    // mode='outlined'
                     theme={{ 
                         roundness: 50, 
                         colors: { onSurfaceVariant: 'grey'} 
@@ -136,12 +134,11 @@ const styles = StyleSheet.create({
         marginBottom: 40,
     },
     headerText: {
-        // fontFamily: "VarelaRound_400Regular",
-        fontSize: 50,
-        fontWeight: "bold",
-        lineHeight: 50,
+        fontSize: 55,
+        lineHeight: 65,
         marginLeft: 30,
-        color: "white"
+        color: "white",
+        fontFamily: 'MitrMedium',
     },
     input: {
         width: 300,
@@ -151,7 +148,8 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         overflow: 'hidden',
         paddingLeft: 5,
-
+        fontFamily: 'MitrRegular',
+        
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -171,7 +169,7 @@ const styles = StyleSheet.create({
     text: {
         color: "white",
         fontSize: 15,
-        fontWeight: "bold",
+        fontFamily: 'MitrRegular',
     },
     button: {
         alignItems: 'center',
@@ -193,8 +191,8 @@ const styles = StyleSheet.create({
     },
     textButton: {
         color:"#FF9B80", 
-        fontWeight: "bold",
         fontSize: 20,
+        fontFamily: 'MitrMedium',
     }
 });
   

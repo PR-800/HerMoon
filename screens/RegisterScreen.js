@@ -3,10 +3,21 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { useFonts } from 'expo-font';
+
 const SignUpScreen = ({navigation}) => {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [confirmPassword, setConfirmPassword] = React.useState("");
+
+    const [loaded] = useFonts({
+        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+    });
+
+    if (!loaded) {
+        return null;
+    }
 
     return (
         <View style={styles.screen}>
@@ -23,7 +34,6 @@ const SignUpScreen = ({navigation}) => {
 
                 <TextInput 
                     style={styles.input} 
-                    // mode='outlined'
                     theme={{ 
                         roundness: 50, 
                         colors: { onSurfaceVariant: 'grey'} 
@@ -39,7 +49,6 @@ const SignUpScreen = ({navigation}) => {
 
                 <TextInput 
                     style={styles.input} 
-                    // mode='outlined'
                     theme={{ 
                         roundness: 50, 
                         colors: { onSurfaceVariant: 'grey'} 
@@ -55,7 +64,6 @@ const SignUpScreen = ({navigation}) => {
 
                 <TextInput 
                     style={styles.input} 
-                    // mode='outlined'
                     theme={{ 
                         roundness: 50, 
                         colors: { onSurfaceVariant: 'grey'} 
@@ -114,10 +122,9 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontSize: 50,
-        fontWeight: "bold",
-        lineHeight: 50,
-        left: -20,
-        color: "white"
+        lineHeight: 60,
+        color: "white",
+        fontFamily: 'MitrMedium',
     },
     input: {
         width: 300,
@@ -147,7 +154,7 @@ const styles = StyleSheet.create({
     text: {
         color: "white",
         fontSize: 15,
-        fontWeight: "bold",
+        fontFamily: 'MitrRegular',
     },
     button: {
         alignItems: 'center',
@@ -169,8 +176,8 @@ const styles = StyleSheet.create({
     },
     textButton: {
         color:"#FF9B80", 
-        fontWeight: "bold",
         fontSize: 20,
+        fontFamily: 'MitrMedium',
     }
 });
   

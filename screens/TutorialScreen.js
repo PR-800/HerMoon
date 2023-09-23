@@ -1,19 +1,20 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-// import AliceCarousel from 'react-alice-carousel';
+
+import { useFonts } from 'expo-font';
 
 const TutorialScreen = ({navigation, images}) => {
-    // const settings = {
-    //     infinite: true,
-    //     dots: true,
-    //     slidesToShow: 1,
-    //     slidesToScroll: 1,
-    //     lazyLoad: true,
-    //     autoplay: true,
-    //     autoplaySpeed: 2000,
-    // };
 
+    const [loaded] = useFonts({
+        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+    });
+
+    if (!loaded) {
+        return null;
+    }
+    
     return (
         <View style={styles.screen}>
             <LinearGradient
@@ -26,18 +27,6 @@ const TutorialScreen = ({navigation, images}) => {
 
                 <View style={styles.content}>
                     <Text>tutorial details</Text>
-                    {/* <AliceCarousel autoPlay autoPlayInterval="3000">
-                        <Image 
-                            source={
-                                require('../assets/icon.png')
-                            }
-                        />
-                        <Image 
-                            source={
-                                require('../assets/icon.png')
-                            }
-                        />
-                    </AliceCarousel> */}
                 </View>
 
                 <View style={styles.bottom}>
@@ -80,14 +69,12 @@ const styles = StyleSheet.create({
     top: {
         height: "10%",
         width: "100%",
-        // backgroundColor: 'pink',
         justifyContent: "center",
         alignItems: "center",
     },
     content: {
         height: "70%",
         width: "100%",
-        // backgroundColor: 'grey',
         justifyContent: "center",
         alignItems: "center",
     },
@@ -100,7 +87,7 @@ const styles = StyleSheet.create({
     text: {
         color: "white",
         fontSize: 15,
-        fontWeight: "bold",
+        fontFamily: 'MitrRegular',
     },
     button: {
         alignItems: 'center',
@@ -121,20 +108,15 @@ const styles = StyleSheet.create({
     },
     textButton: {
         color:"#FF9B80", 
-        fontWeight: "bold",
         fontSize: 20,
+        fontFamily: 'MitrMedium',
     },
     bottom: {
         height: "20%",
         width: "100%",
-        // backgroundColor: 'red',
         justifyContent: "center",
         alignItems: "center",
     },
-    // sliderimg: {
-    //     width: "100%",
-    //     height: "500px",
-    // }
 });
   
 export default TutorialScreen;

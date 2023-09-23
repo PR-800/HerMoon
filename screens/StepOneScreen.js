@@ -2,7 +2,19 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { useFonts } from 'expo-font';
+
 const StepOneScreen = ({navigation, images}) => {
+
+    const [loaded] = useFonts({
+        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+    });
+
+    if (!loaded) {
+        return null;
+    }
+
     return (
         <View style={styles.screen}>
             <LinearGradient
@@ -14,7 +26,7 @@ const StepOneScreen = ({navigation, images}) => {
                 </View>
 
                 <View style={styles.content}>
-                    <Text>Step 1</Text>
+                    <Text style={styles.text}>Step 1</Text>
                 </View>
 
                 <View style={styles.bottom}>
@@ -64,7 +76,7 @@ const styles = StyleSheet.create({
     text: {
         color: "white",
         fontSize: 15,
-        fontWeight: "bold",
+        fontFamily: 'MitrRegular',
     },
     nextButton: {
         alignItems: 'center',
@@ -86,7 +98,7 @@ const styles = StyleSheet.create({
     },
     textNextButton: {
         color: "#FF9B80", 
-        fontWeight: "bold",
+        fontFamily: 'MitrMedium',
         fontSize: 20,
     },
     bottom: {
