@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { useFonts } from 'expo-font';
+import { useFonts } from 'expo-font'; 
 
 const LoginScreen = ({navigation}) => {
 

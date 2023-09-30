@@ -3,8 +3,19 @@ import { StyleSheet, Text, View, Image, Pressable  } from 'react-native';
 import { Button } from 'react-native-web';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { useFonts } from 'expo-font';
 
 const ProfileScreen = ({ route, navigation }) => {
+
+    const [loaded] = useFonts({
+        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+    });
+
+    if (!loaded) {
+        return null;
+    }
+    
     return ( 
         <View style={styles.screen}>
             <LinearGradient
@@ -125,7 +136,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        fontFamily: "monospace",
     },
     image: {
         width: 150, 
@@ -136,8 +146,7 @@ const styles = StyleSheet.create({
     },
     headers: {
         fontSize: 25,
-        fontWeight: '700',
-        fontFamily: "monospace",
+        fontFamily: "MitrMedium",
         marginTop: -30,
         color: "white",
 
@@ -148,6 +157,7 @@ const styles = StyleSheet.create({
     subheader: {
         fontSize: 17,
         color: "white",
+        fontFamily: "MitrRegular",
 
         textShadowColor: 'rgba(0, 0, 0, 0.5)',
         textShadowOffset: {width: -1, height: 2},
@@ -177,8 +187,8 @@ const styles = StyleSheet.create({
     content: {
         // fontFamily: "monospace",
         fontSize: 17 ,
-        fontWeight: "500",
-        margin: 5,
+        fontFamily: "MitrRegular",
+        margin: 4,
     },
     icon: {
         display: "flex",

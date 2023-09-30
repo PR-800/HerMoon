@@ -47,16 +47,16 @@ const HomeScreen = ({ navigation }) => {
 
     return (
         <View style={styles.screen}>
-            <View style={{ marginTop: 20 }}>
 
-                <CalendarStripC />
-            </View>
+            <CalendarStripC/>
+            
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -140 }}>
                 <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.todayborder}>
                     <Text style={styles.modalText01}>Today</Text>
                 </LinearGradient>
                 <Text style={[styles.modalText01, {paddingHorizontal: 22, color: 'black' }]}>{formatDate(date)}</Text>
             </View>
+
             <View style={[styles.leftAlignedText, { marginTop: 100 }]}>
                 <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>Welcome</Text>
                 <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', }}>Leslie Alexander</Text>
@@ -168,7 +168,6 @@ const styles = StyleSheet.create({
         fontFamily: 'MitrRegular',
         color: 'white'
     },
-
 });
 
 export default HomeScreen;

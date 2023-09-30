@@ -2,8 +2,18 @@ import React from 'react'
 import { StyleSheet, Text, View, Image, Pressable, ScrollView, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { useFonts } from 'expo-font';
 
 const ArticleScreen = ({ route, navigation }) => {
+
+    const [loaded] = useFonts({
+        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+    });
+
+    if (!loaded) {
+        return null;
+    }
     return ( 
         <View style={styles.screen}>
             <LinearGradient
@@ -160,6 +170,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: "white",
         fontWeight: "600",
+        fontFamily: 'MitrRegular'
     },
     icon: {
         display: "flex",
@@ -168,9 +179,10 @@ const styles = StyleSheet.create({
         // color: "white",
     },
     header: {
-        marginLeft:30,
-        // margin:10,
-        fontSize:25,color:"white",fontWeight:"bold",
+        marginLeft:40,
+        fontSize: 40,
+        color:"white",
+        fontFamily: 'MitrMedium'
     },
     boxList: {
         borderRadius: 20,
@@ -182,18 +194,23 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
     },
     name: {
-
+        marginLeft: 8,
+        fontFamily: 'MitrRegular'
     },
     title: {
         fontSize: 20,
-        fontWeight: "bold",
+        // fontWeight: "bold",
+        marginVertical: 5,
+        lineHeight: 25,
+        fontFamily: 'MitrMedium'
     },
     timestamp: {
-        marginVertical: 10,
-        color: "gray"
+        marginBottom: 10,
+        color: "gray",
+        fontFamily: 'MitrRegular'
     },
     detail: {
-
+        fontFamily: 'MitrRegular'
     },
     userIcon: {
         marginHorizontal: 5,
@@ -220,9 +237,9 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         borderRadius: 10,
         left: 50,
-        width: 100,
-        height: 100,
-        margin: -10
+        width: 120,
+        height: 120,
+        margin: -15
 
     }
 });

@@ -4,6 +4,8 @@ import { TextInput } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { useFonts } from 'expo-font';
+
 const EditProfileScreen = ({ route, navigation }) => {
 
   const dropDownRef = React.useRef();
@@ -44,6 +46,15 @@ const EditProfileScreen = ({ route, navigation }) => {
     { label: '7-9 hours', value: 'apple' },
     { label: 'Above 9 hours', value: 'cat' },
   ]);
+
+  const [loaded] = useFonts({
+    MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+    MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+  });
+
+  if (!loaded) {
+      return null;
+  }
 
   return (
       <View style={styles.screen}>
@@ -180,7 +191,7 @@ const EditProfileScreen = ({ route, navigation }) => {
           <Pressable onPress={() => {
                 return console.log("SUBMITED")
           }}>
-            <Text style={{color: "white", fontSize: 20, fontWeight: "600"}}>
+            <Text style={{color: "white", fontSize: 20, fontFamily: "MitrMedium",}}>
             SUBMIT
             </Text>
           </Pressable>
@@ -199,7 +210,7 @@ const styles = StyleSheet.create({
   header: {
     display: "flex",
     fontSize: 25,
-    fontWeight: "700",
+    fontFamily: "MitrMedium",
     lineHeight: 50,
 },
   input: {

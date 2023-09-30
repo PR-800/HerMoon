@@ -2,8 +2,18 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { useFonts } from 'expo-font'; 
 
 const ContactScreen = ({ route, navigation }) => {
+
+    const [loaded] = useFonts({
+        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+    });
+
+    if (!loaded) {
+        return null;
+    }
 
   return (
     <View style={styles.screen}>
@@ -21,18 +31,20 @@ const ContactScreen = ({ route, navigation }) => {
                         source={require('../assets/article/arrow-left-white.png')}
                         />
                     </Pressable>
-                    <Text style={styles.subheading}>Group members</Text>
+                    <Text style={styles.header}>Group members</Text>
                     <Text></Text>
                 </View>
                 {/* <Text style={styles.header}>รายชื่อสมาชิกกลุ่ม</Text> */}
             </LinearGradient>
             <View style={styles.content}>
-                <Text>64070014 นายจิรโรจน์ เลิศอัครนานนท์</Text>
-                <Text>64070025 นางสาวฐิติภา เอี่ยมสิริวงศ์</Text>
-                <Text>64070149 นางสาวดวงกมล พบสูงเนิน{`\n`}</Text>
-                <Text>คณะเทคโนโลยีสารสนเทศ ชั้นปีที่ 3</Text>
-                <Text>แขนง Software Engineering</Text>
-                <Text>สถาบันพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</Text>
+                <Text style={styles.text}>64070014 นายจิรโรจน์ เลิศอัครนานนท์</Text>
+                <Text style={styles.text}>64070025 นางสาวฐิติภา เอี่ยมสิริวงศ์</Text>
+                <Text style={styles.text}>64070149 นางสาวดวงกมล พบสูงเนิน{`\n`}</Text>
+                <Text style={styles.text}>คณะเทคโนโลยีสารสนเทศ</Text>
+                <Text style={styles.text}>สาขาเทคโนโลยีสารสนเทศ ชั้นปีที่ 3</Text>
+                <Text style={styles.text}>แขนง Software Engineering{`\n`}</Text>
+                <Text style={styles.text}>สถาบันเทคโนโลยีพระจอมเกล้า</Text>
+                <Text style={styles.text}>เจ้าคุณทหารลาดกระบัง</Text>
             </View>
     </View>
   )
@@ -44,42 +56,34 @@ screen: {
     backgroundColor: "white",
     alignItems: "center",
 },
-  gradientBackground: {
+gradientBackground: {
     width: '100%',
-    height: '20%',
+    height: '15%',
     justifyContent: 'center',
-    // alignItems: 'center'
 },
 navbar: {
     padding: 30,
+    paddingTop: 60,
     flexDirection: "row",
     justifyContent: "space-between",
-    // borderColor: "black",
-    // borderWidth: 2,
-},
-subheading: {
-    display: "flex",
-    fontSize: 20,
-    color: "white",
-    fontWeight: "600",
-
-},
-icon: {
-    display: "flex",
-    width: 25,
-    height: 25,
 },
 header: {
-    marginLeft:30,
-    fontSize:25,
-    color:"white",
-    fontWeight:"bold",
+    display: "flex",
+    fontSize: 25,
+    color: "white",
+    fontFamily: 'MitrMedium',
+    marginTop: -8,
 },
 content: {
     alignItems: "center",
     margin: 50,
     fontSize: 20,
-}
+},
+text: {
+    fontFamily: 'MitrRegular',
+    fontSize: 17,
+    lineHeight: 30,
+},
 });
 
 export default ContactScreen

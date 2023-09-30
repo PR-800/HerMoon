@@ -2,8 +2,18 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { useFonts } from 'expo-font';
 
 const PrivacyScreen = ({ route, navigation }) => {
+
+    const [loaded] = useFonts({
+        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+    });
+
+    if (!loaded) {
+        return null;
+    }
 
   return (
     <View style={styles.screen}>
@@ -21,14 +31,14 @@ const PrivacyScreen = ({ route, navigation }) => {
                         source={require('../assets/article/arrow-left-white.png')}
                         />
                     </Pressable>
-                    <Text style={styles.subheading}>PrivacyScreen</Text>
+                    <Text style={styles.header}>Privacy Policy</Text>
                     <Text></Text>
                 </View>
                 {/* <Text style={styles.header}>รายชื่อสมาชิกกลุ่ม</Text> */}
             </LinearGradient>
             <View style={styles.content}>
-                <Text>วิชานี้เป็นส่วนหนึ่งของวิชา</Text>
-                <Text>Mobile Device Programming (1/2023)</Text>
+                <Text style={styles.text}>วิชานี้เป็นส่วนหนึ่งของวิชา</Text>
+                <Text style={styles.text}>Mobile Device Programming (1/2023)</Text>
             </View>
     </View>
   )
@@ -40,42 +50,34 @@ screen: {
     backgroundColor: "white",
     alignItems: "center",
 },
-  gradientBackground: {
+gradientBackground: {
     width: '100%',
-    height: '20%',
+    height: '15%',
     justifyContent: 'center',
-    // alignItems: 'center'
 },
 navbar: {
     padding: 30,
+    paddingTop: 60,
     flexDirection: "row",
     justifyContent: "space-between",
-    // borderColor: "black",
-    // borderWidth: 2,
-},
-subheading: {
-    display: "flex",
-    fontSize: 20,
-    color: "white",
-    fontWeight: "600",
-
-},
-icon: {
-    display: "flex",
-    width: 25,
-    height: 25,
 },
 header: {
-    marginLeft:30,
-    fontSize:25,
-    color:"white",
-    fontWeight:"bold",
+    display: "flex",
+    fontSize: 25,
+    color: "white",
+    fontFamily: 'MitrMedium',
+    marginTop: -8,
 },
 content: {
     alignItems: "center",
     margin: 50,
     fontSize: 20,
-}
+},
+text: {
+    fontFamily: 'MitrRegular',
+    fontSize: 17,
+    lineHeight: 30,
+},
 });
 
 export default PrivacyScreen

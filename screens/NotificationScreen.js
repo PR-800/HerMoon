@@ -3,8 +3,19 @@ import { StyleSheet, Text, View, Image, Pressable, Switch } from 'react-native';
 // import ToggleSwitch from 'toggle-switch-react-native'
 // import { Button } from 'react-native-web';
 
+import { useFonts } from 'expo-font'; 
 
 const NotificationScreen = ({ route, navigation }) => {
+
+    const [loaded] = useFonts({
+        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+    });
+
+    if (!loaded) {
+        return null;
+    }
+
     return ( 
         <View style={styles.screen}>
             <View style={styles.headerGroup}>
@@ -24,7 +35,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 General
             </Text>
             <View style={styles.filterContainer}>
-                <Text>General Notification</Text>
+                <Text style={styles.text}>General Notification</Text>
                 <Switch
                 trackColor={{ true: "#9F79EB", false: "lightgray" }}
                 thumbColor={"blue"}
@@ -32,7 +43,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 />
             </View>
             <View style={styles.filterContainer}>
-                <Text>Sound</Text>
+                <Text style={styles.text}>Sound</Text>
                 <Switch
                 trackColor={{ true: "#ff6f00", false: "lightgray" }}
                 thumbColor={"#ff6f00"}
@@ -40,7 +51,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 />
             </View>
             <View style={styles.filterContainer}>
-                <Text>Vibrate</Text>
+                <Text style={styles.text}>Vibrate</Text>
                 <Switch
                 trackColor={{ true: "#ff6f00", false: "lightgray" }}
                 thumbColor={"#ff6f00"}
@@ -50,7 +61,7 @@ const NotificationScreen = ({ route, navigation }) => {
             <Text style={styles.subHead}>
                 System & Service updates</Text>
             <View style={styles.filterContainer}>
-                <Text>App updates</Text>
+                <Text style={styles.text}>App updates</Text>
                 <Switch
                 trackColor={{ true: "#ff6f00", false: "lightgray" }}
                 thumbColor={"#ff6f00"}
@@ -58,7 +69,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 />
             </View>
             <View style={styles.filterContainer}>
-                <Text>Reminder</Text>
+                <Text style={styles.text}>Reminder</Text>
                 <Switch
                 trackColor={{ true: "#ff6f00", false: "lightgray" }}
                 thumbColor={"#ff6f00"}
@@ -66,7 +77,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 />
             </View>
             <View style={styles.filterContainer}>
-                <Text>Promotion</Text>
+                <Text style={styles.text}>Promotion</Text>
                 <Switch
                 trackColor={{ true: "#ff6f00", false: "lightgray" }}
                 thumbColor={"#ff6f00"}
@@ -100,12 +111,12 @@ const styles = StyleSheet.create({
     header: {
         display: "flex",
         fontSize: 25,
-        fontWeight: "700",
+        fontFamily: 'MitrMedium',
         lineHeight: 50,
     },
     subHead: {
         fontSize: 20,
-        fontWeight: "bold",
+        fontFamily: 'MitrMedium',
         justifyContent: "flex-start",
         alignItems: "flex-start",
         marginVertical: 20,
@@ -136,6 +147,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "80%",
         marginVertical: 5,
+    },
+    text: {
+        fontFamily: 'MitrRegular',
+        fontSize: 17,
     },
 });
 

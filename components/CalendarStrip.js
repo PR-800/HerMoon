@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react'
 
+import { useFonts } from 'expo-font';
+
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
 
@@ -17,6 +19,16 @@ const CalendarStripC = () => {
             end: moment(endDate),
         },
     ];
+
+    const [loaded] = useFonts({
+        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+    });
+
+    if (!loaded) {
+        return null;
+    }
+    
     return (
             <CalendarStrip
                 selectedDay={selectedDay}
@@ -32,24 +44,26 @@ const CalendarStripC = () => {
                     borderHighlightColor: 'white',
                 }}
                 calendarHeaderStyle={{
-                    fontSize: 50,
-                    color: 'white',
+                    fontSize: 30,
+                    color: 'transparent',
                     fontFamily: 'MitrRegular',
                 }}
                 iconLeftStyle={{ position: "absolute", top: -200 }}
                 iconRightStyle={{ position: "absolute", top: -200 }}
-                style={{ height: 150, paddingTop: 10, paddingBottom: 10 }}
+                style={{ height: 150, top: 25}}
                 startDate={moment(date)}
                 highlightDateContainerStyle={{
                     backgroundColor: '#F77D80',
-                    paddingVertical: 10,
+                    paddingVertical: 5,
                     height: 'auto',
                     color: 'black',
+                    fontFamily: 'MitrRegular',
                 }}
                 dayContainerStyle={{ paddingVertical: 10 }}
                 highlightDateNumberStyle={{
                     color: 'gray',
                     fontSize: 14,
+                    fontFamily: 'MitrRegular',
                 }}
                 highlightDateNameStyle={{
                     color: 'white',
@@ -59,6 +73,13 @@ const CalendarStripC = () => {
                     borderTopEndRadius: 20,
                     borderTopLeftRadius: 20,
                     borderTopRightRadius: 20,
+                    fontFamily: 'MitrRegular',
+                }}
+                dateNameStyle={{
+                    fontFamily: 'MitrRegular',
+                }}
+                dateNumberStyle={{
+                    fontFamily: 'MitrRegular',
                 }}
                 highlightDateNumberContainerStyle={{
                     backgroundColor: '#FFEAEA',
