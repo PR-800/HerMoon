@@ -67,6 +67,68 @@ const ArticleScreen = ({ route, navigation }) => {
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                     </Text>
                 </TouchableOpacity>
+
+                {/* 2 */}
+                <TouchableOpacity style={styles.boxList}>
+                    <View style={styles.groupUsername}>
+                        <Image
+                        style={styles.userIcon}
+                        source={require('../assets/article/test-user-image.png')}
+                        />
+                        <Text style={styles.name}>
+                            Username
+                        </Text>
+                    </View>
+                    <View style={styles.groupBox}>
+                        <View style={styles.groupLeft}>
+                        <Text style={styles.title} numberOfLines={3}>
+                        6 visual design fundamentals that UX designersssss
+                        </Text>
+                        </View>
+                        <View style={styles.groupRight}>
+                        <Image
+                            style={styles.coverImage}
+                            source={require('../assets/article/test-cover.png')}
+                        />
+                        </View>
+                    </View>
+                    <Text style={styles.timestamp}>
+                        17 hours ago
+                    </Text>
+                    <Text style={styles.detail} numberOfLines={2}>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.boxList}>
+                    <View style={styles.groupUsername}>
+                        <Image
+                        style={styles.userIcon}
+                        source={require('../assets/article/test-user-image.png')}
+                        />
+                        <Text style={styles.name}>
+                            Username
+                        </Text>
+                    </View>
+                    <View style={styles.groupBox}>
+                        <View style={styles.groupLeft}>
+                        <Text style={styles.title} numberOfLines={3}>
+                        6 visual design fundamentals that UX designersssss
+                        </Text>
+                        </View>
+                        <View style={styles.groupRight}>
+                        <Image
+                            style={styles.coverImage}
+                            source={require('../assets/article/test-cover.png')}
+                        />
+                        </View>
+                    </View>
+                    <Text style={styles.timestamp}>
+                        17 hours ago
+                    </Text>
+                    <Text style={styles.detail} numberOfLines={2}>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </Text>
+                </TouchableOpacity>
             
                 
 
