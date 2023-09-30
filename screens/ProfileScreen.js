@@ -57,7 +57,7 @@ const ProfileScreen = ({ route, navigation }) => {
                     </View>
                 </Pressable>
 
-                <Pressable onPress={() => {
+                {/* <Pressable onPress={() => {
                     return console.log("Language")
                 }}>
                     <View style={styles.group}>
@@ -68,26 +68,27 @@ const ProfileScreen = ({ route, navigation }) => {
                         <Text style={styles.content}>Language</Text>
                     </View>
                     
-                </Pressable>
+                </Pressable> */}
 
             </View>
 
             <View style={styles.box} >
                 <Pressable onPress={() => {
-                    navigation.navigate("editProfile", {});
-                    return console.log("Help")
+                    navigation.navigate("tutorial", {});
+                    return console.log("tutorial")
                 }}>
                     <View style={styles.group}>
                         <Image
                             source={require('../assets/profile/support.png')}
                             style={styles.icon}
                         />
-                        <Text style={styles.content}>Help & Support</Text>
+                        <Text style={styles.content}>Tutorial</Text>
                     </View>
                 
                 </Pressable> 
                 
                 <Pressable onPress={() => {
+                    navigation.navigate("contact", {});
                     return console.log("Contact")
                 }}>
                     <View style={styles.group}>
@@ -100,7 +101,7 @@ const ProfileScreen = ({ route, navigation }) => {
                 </Pressable>
 
                 <Pressable onPress={() => {
-                    return console.log("Privacy")
+                    navigation.navigate("privacy", {});
                 }}>
                     <View style={styles.group}>
                         <Image
@@ -124,7 +125,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        // backgroundColor: "white",
         fontFamily: "monospace",
     },
     image: {

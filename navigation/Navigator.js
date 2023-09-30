@@ -26,6 +26,8 @@ import ProfileScreen from "../screens/ProfileScreen";
 
 import EditProfileScreen from "../screens/EditProfileScreen";
 import NotificationScreen from "../screens/NotificationScreen";
+import ContactScreen from "../screens/ContactScreen";
+import PrivacyScreen from "../screens/PrivacyScreen";
 
 import HistoryScreen from "../screens/HistoryScreen";
 
@@ -88,6 +90,17 @@ function MyPageNavigator() {
                     headerShown: false
                 }}
             />
+            <PageNavigator.Screen name="contact" component={ContactScreen} 
+                options={{
+                    headerShown: false
+                }}
+            />
+            <PageNavigator.Screen name="privacy" component={PrivacyScreen} 
+                options={{
+                    headerShown: false
+                }}
+            />
+
         </PageNavigator.Navigator>
     );
 }

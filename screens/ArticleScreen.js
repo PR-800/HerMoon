@@ -18,7 +18,7 @@ const ArticleScreen = ({ route, navigation }) => {
                             }}>
                         <Image
                         style={styles.icon}
-                        source={require('../assets/profile/arrow-left.png')}
+                        source={require('../assets/article/arrow-left-white.png')}
                         />
                     </Pressable>
                     <Text style={styles.subheading}>Search</Text>
