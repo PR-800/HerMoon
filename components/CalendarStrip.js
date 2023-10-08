@@ -44,7 +44,7 @@ const CalendarStripC = () => {
                     borderHighlightColor: 'white',
                 }}
                 calendarHeaderStyle={{
-                    fontSize: 30,
+                    fontSize: 55,
                     color: 'transparent',
                     fontFamily: 'MitrRegular',
                 }}

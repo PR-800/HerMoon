@@ -48,13 +48,13 @@ const HomeScreen = ({ navigation }) => {
     return (
         <View style={styles.screen}>
 
-            <CalendarStripC/>
-            
+            <CalendarStripC />
+
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -140 }}>
                 <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.todayborder}>
                     <Text style={styles.modalText01}>Today</Text>
                 </LinearGradient>
-                <Text style={[styles.modalText01, {paddingHorizontal: 22, color: 'black' }]}>{formatDate(date)}</Text>
+                <Text style={[styles.modalText01, { paddingHorizontal: 22, color: 'black' }]}>{formatDate(date)}</Text>
             </View>
 
             <View style={[styles.leftAlignedText, { marginTop: 100 }]}>
@@ -63,10 +63,14 @@ const HomeScreen = ({ navigation }) => {
             </View>
 
             <View style={{ marginLeft: -250 }}>
+            <Pressable onPress={() => {
+                    navigation.navigate("History", {});
+                    return console.log("History")
+                }}>
                 <Image
-                    source={require('../assets/Home/noti-icon.png')}
+                    source={require('../assets/Home/clock-icon.png')}
                     style={[styles.image, { width: 60, height: 60 }]}
-                />
+                /></Pressable>
             </View>
 
             <View style={{ marginTop: -40 }}>
@@ -99,7 +103,7 @@ const HomeScreen = ({ navigation }) => {
                     />
                 </TouchableOpacity>
                 <NotesModel visible={modalVisibleNotes} onClose={NotesIcon}></NotesModel>
-                <Pressable onPress={() => {
+                {/* <Pressable onPress={() => {
                     navigation.navigate("History", {});
                     return console.log("History")
                 }}>
@@ -108,7 +112,7 @@ const HomeScreen = ({ navigation }) => {
                         source={require('../assets/Home/history-icon.png')}
                         style={[styles.image, { width: 58, height: 58 }]}
                     />
-                </Pressable>
+                </Pressable> */}
             </View>
         </View>
     );
