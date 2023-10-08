@@ -84,7 +84,7 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                             />
                             <Text style={styles.modalText01}>สีดำ</Text>
                         </View>
-                        {/* <Text> {checked} </Text> */}
+                        {/* <Text style={styles.modalText02}> {checked} </Text> */}
                     </View>
                     <View style={{ marginLeft: 130, marginTop: -60 }}>
                         <TouchableOpacity>
@@ -153,6 +153,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
         fontFamily: 'MitrRegular'
+    },
+    modalText02: {
+        textAlign: 'center',
+        fontSize: 14,
+        fontFamily: 'MitrRegular',
+        width: 180
     },
 })
 

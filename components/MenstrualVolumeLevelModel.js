@@ -23,7 +23,7 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value="large quantity"
-                                status={checkedVL === 'large quantity' ? 'checkedVL' : 'uncheckedVL'}
+                                status={checkedVL === 'large quantity' ? 'checked' : 'unchecked'}
                                 onPress={() => setCheckedVL('large quantity')}
                                 color='#BE0A01'
                             />
@@ -32,7 +32,7 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value="moderate quantity"
-                                status={checkedVL === 'moderate quantity' ? 'checkedVL' : 'uncheckedVL'}
+                                status={checkedVL === 'moderate quantity' ? 'checked' : 'unchecked'}
                                 onPress={() => setCheckedVL('moderate quantity')}
                                 color='#FF0000'
                             />
@@ -41,7 +41,7 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value="small quantity"
-                                status={checkedVL === 'small quantity' ? 'checkedVL' : 'uncheckedVL'}
+                                status={checkedVL === 'small quantity' ? 'checked' : 'unchecked'}
                                 onPress={() => setCheckedVL('small quantity')}
                                 color='#F98585'
                             />

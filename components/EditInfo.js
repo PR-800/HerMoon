@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const EditInfo = ({ visible, onClose }) => {
     const [checked, setChecked] = React.useState(''); //initial choice
     const [checkedVL, setCheckedVL] = React.useState(''); //initial choice
-    const [text, setText] = useState('');
+    const [notes, setNotes] = React.useState(''); //initial choice
     return (
         <Modal
             transparent={true}
@@ -109,7 +109,7 @@ const EditInfo = ({ visible, onClose }) => {
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <RadioButton
                                     value="large quantity"
-                                    status={checkedVL === 'large quantity' ? 'checkedVL' : 'uncheckedVL'}
+                                    status={checkedVL === 'large quantity' ? 'checked' : 'unchecked'}
                                     onPress={() => setCheckedVL('large quantity')}
                                     color='#BE0A01'
                                 />
@@ -118,7 +118,7 @@ const EditInfo = ({ visible, onClose }) => {
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <RadioButton
                                     value="moderate quantity"
-                                    status={checkedVL === 'moderate quantity' ? 'checkedVL' : 'uncheckedVL'}
+                                    status={checkedVL === 'moderate quantity' ? 'checked' : 'unchecked'}
                                     onPress={() => setCheckedVL('moderate quantity')}
                                     color='#FF0000'
                                 />
@@ -127,7 +127,7 @@ const EditInfo = ({ visible, onClose }) => {
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <RadioButton
                                     value="small quantity"
-                                    status={checkedVL === 'small quantity' ? 'checkedVL' : 'uncheckedVL'}
+                                    status={checkedVL === 'small quantity' ? 'checked' : 'unchecked'}
                                     onPress={() => setCheckedVL('small quantity')}
                                     color='#F98585'
                                 />
@@ -141,15 +141,24 @@ const EditInfo = ({ visible, onClose }) => {
                                     source={require('../assets/Home/notes02-icon.png')}
                                 />
                             </View>
-                            <View style={{ backgroundColor: 'white', borderRadius: 40, paddingHorizontal: 20 }}>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={text => setText(text)}
-                                    value={text}
-                                    multiline={true}
-                                    placeholder="Tap here to continue..."
-                                />
-                            </View>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <RadioButton
+                                value='Severe abdominal pain'
+                                status={notes === 'Severe abdominal pain' ? 'checked' : 'unchecked'}
+                                onPress={() => setNotes('Severe abdominal pain')}
+                                color='#FF0000'
+                            />
+                            <Text style={styles.modalText}>อาการปวดท้องรุนแรง</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <RadioButton
+                                value='Menstruating for an extended period'
+                                status={notes === 'Menstruating for an extended period' ? 'checked' : 'unchecked'}
+                                onPress={() => setNotes('Menstruating for an extended period')}
+                                color='#FF0000'
+                            />
+                            <Text style={styles.modalText}>ประจำเดือนมาหลายวันเกินไป</Text>
+                        </View>
                         </View>
                         <View style={{ marginLeft: 170 }}>
                             <TouchableOpacity>
@@ -161,7 +170,7 @@ const EditInfo = ({ visible, onClose }) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{ marginLeft: 210, marginTop: -550 }}>
+                    <View style={{ marginLeft: 210, marginTop: -590 }}>
                         <TouchableOpacity onPress={onClose}>
                             <Image
 
@@ -194,7 +203,7 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
         width: 320,
-        height: 600
+        height: 650
     },
     textStyle: {
         color: 'white',
