@@ -1,152 +1,141 @@
-import React from 'react'
+import React, {Component} from 'react'
 import { StyleSheet, Text, View, Image, Pressable, ScrollView, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useFonts } from 'expo-font';
 
-const ArticleScreen = ({ route, navigation }) => {
+import firebase from '../data/firebaseDB';
 
-    const [loaded] = useFonts({
-        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
-        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
-    });
 
-    if (!loaded) {
-        return null;
+class ArticleClass extends Component {
+    constructor() {
+        super();
+
+        this.articlesCollection = firebase.firestore().collection("articles");
+
+        this.state = {
+            // Initialize your state variables here
+            article_list: [],
+        }
     }
-    return ( 
-        <View style={styles.screen}>
-            <LinearGradient
-            start={{x: 0, y: 0}} end={{x: 1, y: 1}}
-            colors={['#9F79EB', '#FC7D7B',]}
-            style={styles.gradientBackground}
-            >
-                <View style={styles.navbar}>
-                    <Pressable onPress={() => {
-                                navigation.navigate("Home", {});
-                                return console.log("go Home")
-                            }}>
-                        <Image
-                        style={styles.icon}
-                        source={require('../assets/article/arrow-left-white.png')}
-                        />
-                    </Pressable>
-                    <Text style={styles.subheading}>Search</Text>
-                    <Pressable onPress={() => {
-                                // navigation.navigate("Home", {});
-                                return console.log("searching")
-                            }}>
-                        <Image
-                        style={styles.icon}
-                        source={require('../assets/article/search.png')}
-                        />
-                    </Pressable>
-                </View>
-                <Text style={styles.header}>Article</Text>
-            </LinearGradient>
+
+    getCollection = (querySnapshot) => {
+        const all_data = [];
+        querySnapshot.forEach((res) => {
+            // console.log("res: ", res);
+            // console.log("res.data() : ", res.data());
+    
+          const { name, nameImg, title, description, date, coverImg } = res.data();
+          all_data.push({
+            key: res.id,
+            name,
+            nameImg,
+            title,
+            description,
+            date,
+            coverImg,
+          });
+        });
+        // console.log("all_data : ", all_data);
+        
+        this.setState({
+            article_list: all_data,
+        });
+      };
+    
+      componentDidMount() {
+        this.unsubscribe = this.articlesCollection.onSnapshot(this.getCollection);
+      }
+    
+      componentWillUnmount() {
+        this.unsubscribe();
+      }
+
+      render() {
+        const {navigation} = this.props
+        return ( 
+            // navbar
+            <View style={styles.screen}>
+                <LinearGradient
+                start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+                colors={['#9F79EB', '#FC7D7B',]}
+                style={styles.gradientBackground}
+                >
+                    <View style={styles.navbar}>
+                        <Pressable onPress={() => {
+                                    navigation.navigate("Home", {});
+                                    return console.log("go Home")
+                                }}>
+                            <Image
+                            style={styles.icon}
+                            source={require('../assets/article/arrow-left-white.png')}
+                            />
+                        </Pressable>
+                        <Text style={styles.subheading}>Search</Text>
+                        <Pressable onPress={() => {
+                                    // navigation.navigate("Home", {});
+                                    return console.log("searching")
+                                }}>
+                            <Image
+                            style={styles.icon}
+                            source={require('../assets/article/search.png')}
+                            />
+                        </Pressable>
+                    </View>
+                    <Text style={styles.header}>Article</Text>
+                </LinearGradient>
 
 
-            <ScrollView>
-                <TouchableOpacity style={styles.boxList}>
-                    <View style={styles.groupUsername}>
-                        <Image
-                        style={styles.userIcon}
-                        source={require('../assets/article/test-user-image.png')}
-                        />
-                        <Text style={styles.name}>
-                            Username
-                        </Text>
-                    </View>
-                    <View style={styles.groupBox}>
-                        <View style={styles.groupLeft}>
-                        <Text style={styles.title} numberOfLines={3}>
-                        6 visual design fundamentals that UX designersssss
-                        </Text>
-                        </View>
-                        <View style={styles.groupRight}>
-                        <Image
-                            style={styles.coverImage}
-                            source={require('../assets/article/test-cover.png')}
-                        />
-                        </View>
-                    </View>
-                    <Text style={styles.timestamp}>
-                        17 hours ago
-                    </Text>
-                    <Text style={styles.detail} numberOfLines={2}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </Text>
-                </TouchableOpacity>
+                <ScrollView>
+                {this.state.article_list.map((item, i) => {
+                        return (
+                            <TouchableOpacity style={styles.boxList}>
 
-                {/* 2 */}
-                <TouchableOpacity style={styles.boxList}>
-                    <View style={styles.groupUsername}>
-                        <Image
-                        style={styles.userIcon}
-                        source={require('../assets/article/test-user-image.png')}
-                        />
-                        <Text style={styles.name}>
-                            Username
-                        </Text>
-                    </View>
-                    <View style={styles.groupBox}>
-                        <View style={styles.groupLeft}>
-                        <Text style={styles.title} numberOfLines={3}>
-                        6 visual design fundamentals that UX designersssss
-                        </Text>
-                        </View>
-                        <View style={styles.groupRight}>
-                        <Image
-                            style={styles.coverImage}
-                            source={require('../assets/article/test-cover.png')}
-                        />
-                        </View>
-                    </View>
-                    <Text style={styles.timestamp}>
-                        17 hours ago
-                    </Text>
-                    <Text style={styles.detail} numberOfLines={2}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.boxList}>
-                    <View style={styles.groupUsername}>
-                        <Image
-                        style={styles.userIcon}
-                        source={require('../assets/article/test-user-image.png')}
-                        />
-                        <Text style={styles.name}>
-                            Username
-                        </Text>
-                    </View>
-                    <View style={styles.groupBox}>
-                        <View style={styles.groupLeft}>
-                        <Text style={styles.title} numberOfLines={3}>
-                        6 visual design fundamentals that UX designersssss
-                        </Text>
-                        </View>
-                        <View style={styles.groupRight}>
-                        <Image
-                            style={styles.coverImage}
-                            source={require('../assets/article/test-cover.png')}
-                        />
-                        </View>
-                    </View>
-                    <Text style={styles.timestamp}>
-                        17 hours ago
-                    </Text>
-                    <Text style={styles.detail} numberOfLines={2}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </Text>
-                </TouchableOpacity>
-            
-                
+                                <View key={i}>
+                                    <View style={styles.groupUsername}>
+                                        <Image
+                                        style={styles.userIcon}
+                                        source={{ uri: item.nameImg }}
+                                        />
+                                        <Text style={styles.name}>
+                                            {item.name}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.groupBox}>
+                                        <View style={styles.groupLeft}>
+                                        <Text style={styles.title} numberOfLines={3}>
+                                        {item.title}
+                                        </Text>
+                                        </View>
+                                        <View style={styles.groupRight}>
+                                        <Image
+                                            style={styles.coverImage}
+                                            source={item.coverImg}
+                                        />
+                                        </View>
+                                    </View>
+                                    <Text style={styles.timestamp}>
+                                        {item.date}
+                                    </Text>
+                                    <Text style={styles.detail} numberOfLines={2}>
+                                        {item.description}
+                                        {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. */}
+                                    </Text>
+                                </View>
 
+                                
+                            </TouchableOpacity>
+                        );
+                })}
+                </ScrollView>
 
-            </ScrollView>
-        </View>
-    )
+            </View>
+        )
+    }
+
 }
+
+
 
 const styles = StyleSheet.create({
     screen: {
@@ -244,4 +233,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ArticleScreen
+export default ArticleClass
