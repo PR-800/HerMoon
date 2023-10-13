@@ -25,6 +25,8 @@ import ArticleScreen from "../screens/ArticleScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
 import EditProfileScreen from "../screens/EditProfileScreen";
+// import EditProfileScreen from "../screens/TestEdit";
+
 import NotificationScreen from "../screens/NotificationScreen";
 import ContactScreen from "../screens/ContactScreen";
 import PrivacyScreen from "../screens/PrivacyScreen";

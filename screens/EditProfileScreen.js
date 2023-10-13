@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { StyleSheet, Text, View, Image, Button, Pressable, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, Pressable, TouchableWithoutFeedback, Modal, TouchableOpacity, ScrollView, } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -47,6 +47,21 @@ const EditProfileScreen = ({ route, navigation }) => {
     { label: 'Above 9 hours', value: 'cat' },
   ]);
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  const tags = ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5', 'Tag6', 'Tag7', 'Tag8', 'Tag9', 'Tag10', 'Tag11'];
+
+  const toggleTag = (tag) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
+    } else {
+      setSelectedTags([...selectedTags, tag]);
+    }
+  };
+  console.log('selectedTags : ', selectedTags)
+
   const [loaded] = useFonts({
     MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
     MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
@@ -70,9 +85,11 @@ const EditProfileScreen = ({ route, navigation }) => {
           </Pressable>
           <Text style={styles.header}>Edit Profile</Text>
         </View>
+
+        <ScrollView>
         <TextInput
             style={styles.input}
-            label={'Change Name'}
+            label={'Name'}
             underlineColor="transparent"
             theme={{ roundness: 15 }} 
             // keyboardType="number-pad"
@@ -87,17 +104,20 @@ const EditProfileScreen = ({ route, navigation }) => {
         />
         <TextInput
             style={styles.input}
-            label={'Change Password'}
+            label={'Password'}
             underlineColor="transparent"
             autoCompleteType="password"
             theme={{ roundness: 15 }} 
         />
-        <TextInput
+        {/* <TextInput
             style={styles.input}
             label={'Description'}
             underlineColor="transparent"
             theme={{ roundness: 15 }} 
-        />
+        /> */}
+
+
+
         <View style={styles.group}>
           <TextInput
               style={styles.smallinput}
@@ -177,10 +197,17 @@ const EditProfileScreen = ({ route, navigation }) => {
               ]}
               dropDownDirection='TOP'
             />
-          </View>
-          
+          </View> 
         </View>
+
+        <Pressable
+          style={[styles.button, styles.buttonOpen]}
+          onPress={() => setModalVisible(true)}>
+          <Text style={styles.textStyle}>Select Description</Text>
+          <Text style={styles.selectedTagsText}>{selectedTags.length >= 1 ? 'Selected Tags : '+  selectedTags.join(', ') : ''}</Text>
+        </Pressable>
         
+        </ScrollView>
 
 
         {/* Submit */}
@@ -196,7 +223,59 @@ const EditProfileScreen = ({ route, navigation }) => {
             </Text>
           </Pressable>
         </LinearGradient>
+
+          {/* modal */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            statusBarTranslucent={false}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+              setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Hello World!</Text>
+
+                {/* TAG */}
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tagContainer}>
+                  {tags.map((tag) => (
+                    <TouchableOpacity
+                      key={tag}
+                      style={[
+                        styles.tag,
+                        { backgroundColor: selectedTags.includes(tag) ? '#9F79EB' : '#D9D9D9' },
+                      ]}
+                      onPress={() => toggleTag(tag)}
+                    >
+                      <Text style={[styles.tagText, { color: selectedTags.includes(tag) ? 'white' : 'black' }]}>{tag}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+                <View style={styles.selectedTagsContainer}>
+                  <Text style={styles.selectedTagsText}>Selected Tags : {selectedTags.join(', ')}</Text>
+                </View>
+
+              <Pressable
+                // style={[styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}>
+                <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+                colors={['#9F79EB', '#FC7D7B',]}
+                style={styles.linearGradientModal}
+                >
+                    <Text style={styles.buttonClose}>CONFIRM</Text>
+                </LinearGradient>
+                  </Pressable>
+
+              </View>
+            </View>
+          </Modal>
+
       </View>
+
+
+
   )
 }
 
@@ -245,14 +324,14 @@ const styles = StyleSheet.create({
   linearGradient: {
     width: 350,
     height: 50,
-    marginTop: 10,
+    marginVertical: 20,
     borderRadius: 25,
     alignItems: "center",
     justifyContent: "center",
   },
   headerGroup: {
     flexDirection: "row",
-    marginVertical: 30,
+    marginVertical: 10,
     marginTop: 60,
   },
   arrowleft: {
@@ -262,6 +341,100 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
+
+  // modal zone
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: '90%'
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    
+    elevation: 2,
+    
+    borderRadius: 15, 
+    width: 350,
+    // height: 55,
+    margin: 20,
+    
+    justifyContent: 'center',
+    // alignItems: 'flex-start',
+    // overflow : "hidden",
+  },
+  buttonOpen: {
+    backgroundColor: '#e7e0ec',
+    
+  },
+  buttonClose: {
+    color: 'white',
+    fontFamily: "MitrMedium",
+    fontSize: 17,
+  },
+  linearGradientModal: {
+    width: 350,
+    height: 50,
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textStyle: {
+    color: 'black',
+    fontFamily: "MitrMedium",
+    fontSize: 17,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  modalText: {
+    marginBottom: 15,
+    fontSize: 19,
+    textAlign: 'center',
+    fontFamily: "MitrMedium",
+  },
+
+  // tag
+  tagContainer: {
+    alignItems: 'center',
+  },
+  tag: {
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  tagText: {
+    fontSize: 15,
+    fontFamily: "MitrMedium",
+  },
+  selectedTagsContainer: {
+    marginVertical: 10,
+  },
+  selectedTagsText: {
+    fontSize: 16,
+    fontFamily: "MitrMedium",
+    color: '#A43BA6',
+  },
+
 });
 
 export default EditProfileScreen

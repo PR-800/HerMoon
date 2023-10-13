@@ -142,12 +142,14 @@ const styles = StyleSheet.create({
         height: 150, 
         resizeMode: "contain", 
         // borderRadius: "50%",
-        borderRadius: 75
+        borderRadius: 75,
+        marginTop: 20,
     },
     headers: {
         fontSize: 25,
         fontFamily: "MitrMedium",
-        marginTop: -30,
+        marginTop: -40,
+        margin: 3,
         color: "white",
 
         textShadowColor: 'rgba(0, 0, 0, 0.5)',
@@ -207,6 +209,24 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         // opacity: 0.5
+    },
+    navbar: {
+        padding: 30,
+        paddingTop: 60,
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    header: {
+        display: "flex",
+        fontSize: 25,
+        color: "white",
+        fontFamily: 'MitrMedium',
+        marginTop: -8,
+    },
+    gradientNavbar: {
+        width: '100%',
+        height: '15%',
+        justifyContent: 'center',
     },
 });
 

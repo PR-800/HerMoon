@@ -6,8 +6,7 @@ import { useFonts } from 'expo-font';
 
 import firebase from '../data/firebaseDB';
 
-
-class ArticleClass extends Component {
+class ArticleScreen extends Component {
     constructor() {
         super();
 
@@ -233,4 +232,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ArticleClass
+export default ArticleScreen
