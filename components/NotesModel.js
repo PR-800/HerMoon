@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, Modal, TextInput, Image, TouchableOpacity } from 'react-native';;
 import { LinearGradient } from 'expo-linear-gradient';
 import { RadioButton } from 'react-native-paper';
-const NotesModel = ({ visible, onClose }) => {
+const NotesModel = ({ visible, onClose, navigation }) => {
     const [text, setText] = useState('');
     const [notes, setNotes] = React.useState(''); //initial choice
     return (
@@ -22,18 +22,18 @@ const NotesModel = ({ visible, onClose }) => {
                     <View style={{ backgroundColor: 'white', borderRadius: 40, paddingBottom: 150, paddingHorizontal: 20, paddingTop: 30 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value='Severe abdominal pain'
-                                status={notes === 'Severe abdominal pain' ? 'checked' : 'unchecked'}
-                                onPress={() => setNotes('Severe abdominal pain')}
+                                value='อาการปวดท้องรุนแรง'
+                                status={notes === 'อาการปวดท้องรุนแรง' ? 'checked' : 'unchecked'}
+                                onPress={() => setNotes('อาการปวดท้องรุนแรง')}
                                 color='#FF0000'
                             />
                             <Text style={styles.modalText01}>อาการปวดท้องรุนแรง</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value='Menstruating for an extended period'
-                                status={notes === 'Menstruating for an extended period' ? 'checked' : 'unchecked'}
-                                onPress={() => setNotes('Menstruating for an extended period')}
+                                value='ประจำเดือนมาหลายวันเกินไป'
+                                status={notes === 'ประจำเดือนมาหลายวันเกินไป' ? 'checked' : 'unchecked'}
+                                onPress={() => setNotes('ประจำเดือนมาหลายวันเกินไป')}
                                 color='#FF0000'
                             />
                             <Text style={styles.modalText01}>ประจำเดือนมาหลายวันเกินไป</Text>
@@ -42,7 +42,12 @@ const NotesModel = ({ visible, onClose }) => {
                     </View>
                     
                     <View style={{ marginLeft: 140, marginTop: -70 }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate("Home", { notes });
+                            return console.log("Home =>", notes)
+                        }}
+                        >
                             <Image
                                 source={require('../assets/Home/save03-icon.png')}
                                 style={styles.image}

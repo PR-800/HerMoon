@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity } fro
 import { RadioButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
+const MenstrualVolumeLevelModel = ({ visible, onClose, navigation }) => {
     const [checkedVL, setCheckedVL] = React.useState(''); //initial choice
     return (
         <Modal
@@ -22,27 +22,27 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
                     <View style={{ backgroundColor: 'white', borderRadius: 40, paddingBottom: 150, paddingHorizontal: 20, paddingTop: 20 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value="large quantity"
-                                status={checkedVL === 'large quantity' ? 'checked' : 'unchecked'}
-                                onPress={() => setCheckedVL('large quantity')}
+                                value="ปริมาณมาก"
+                                status={checkedVL === 'ปริมาณมาก' ? 'checked' : 'unchecked'}
+                                onPress={() => setCheckedVL('ปริมาณมาก')}
                                 color='#BE0A01'
                             />
                             <Text style={styles.modalText01} >ปริมาณมาก</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value="moderate quantity"
-                                status={checkedVL === 'moderate quantity' ? 'checked' : 'unchecked'}
-                                onPress={() => setCheckedVL('moderate quantity')}
+                                value="ปริมาณปานกลาง (ปกติ)"
+                                status={checkedVL === 'ปริมาณปานกลาง (ปกติ)' ? 'checked' : 'unchecked'}
+                                onPress={() => setCheckedVL('ปริมาณปานกลาง (ปกติ)')}
                                 color='#FF0000'
                             />
                             <Text style={styles.modalText01} >ปริมาณปานกลาง (ปกติ)</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value="small quantity"
-                                status={checkedVL === 'small quantity' ? 'checked' : 'unchecked'}
-                                onPress={() => setCheckedVL('small quantity')}
+                                value="ปริมาณน้อย"
+                                status={checkedVL === 'ปริมาณน้อย' ? 'checked' : 'unchecked'}
+                                onPress={() => setCheckedVL('ปริมาณน้อย')}
                                 color='#F98585'
                             />
                             <Text style={styles.modalText01} >ปริมาณน้อย</Text>
@@ -50,7 +50,10 @@ const MenstrualVolumeLevelModel = ({ visible, onClose }) => {
                         {/* <Text> {checkedVL} </Text> */}
                     </View>
                     <View style={{ marginLeft: 130, marginTop: -60 }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate("Home", { checkedVL });
+                            return console.log("Home =>", checkedVL)
+                        }}>
                             <Image
                                 source={require('../assets/Home/save02-icon.png')}
                                 style={styles.image}

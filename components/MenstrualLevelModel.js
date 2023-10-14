@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity, Button } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 
-const MenstrualLevelModel = ({ visible, onClose }) => {
+const MenstrualLevelModel = ({ visible, onClose, navigation }) => {
     const [checked, setChecked] = React.useState(''); //initial choice
     return (
         <Modal
@@ -23,71 +23,74 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                     <View style={{ backgroundColor: 'white', borderRadius: 40, padding: 20 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value='Bright red'
-                                status={checked === 'Bright red' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('Bright red')}
+                                value='สีแดงสด'
+                                status={checked === 'สีแดงสด' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('สีแดงสด')}
                                 color='#FF0000'
                             />
                             <Text style={styles.modalText01}>สีแดงสด</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value='Reddish Orange'
-                                status={checked === 'Reddish Orange' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('Reddish Orange')}
+                                value='สีแดงส้ม'
+                                status={checked === 'สีแดงส้ม' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('สีแดงส้ม')}
                                 color='#FD4400'
                             />
                             <Text style={styles.modalText01}>สีแดงส้ม</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value='Dark red'
-                                status={checked === 'Dark red' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('Dark red')}
+                                value='สีแดงเข้ม'
+                                status={checked === 'สีแดงเข้ม' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('สีแดงเข้ม')}
                                 color='#BE0A01'
                             />
                             <Text style={styles.modalText01}>สีแดงเข้ม</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value='Pink'
-                                status={checked === 'Pink' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('Pink')}
+                                value='สีชมพู'
+                                status={checked === 'สีชมพู' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('สีชมพู')}
                                 color='#FF97C5'
                             />
                             <Text style={styles.modalText01}>สีชมพู</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value='Brown'
-                                status={checked === 'Brown' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('Brown')}
+                                value='สีน้ำตาล'
+                                status={checked === 'สีน้ำตาล' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('สีน้ำตาล')}
                                 color='#7A601C'
                             />
                             <Text style={styles.modalText01}>สีน้ำตาล</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value='Reddish gray'
-                                status={checked === 'Reddish gray' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('Reddish gray')}
+                                value='สีแดงอมเทาปนและสีเขียว'
+                                status={checked === 'สีแดงอมเทาปนและสีเขียว' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('สีแดงอมเทาปนและสีเขียว')}
                                 color='#576458'
                             />
                             <Text style={styles.modalText01}>สีแดงอมเทาปนและสีเขียว</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
-                                value='Black'
-                                status={checked === 'Black' ? 'checked' : 'unchecked'}
-                                onPress={() => setChecked('Black')}
+                                value='สีดำ'
+                                status={checked === 'สีดำ' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('สีดำ')}
                                 color='black'
                             />
                             <Text style={styles.modalText01}>สีดำ</Text>
                         </View>
-                        {/* <Text style={styles.modalText02}> {checked} </Text> */}
+                        <Text style={styles.modalText02}> {checked} </Text>
                     </View>
                     <View style={{ marginLeft: 130, marginTop: -60 }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate("Home", { checked });
+                            return console.log("Home =>", checked)
+                        }}>
                             <Image
 
                                 source={require('../assets/Home/save01-icon.png')}
@@ -104,7 +107,7 @@ const MenstrualLevelModel = ({ visible, onClose }) => {
                             />
                         </TouchableOpacity>
                     </View>
-                    <View style={{ marginLeft: 110, marginTop: -30}}>
+                    <View style={{ marginLeft: 110, marginTop: -30 }}>
                         <TouchableOpacity>
                             <Image
 

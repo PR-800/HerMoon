@@ -9,7 +9,7 @@ import CalendarStripC from '../components/CalendarStrip';
 import moment from 'moment';
 import { useFonts } from 'expo-font';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, route }) => {
     const [modalVisibleBlood, setModalVisibleBlood] = useState(false);
     const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false);
     const [modalVisibleNotes, setModalVisibleNotes] = useState(false);
@@ -45,74 +45,114 @@ const HomeScreen = ({ navigation }) => {
         return null;
     }
 
+    const dataColor = route.params?.checked;
+    let color_m = []
+
+    if (dataColor) {
+        color_m = dataColor
+    } else {
+        color_m = 'เลือกสีประจำเดือน'
+    }
+    
+
+    const dataVolum = route.params?.checkedVL;
+    let volum_m = ''
+
+    if (dataVolum) {
+        volum_m = dataVolum
+    } else {
+        volum_m = 'เลือกปริมาณประจำเดือน'
+    }
+
+    const dataNote = route.params?.data;
+    let note_m = ''
+
+    if (dataNote) {
+        note_m = dataNote
+    } else {
+        note_m = 'ข้อมูลเพิ่มเติม'
+    }
+    
+    console.log('dataColor ', dataColor)
+    console.log('dataVolum ', dataVolum)
+    console.log('dataNote ', dataNote)
     return (
         <View style={styles.screen}>
-
             <CalendarStripC />
 
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -140 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -110 }}>
                 <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.todayborder}>
                     <Text style={styles.modalText01}>Today</Text>
                 </LinearGradient>
                 <Text style={[styles.modalText01, { paddingHorizontal: 22, color: 'black' }]}>{formatDate(date)}</Text>
             </View>
 
-            <View style={[styles.leftAlignedText, { marginTop: 100 }]}>
+            <View style={[styles.leftAlignedText, { marginTop: 90 }]}>
                 <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>Welcome</Text>
                 <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', }}>Leslie Alexander</Text>
             </View>
 
             <View style={{ marginLeft: -250 }}>
-            <Pressable onPress={() => {
+                <Pressable onPress={() => {
                     navigation.navigate("History", {});
                     return console.log("History")
                 }}>
-                <Image
-                    source={require('../assets/Home/clock-icon.png')}
-                    style={[styles.image, { width: 60, height: 60 }]}
-                /></Pressable>
+                    <Image
+                        source={require('../assets/Home/clock-icon.png')}
+                        style={[styles.image, { width: 60, height: 60 }]}
+                    /></Pressable>
             </View>
 
-            <View style={{ marginTop: -40 }}>
+            <View style={{ marginTop: -40, marginBottom: 10 }}>
                 <Image
                     source={require('../assets/Home/Profile-icon.png')}
-                    style={{ width: 280, height: 280 }}
+                    style={{ width: 250, height: 250 }}
                 />
             </View>
 
-            <View style={styles.groupimage}>
+            <View>
                 <TouchableOpacity onPress={BloodIcon}>
-                    <Image
+                    <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#FFB4BF' }]}>
+                        <View style={{ paddingTop: 2, paddingLeft: 10 }}>
+                            <Image
 
-                        source={require('../assets/Home/blood-icon.png')}
-                        style={styles.image}
-                    />
+                                source={require('../assets/Home/blood01-icon.png')}
+                                style={{ width: 30, height: 35 }}
+                            /></View>
+                        <View style={{ paddingTop: 4, paddingLeft: 10 }}>
+                            <Text style={styles.textF}>{color_m}</Text>
+                        </View>
+                    </View>
                 </TouchableOpacity>
-                <MenstrualLevelModel visible={modalVisibleBlood} onClose={BloodIcon} />
+                <MenstrualLevelModel visible={modalVisibleBlood} onClose={BloodIcon} navigation={navigation} />
                 <TouchableOpacity onPress={SanitaryPadIcon}>
-                    <Image
-                        source={require('../assets/Home/sanitarypad-icon.png')}
-                        style={styles.image}
-                    />
+                    <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#89DCFF' }]}>
+                        <View style={{ marginTop: -6 }}>
+                            <Image
+                                source={require('../assets/Home/sanitarypad01-icon.png')}
+                                style={{ width: 45, height: 45 }}
+                            />
+                        </View>
+                        <View style={{ paddingTop: 4, paddingLeft: 5 }}>
+                            <Text style={styles.textF}>{volum_m}</Text>
+                        </View>
+                    </View>
                 </TouchableOpacity>
-                <MenstrualVolumeLevelModel visible={modalVisibleSanitaryPad} onClose={SanitaryPadIcon} />
+                <MenstrualVolumeLevelModel visible={modalVisibleSanitaryPad} onClose={SanitaryPadIcon} navigation={navigation}/>
                 <TouchableOpacity onPress={NotesIcon}>
-                    <Image
-                        source={require('../assets/Home/notes-icon.png')}
-                        style={styles.image}
-                    />
+                    <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#B579CF' }]}>
+                        <View style={{ paddingTop: 2, paddingLeft: 10 }}>
+                            <Image
+                                source={require('../assets/Home/notes02-icon.png')}
+                                style={{ width: 30, height: 30 }}
+                            />
+                        </View>
+                        <View style={{ paddingTop: 4, paddingLeft: 10 }}>
+                            <Text style={styles.textF}>{note_m}</Text>
+                        </View>
+                    </View>
                 </TouchableOpacity>
-                <NotesModel visible={modalVisibleNotes} onClose={NotesIcon}></NotesModel>
-                {/* <Pressable onPress={() => {
-                    navigation.navigate("History", {});
-                    return console.log("History")
-                }}>
-                
-                    <Image
-                        source={require('../assets/Home/history-icon.png')}
-                        style={[styles.image, { width: 58, height: 58 }]}
-                    />
-                </Pressable> */}
+                <NotesModel visible={modalVisibleNotes} onClose={NotesIcon} navigation={navigation}></NotesModel>
             </View>
         </View>
     );
@@ -130,11 +170,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 40
-    },
-    image: {
-        width: 50,
-        height: 50,
-        marginHorizontal: 5, // ระยะห่างแนวนอนระหว่างรูปภาพ
     },
     leftAlignedText: {
         marginLeft: -180,
@@ -172,6 +207,20 @@ const styles = StyleSheet.create({
         fontFamily: 'MitrRegular',
         color: 'white'
     },
+    textBox: {
+        margin: 4,
+        backgroundColor: 'white',
+        width: 300,
+        height: 47,
+        borderRadius: 30,
+        paddingHorizontal: 5,
+        paddingVertical: 5,
+        borderWidth: 1,
+    },
+    textF: {
+        fontFamily: 'MitrRegular',
+        fontSize: 16
+    }
 });
 
 export default HomeScreen;
