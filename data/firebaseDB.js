@@ -1,5 +1,6 @@
 import * as firebase from "firebase/compat";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyAP8qRjWxkf1GdfJfcQqxmh4AALG_IKi-A",
   authDomain: "hermoon-f6765.firebaseapp.com",

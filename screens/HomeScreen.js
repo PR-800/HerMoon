@@ -8,6 +8,8 @@ import NotesModel from '../components/NotesModel';
 import CalendarStripC from '../components/CalendarStrip';
 import moment from 'moment';
 import { useFonts } from 'expo-font';
+import firebase from '../data/firebaseDB';
+import { Button } from 'react-native-paper';
 
 const HomeScreen = ({ navigation, route }) => {
     const [modalVisibleBlood, setModalVisibleBlood] = useState(false);
@@ -53,7 +55,7 @@ const HomeScreen = ({ navigation, route }) => {
     } else {
         color_m = 'เลือกสีประจำเดือน'
     }
-    
+
 
     const dataVolum = route.params?.checkedVL;
     let volum_m = ''
@@ -72,10 +74,32 @@ const HomeScreen = ({ navigation, route }) => {
     } else {
         note_m = 'ข้อมูลเพิ่มเติม'
     }
-    
+
     console.log('dataColor ', dataColor)
     console.log('dataVolum ', dataVolum)
     console.log('dataNote ', dataNote)
+
+    const AddMonthlySummary = () => {
+    // ข้อมูลที่ต้องการเพิ่ม
+    const dataToAdd = {
+        date: firebase.firestore.FieldValue.serverTimestamp(),
+        menstrual_color: color_m,
+        menstrual_notes: note_m,
+        menstrual_volume: volum_m,
+    };
+
+    //สร้าง collection
+    const databaseRef = firebase.firestore().collection("monthly_summary");
+
+    // เพิ่มข้อมูลลง db
+    databaseRef.add(dataToAdd)
+        .then((docRef) => {
+            console.log("เพิ่มข้อมูลสำเร็จ: ", docRef.id);
+        })
+        .catch((error) => {
+            console.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ", error);
+        });
+    }
     return (
         <View style={styles.screen}>
             <CalendarStripC />
@@ -109,6 +133,7 @@ const HomeScreen = ({ navigation, route }) => {
                     style={{ width: 250, height: 250 }}
                 />
             </View>
+            <Button onPress={AddMonthlySummary}>add date (TEST)</Button>
 
             <View>
                 <TouchableOpacity onPress={BloodIcon}>
@@ -138,7 +163,7 @@ const HomeScreen = ({ navigation, route }) => {
                         </View>
                     </View>
                 </TouchableOpacity>
-                <MenstrualVolumeLevelModel visible={modalVisibleSanitaryPad} onClose={SanitaryPadIcon} navigation={navigation}/>
+                <MenstrualVolumeLevelModel visible={modalVisibleSanitaryPad} onClose={SanitaryPadIcon} navigation={navigation} />
                 <TouchableOpacity onPress={NotesIcon}>
                     <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#B579CF' }]}>
                         <View style={{ paddingTop: 2, paddingLeft: 10 }}>
@@ -154,6 +179,7 @@ const HomeScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
                 <NotesModel visible={modalVisibleNotes} onClose={NotesIcon} navigation={navigation}></NotesModel>
             </View>
+            
         </View>
     );
 };
