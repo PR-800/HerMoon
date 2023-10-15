@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -15,6 +15,26 @@ const HomeScreen = ({ navigation, route }) => {
     const [modalVisibleBlood, setModalVisibleBlood] = useState(false);
     const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false);
     const [modalVisibleNotes, setModalVisibleNotes] = useState(false);
+
+    const [color_m, setColorM] = useState('เลือกสีประจำเดือน');
+    const [volum_m, setVolumM] = useState('เลือกปริมาณประจำเดือน');
+    const [note_m, setNoteM] = useState('ข้อมูลเพิ่มเติม');
+
+    //เก็บค่าลงใน state
+    useEffect(() => {
+        if (route.params) {
+            const { checked, checkedVL, notes } = route.params;
+            if (checked) {
+                setColorM(checked);
+            }
+            if (checkedVL) {
+                setVolumM(checkedVL);
+            }
+            if (notes) {
+                setNoteM(notes);
+            }
+        }
+    }, [route.params]);
 
     const date = new Date();
 
@@ -47,58 +67,26 @@ const HomeScreen = ({ navigation, route }) => {
         return null;
     }
 
-    const dataColor = route.params?.checked;
-    let color_m = []
-
-    if (dataColor) {
-        color_m = dataColor
-    } else {
-        color_m = 'เลือกสีประจำเดือน'
-    }
-
-
-    const dataVolum = route.params?.checkedVL;
-    let volum_m = ''
-
-    if (dataVolum) {
-        volum_m = dataVolum
-    } else {
-        volum_m = 'เลือกปริมาณประจำเดือน'
-    }
-
-    const dataNote = route.params?.data;
-    let note_m = ''
-
-    if (dataNote) {
-        note_m = dataNote
-    } else {
-        note_m = 'ข้อมูลเพิ่มเติม'
-    }
-
-    console.log('dataColor ', dataColor)
-    console.log('dataVolum ', dataVolum)
-    console.log('dataNote ', dataNote)
-
     const AddMonthlySummary = () => {
-    // ข้อมูลที่ต้องการเพิ่ม
-    const dataToAdd = {
-        date: firebase.firestore.FieldValue.serverTimestamp(),
-        menstrual_color: color_m,
-        menstrual_notes: note_m,
-        menstrual_volume: volum_m,
-    };
+        // ข้อมูลที่ต้องการเพิ่ม
+        const dataToAdd = {
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+            menstrual_color: color_m,
+            menstrual_volume: volum_m,
+            menstrual_notes: note_m,
+        };
 
-    //สร้าง collection
-    const databaseRef = firebase.firestore().collection("monthly_summary");
+        //สร้าง collection
+        const databaseRef = firebase.firestore().collection("monthly_summary");
 
-    // เพิ่มข้อมูลลง db
-    databaseRef.add(dataToAdd)
-        .then((docRef) => {
-            console.log("เพิ่มข้อมูลสำเร็จ: ", docRef.id);
-        })
-        .catch((error) => {
-            console.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ", error);
-        });
+        // เพิ่มข้อมูลลง db
+        databaseRef.add(dataToAdd)
+            .then((docRef) => {
+                console.log("เพิ่มข้อมูลสำเร็จ: ", docRef.id);
+            })
+            .catch((error) => {
+                console.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ", error);
+            });
     }
     return (
         <View style={styles.screen}>
@@ -111,7 +99,7 @@ const HomeScreen = ({ navigation, route }) => {
                 <Text style={[styles.modalText01, { paddingHorizontal: 22, color: 'black' }]}>{formatDate(date)}</Text>
             </View>
 
-            <View style={[styles.leftAlignedText, { marginTop: 90 }]}>
+            <View style={[styles.leftAlignedText, { marginTop: 80 }]}>
                 <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>Welcome</Text>
                 <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', }}>Leslie Alexander</Text>
             </View>
@@ -123,17 +111,24 @@ const HomeScreen = ({ navigation, route }) => {
                 }}>
                     <Image
                         source={require('../assets/Home/clock-icon.png')}
-                        style={[styles.image, { width: 60, height: 60 }]}
+                        style={[styles.image, { width: 50, height: 50 }]}
                     /></Pressable>
             </View>
 
             <View style={{ marginTop: -40, marginBottom: 10 }}>
                 <Image
                     source={require('../assets/Home/Profile-icon.png')}
-                    style={{ width: 250, height: 250 }}
+                    style={{ width: 240, height: 240 }}
                 />
             </View>
-            <Button onPress={AddMonthlySummary}>add date (TEST)</Button>
+            <Text style={styles.textF}>เพิ่มข้อมูลและบันทึกรอบเดือน</Text>
+            <View style={{ marginTop: -40, marginBottom: 5, marginLeft: 250 }}>
+                <TouchableOpacity onPress={AddMonthlySummary}>
+                <Image
+                                source={require('../assets/Home/save04-icon.png')}
+                                style={{ width: 50, height: 50 }}
+                            />
+                </TouchableOpacity></View>
 
             <View>
                 <TouchableOpacity onPress={BloodIcon}>
@@ -178,8 +173,9 @@ const HomeScreen = ({ navigation, route }) => {
                     </View>
                 </TouchableOpacity>
                 <NotesModel visible={modalVisibleNotes} onClose={NotesIcon} navigation={navigation}></NotesModel>
+
             </View>
-            
+
         </View>
     );
 };
@@ -237,7 +233,7 @@ const styles = StyleSheet.create({
         margin: 4,
         backgroundColor: 'white',
         width: 300,
-        height: 47,
+        height: 45,
         borderRadius: 30,
         paddingHorizontal: 5,
         paddingVertical: 5,
@@ -246,7 +242,8 @@ const styles = StyleSheet.create({
     textF: {
         fontFamily: 'MitrRegular',
         fontSize: 16
-    }
+    },
+
 });
 
 export default HomeScreen;

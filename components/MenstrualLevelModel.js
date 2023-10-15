@@ -84,7 +84,7 @@ const MenstrualLevelModel = ({ visible, onClose, navigation }) => {
                             />
                             <Text style={styles.modalText01}>สีดำ</Text>
                         </View>
-                        <Text style={styles.modalText02}> {checked} </Text>
+                        {/* <Text style={styles.modalText02}> {checked} </Text> */}
                     </View>
                     <View style={{ marginLeft: 130, marginTop: -60 }}>
                         <TouchableOpacity onPress={() => {
