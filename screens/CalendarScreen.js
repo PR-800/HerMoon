@@ -75,71 +75,6 @@ const CalendarScreen = () => {
           // console.log("time formatted: ", moment(time).format("HH:mm")); // 04:04
         }}
       />
-      {/* {Object.keys(dataMSummary).map(key => {
-        const item = dataMSummary[key];
-        if (item.date) { // ตรวจสอบว่า item.date ไม่ใช่ null
-          const datedb = moment(item.date.toDate()).format("DD/MM/YYYY");
-          console.log('dateTime', dateTime);
-          console.log('datedb', datedb);
-          if (dateTime == datedb) {
-            // วันที่ตรงกัน
-            return (
-              <LinearGradient key={key} colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.box}>
-                <Text style={styles.textF}>date: {dateTime}</Text>
-                <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
-                  <Image
-                    source={require('../assets/Home/blood01-icon.png')}
-                  />
-                  {dateTime == datedb && (
-                    <View style={{ paddingTop: 4, paddingLeft: 15 }}>
-                      <Text style={styles.textF}>{item.menstrual_color}</Text>
-                    </View>
-                  )}
-                </View>
-                <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
-                  <Image style={{ marginTop: -5, marginLeft: -5 }}
-                    source={require('../assets/Home/sanitarypad02-icon.png')}
-                  />
-                  <View style={{ paddingTop: 4, paddingLeft: 10 }}>
-                    <Text style={styles.textF}>{item.menstrual_volume}</Text>
-                  </View>
-                </View>
-                <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
-                  <Image
-                    source={require('../assets/Home/notes02-icon.png')}
-                  />
-                  <View style={{ paddingTop: 4, paddingLeft: 15 }}>
-                    <Text style={styles.textF}>{item.menstrual_notes}</Text>
-                  </View>
-                </View>
-                <TouchableOpacity onPress={EditIcon}>
-                  <Image style={{ marginLeft: 250, marginVertical: 10, width: 30, height: 30 }}
-                    source={require('../assets/Home/edit01-icon.png')}
-                  />
-                </TouchableOpacity>
-                <EditInfo visible={modalVisibleEdit} onClose={EditIcon} />
-                <View >
-                </View>
-              </LinearGradient>);
-          }}
-      })} */}
-
-      {/* {Object.keys(dataMSummary).map(key => {
-        const item = dataMSummary[key];
-        if (item.date) { // ตรวจสอบว่า item.date ไม่ใช่ null
-          const datedb = moment(item.date.toDate()).format("DD/MM/YYYY");
-          console.log('dateTime', dateTime);
-          console.log('datedb', datedb);
-
-          if (dateTime == datedb) {
-            return (
-              <View style={{ paddingTop: 4, paddingLeft: 15 }}>
-                <Text style={styles.textF}>{item.menstrual_color}</Text>
-              </View>
-            );
-          }
-        }
-      })} */}
 
       <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.box}>
         <Text style={styles.textF}>date: {dateTime}</Text>
@@ -153,7 +88,7 @@ const CalendarScreen = () => {
               const datedb = moment(item.date.toDate()).format("DD/MM/YYYY");
               if (dateTime == datedb) {
                 return (
-                  <View style={{ paddingTop: 4, paddingLeft: 15 }}>
+                  <View key={key} style={{ paddingTop: 4, paddingLeft: 15 }}>
                     <Text style={styles.textF}>{item.menstrual_color}</Text>
                   </View>
                 );
@@ -171,7 +106,7 @@ const CalendarScreen = () => {
               const datedb = moment(item.date.toDate()).format("DD/MM/YYYY");
               if (dateTime == datedb) {
                 return (
-                  <View style={{ paddingTop: 4, paddingLeft: 10 }}>
+                  <View key={key} style={{ paddingTop: 4, paddingLeft: 10 }}>
                     <Text style={styles.textF}>{item.menstrual_volume}</Text>
                   </View>
                 );
@@ -189,7 +124,7 @@ const CalendarScreen = () => {
               const datedb = moment(item.date.toDate()).format("DD/MM/YYYY");
               if (dateTime == datedb) {
                 return (
-                  <View style={{ paddingTop: 4, paddingLeft: 15 }}>
+                  <View key={key} style={{ paddingTop: 4, paddingLeft: 15 }}>
                     <Text style={styles.textF}>{item.menstrual_notes}</Text>
                   </View>
                 );
