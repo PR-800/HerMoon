@@ -1,56 +1,60 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useFonts } from 'expo-font';
+import firebase from '../data/firebaseDB';
 
+//import component
 import MenstrualLevelModel from '../components/MenstrualLevelModel';
 import MenstrualVolumeLevelModel from '../components/MenstrualVolumeLevelModel';
 import NotesModel from '../components/NotesModel';
 import CalendarStripC from '../components/CalendarStrip';
-import moment from 'moment';
-import { useFonts } from 'expo-font';
-import firebase from '../data/firebaseDB';
-import { Button } from 'react-native-paper';
+
 
 
 const HomeScreen = ({ navigation, route }) => {
-    const [modalVisibleBlood, setModalVisibleBlood] = useState(false);
-    const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false);
-    const [modalVisibleNotes, setModalVisibleNotes] = useState(false);
+    const [modalVisibleBlood, setModalVisibleBlood] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualLevelModel
+    const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualVolumeLevelModel
+    const [modalVisibleNotes, setModalVisibleNotes] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component NotesModel
 
-    const [color_m, setColorM] = useState('เลือกสีประจำเดือน');
-    const [volum_m, setVolumM] = useState('เลือกปริมาณประจำเดือน');
-    const [note_m, setNoteM] = useState('ข้อมูลเพิ่มเติม');
+    const [colorM, setColorM] = useState('เลือกสีประจำเดือน'); //เก็บค่าสีของประจำเดือนที่ส่งผ่าน route
+    const [volumM, setVolumM] = useState('เลือกปริมาณประจำเดือน'); //เก็บค่าปริมาณประจำเดือนที่ส่งผ่าน route
+    const [notesM, setNoteM] = useState('ข้อมูลเพิ่มเติม'); //เก็บข้อมูลเพิ่มเติมของประจำเดือนที่ส่งผ่าน route
 
+    const date = new Date(); //สำหรับแสดงวันที่
     //เก็บค่าลงใน state
     useEffect(() => {
         if (route.params) {
-            const { checked, checkedVL, notes } = route.params;
-            if (checked) {
-                setColorM(checked);
+            //ค่าที่ส่งมาจาก component ใช้ route.params ในการเอาค่ามาแสดง
+            const { dataColorModel, dataVolumeModel, dataNotesModel } = route.params;
+            if (dataColorModel) {
+                setColorM(dataColorModel);
             }
-            if (checkedVL) {
-                setVolumM(checkedVL);
+            if (dataVolumeModel) {
+                setVolumM(dataVolumeModel);
             }
-            if (notes) {
-                setNoteM(notes);
+            if (dataNotesModel) {
+                setNoteM(dataNotesModel);
             }
         }
     }, [route.params]);
 
-    const date = new Date();
-
+    //สำหรับ open, close => MenstrualLevelModel
     const BloodIcon = () => {
         setModalVisibleBlood(!modalVisibleBlood);
     };
 
+    //สำหรับ open, close => MenstrualVolumeLevelModel
     const SanitaryPadIcon = () => {
         setModalVisibleSanitaryPad(!modalVisibleSanitaryPad);
     };
 
+    //สำหรับ open, close => NotesModel
     const NotesIcon = () => {
         setModalVisibleNotes(!modalVisibleNotes)
     }
 
+    //จัด format วันที่
     const formatDate = (date) => {
         const options = { day: '2-digit', month: 'long', year: 'numeric' };
         const formattedDate = new Date(date).toLocaleDateString('en-US', options);
@@ -59,6 +63,7 @@ const HomeScreen = ({ navigation, route }) => {
         return `${month} ${year}`;
     }
 
+    //เรียกใช้ฟ้อนต์
     const [loaded] = useFonts({
         MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
         MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
@@ -68,13 +73,14 @@ const HomeScreen = ({ navigation, route }) => {
         return null;
     }
 
+    //เพิ่มข้อมูลลง firebase
     const AddMonthlySummary = () => {
         // ข้อมูลที่ต้องการเพิ่ม
         const dataToAdd = {
             date: firebase.firestore.FieldValue.serverTimestamp(),
-            menstrual_color: color_m,
-            menstrual_volume: volum_m,
-            menstrual_notes: note_m,
+            menstrual_color: colorM,
+            menstrual_volume: volumM,
+            menstrual_notes: notesM,
         };
 
         //สร้าง collection
@@ -89,18 +95,19 @@ const HomeScreen = ({ navigation, route }) => {
                 console.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ", error);
             });
     }
+
     return (
         <View style={styles.screen}>
             <CalendarStripC />
 
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -110 }}>
                 <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.todayborder}>
-                    <Text style={styles.modalText01}>Today</Text>
+                    <Text style={styles.textHeader}>Today</Text>
                 </LinearGradient>
-                <Text style={[styles.modalText01, { paddingHorizontal: 22, color: 'black' }]}>{formatDate(date)}</Text>
+                <Text style={[styles.textHeader, { paddingHorizontal: 22, color: 'black' }]}>{formatDate(date)}</Text>
             </View>
 
-            <View style={[styles.leftAlignedText, { marginTop: 80 }]}>
+            <View style={{marginLeft: -180, marginBottom: 20, marginTop: 80 }}>
                 <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>Welcome</Text>
                 <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', }}>Leslie Alexander</Text>
             </View>
@@ -122,7 +129,7 @@ const HomeScreen = ({ navigation, route }) => {
                     style={{ width: 240, height: 240 }}
                 />
             </View>
-            <Text style={styles.textF}>เพิ่มข้อมูลและบันทึกรอบเดือน</Text>
+            <Text style={styles.textNormal}>เพิ่มข้อมูลและบันทึกรอบเดือน</Text>
             <View style={{ marginTop: -40, marginBottom: 5, marginLeft: 250 }}>
                 <TouchableOpacity onPress={AddMonthlySummary}>
                 <Image
@@ -141,7 +148,7 @@ const HomeScreen = ({ navigation, route }) => {
                                 style={{ width: 30, height: 35 }}
                             /></View>
                         <View style={{ paddingTop: 4, paddingLeft: 10 }}>
-                            <Text style={styles.textF}>{color_m}</Text>
+                            <Text style={styles.textNormal}>{colorM}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -155,7 +162,7 @@ const HomeScreen = ({ navigation, route }) => {
                             />
                         </View>
                         <View style={{ paddingTop: 4, paddingLeft: 5 }}>
-                            <Text style={styles.textF}>{volum_m}</Text>
+                            <Text style={styles.textNormal}>{volumM}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -169,7 +176,7 @@ const HomeScreen = ({ navigation, route }) => {
                             />
                         </View>
                         <View style={{ paddingTop: 4, paddingLeft: 10 }}>
-                            <Text style={styles.textF}>{note_m}</Text>
+                            <Text style={styles.textNormal}>{notesM}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -188,43 +195,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "white",
     },
-    groupimage: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 40
-    },
-    leftAlignedText: {
-        marginLeft: -180,
-        marginBottom: 20
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 22,
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
     todayborder: {
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 30,
     },
-    modalText01: {
+    textHeader: {
         textAlign: 'center',
         fontSize: 24,
         fontFamily: 'MitrRegular',
@@ -240,7 +216,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         borderWidth: 1,
     },
-    textF: {
+    textNormal: {
         fontFamily: 'MitrRegular',
         fontSize: 16
     },
