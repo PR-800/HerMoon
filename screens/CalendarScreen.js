@@ -48,8 +48,7 @@ const CalendarScreen = () => {
     Object.keys(dataMSummary).forEach((itemKey) => {
       const item = dataMSummary[itemKey];
       if (item.date) {
-        const datedb = moment(item.date.toDate()).format("DD/MM/YYYY");
-        if (dateTime === datedb) {
+        if (dateTime === item.date) {
           if (key === "color") {
             itemsToRender.push(
               <Text key={itemKey} style={styles.textNormal}>{item.menstrual_color}</Text>

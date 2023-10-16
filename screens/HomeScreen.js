@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import firebase from '../data/firebaseDB';
+import moment from 'moment';
 
 //import component
 import MenstrualLevelModel from '../components/MenstrualLevelModel';
@@ -73,28 +74,49 @@ const HomeScreen = ({ navigation, route }) => {
         return null;
     }
 
-    //เพิ่มข้อมูลลง firebase
     const AddMonthlySummary = () => {
-        // ข้อมูลที่ต้องการเพิ่ม
-        const dataToAdd = {
-            date: firebase.firestore.FieldValue.serverTimestamp(),
-            menstrual_color: colorM,
-            menstrual_volume: volumM,
-            menstrual_notes: notesM,
-        };
+    // สร้างวันที่
+    const desiredDate = new Date();
+    const formattedDate = moment(desiredDate).format("DD/MM/YYYY");
 
-        //สร้าง collection
-        const databaseRef = firebase.firestore().collection("monthly_summary");
+    // สร้าง reference ไปยัง collection "monthly_summary"
+    const databaseRef = firebase.firestore().collection("monthly_summary");
 
-        // เพิ่มข้อมูลลง db
-        databaseRef.add(dataToAdd)
-            .then((docRef) => {
-                console.log("เพิ่มข้อมูลสำเร็จ: ", docRef.id);
-            })
-            .catch((error) => {
-                console.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ", error);
+    //เรียกข้อมูลที่ตรงกับ formattedDate
+    const query = databaseRef.where("date", "==", formattedDate);
+
+    // ดึงข้อมูลที่ตรงกับเงื่อนไข
+    query.get().then((querySnapshot) => {
+        if (querySnapshot.empty) {
+            console.log("ไม่พบข้อมูลที่ตรงกับวันที่ " + formattedDate);
+            // ข้อมูลที่ต้องการเพิ่ม
+            const dataToAdd = {
+                date: moment(desiredDate).format("DD/MM/YYYY"),
+                menstrual_color: colorM,
+                menstrual_volume: volumM,
+                menstrual_notes: notesM,
+            };
+
+            //สร้าง collection
+            const databaseRef = firebase.firestore().collection("monthly_summary");
+
+            // เพิ่มข้อมูลลง firebase
+            databaseRef.add(dataToAdd)
+                .then((docRef) => {
+                    console.log("เพิ่มข้อมูลสำเร็จ: ", docRef.id);
+                })
+                .catch((error) => {
+                    console.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ", error);
+                });
+        } else {
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                console.log("มีข้อมูลที่ตรงกับวันที่นี้แล้ว", data);
             });
-    }
+        }
+    }).catch((error) => {
+        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล: ", error);
+    });}
 
     return (
         <View style={styles.screen}>
@@ -107,7 +129,7 @@ const HomeScreen = ({ navigation, route }) => {
                 <Text style={[styles.textHeader, { paddingHorizontal: 22, color: 'black' }]}>{formatDate(date)}</Text>
             </View>
 
-            <View style={{marginLeft: -180, marginBottom: 20, marginTop: 80 }}>
+            <View style={{ marginLeft: -180, marginBottom: 20, marginTop: 80 }}>
                 <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>Welcome</Text>
                 <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', }}>Leslie Alexander</Text>
             </View>
@@ -129,13 +151,14 @@ const HomeScreen = ({ navigation, route }) => {
                     style={{ width: 240, height: 240 }}
                 />
             </View>
+
             <Text style={styles.textNormal}>เพิ่มข้อมูลและบันทึกรอบเดือน</Text>
             <View style={{ marginTop: -40, marginBottom: 5, marginLeft: 250 }}>
                 <TouchableOpacity onPress={AddMonthlySummary}>
-                <Image
-                                source={require('../assets/Home/save04-icon.png')}
-                                style={{ width: 50, height: 50 }}
-                            />
+                    <Image
+                        source={require('../assets/Home/save04-icon.png')}
+                        style={{ width: 50, height: 50 }}
+                    />
                 </TouchableOpacity></View>
 
             <View>
@@ -181,7 +204,6 @@ const HomeScreen = ({ navigation, route }) => {
                     </View>
                 </TouchableOpacity>
                 <NotesModel visible={modalVisibleNotes} onClose={NotesIcon} navigation={navigation}></NotesModel>
-
             </View>
 
         </View>
