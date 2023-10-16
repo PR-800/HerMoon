@@ -67,6 +67,7 @@ const CalendarScreen = () => {
           //   "selected date formatted: ",
           //   moment(selected).format("DD/MM/YYYY HH:mm"),
           // ); // 2022/04/13 13:35
+          // setdateTime(moment(selected).format("DD/MM/YYYY"))
           setdateTime(moment(selected).format("DD/MM/YYYY"))
         }}
         onTimeChange={(time) => {
@@ -74,80 +75,138 @@ const CalendarScreen = () => {
           // console.log("time formatted: ", moment(time).format("HH:mm")); // 04:04
         }}
       />
-      {Object.keys(dataMSummary).map(key => {
+      {/* {Object.keys(dataMSummary).map(key => {
         const item = dataMSummary[key];
-        const datedb = moment(item.date.toDate()).format("DD/MM/YYYY")
-        if (moment(item.date.toDate()).format("DD/MM/YYYY") !== dateTime) {
-          // วันที่ตรงกัน
-          return (
-            <LinearGradient key={key} colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.box}>
-              <Text style={styles.textF}>date: {dateTime}</Text>
-              <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
-                <Image
-                  source={require('../assets/Home/blood01-icon.png')}
-                />
-                <View style={{ paddingTop: 4, paddingLeft: 15 }}>
-                  <Text style={styles.textF}>{item.menstrual_color}</Text>
+        if (item.date) { // ตรวจสอบว่า item.date ไม่ใช่ null
+          const datedb = moment(item.date.toDate()).format("DD/MM/YYYY");
+          console.log('dateTime', dateTime);
+          console.log('datedb', datedb);
+          if (dateTime == datedb) {
+            // วันที่ตรงกัน
+            return (
+              <LinearGradient key={key} colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.box}>
+                <Text style={styles.textF}>date: {dateTime}</Text>
+                <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
+                  <Image
+                    source={require('../assets/Home/blood01-icon.png')}
+                  />
+                  {dateTime == datedb && (
+                    <View style={{ paddingTop: 4, paddingLeft: 15 }}>
+                      <Text style={styles.textF}>{item.menstrual_color}</Text>
+                    </View>
+                  )}
                 </View>
-              </View>
-              <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
-                <Image style={{ marginTop: -5, marginLeft: -5 }}
-                  source={require('../assets/Home/sanitarypad02-icon.png')}
-                />
-                <View style={{ paddingTop: 4, paddingLeft: 10 }}>
-                  <Text style={styles.textF}>{item.menstrual_volume}</Text>
+                <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
+                  <Image style={{ marginTop: -5, marginLeft: -5 }}
+                    source={require('../assets/Home/sanitarypad02-icon.png')}
+                  />
+                  <View style={{ paddingTop: 4, paddingLeft: 10 }}>
+                    <Text style={styles.textF}>{item.menstrual_volume}</Text>
+                  </View>
                 </View>
-              </View>
-              <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
-                <Image
-                  source={require('../assets/Home/notes02-icon.png')}
-                />
-                <View style={{ paddingTop: 4, paddingLeft: 15 }}>
-                  <Text style={styles.textF}>{item.menstrual_notes}</Text>
+                <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
+                  <Image
+                    source={require('../assets/Home/notes02-icon.png')}
+                  />
+                  <View style={{ paddingTop: 4, paddingLeft: 15 }}>
+                    <Text style={styles.textF}>{item.menstrual_notes}</Text>
+                  </View>
                 </View>
+                <TouchableOpacity onPress={EditIcon}>
+                  <Image style={{ marginLeft: 250, marginVertical: 10, width: 30, height: 30 }}
+                    source={require('../assets/Home/edit01-icon.png')}
+                  />
+                </TouchableOpacity>
+                <EditInfo visible={modalVisibleEdit} onClose={EditIcon} />
+                <View >
+                </View>
+              </LinearGradient>);
+          }}
+      })} */}
+
+      {/* {Object.keys(dataMSummary).map(key => {
+        const item = dataMSummary[key];
+        if (item.date) { // ตรวจสอบว่า item.date ไม่ใช่ null
+          const datedb = moment(item.date.toDate()).format("DD/MM/YYYY");
+          console.log('dateTime', dateTime);
+          console.log('datedb', datedb);
+
+          if (dateTime == datedb) {
+            return (
+              <View style={{ paddingTop: 4, paddingLeft: 15 }}>
+                <Text style={styles.textF}>{item.menstrual_color}</Text>
               </View>
-              <TouchableOpacity onPress={EditIcon}>
-                <Image style={{ marginLeft: 250, marginVertical: 10, width: 30, height: 30 }}
-                  source={require('../assets/Home/edit01-icon.png')}
-                />
-              </TouchableOpacity>
-              <EditInfo visible={modalVisibleEdit} onClose={EditIcon} />
-              <View >
-              </View>
-            </LinearGradient>);
-          // console.log('วันที่ตรงกัน');
-        } else {
-          // วันที่ไม่ตรงกัน
-          return (
-          <LinearGradient key={key} colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.box}>
-          <Text style={styles.textF}>date: {dateTime}</Text>
-          <View style={[styles.textBox]}>
-            <Image
-              source={require('../assets/Home/blood01-icon.png')}
-            />
-          </View>
-          <View style={[styles.textBox]}>
-            <Image style={{ marginTop: -5, marginLeft: -5 }}
-              source={require('../assets/Home/sanitarypad02-icon.png')}
-            />
-          </View>
-          <View style={[styles.textBox]}>
-            <Image
-              source={require('../assets/Home/notes02-icon.png')}
-            />
-          </View>
-          <TouchableOpacity onPress={EditIcon}>
-            <Image style={{ marginLeft: 250, marginVertical: 10, width: 30, height: 30 }}
-              source={require('../assets/Home/edit01-icon.png')}
-            />
-          </TouchableOpacity>
-          <EditInfo visible={modalVisibleEdit} onClose={EditIcon} />
-          <View >
-          </View>
-        </LinearGradient>);
-          // console.log('วันที่ไม่ตรงกัน');
+            );
+          }
         }
-      })}
+      })} */}
+
+      <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.box}>
+        <Text style={styles.textF}>date: {dateTime}</Text>
+        <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
+          <Image
+            source={require('../assets/Home/blood01-icon.png')}
+          />
+          {Object.keys(dataMSummary).map(key => {
+            const item = dataMSummary[key];
+            if (item.date) { // ตรวจสอบว่า item.date ไม่ใช่ null
+              const datedb = moment(item.date.toDate()).format("DD/MM/YYYY");
+              if (dateTime == datedb) {
+                return (
+                  <View style={{ paddingTop: 4, paddingLeft: 15 }}>
+                    <Text style={styles.textF}>{item.menstrual_color}</Text>
+                  </View>
+                );
+              }
+            }
+          })}
+        </View>
+        <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
+          <Image style={{ marginTop: -5, marginLeft: -5 }}
+            source={require('../assets/Home/sanitarypad02-icon.png')}
+          />
+          {Object.keys(dataMSummary).map(key => {
+            const item = dataMSummary[key];
+            if (item.date) { // ตรวจสอบว่า item.date ไม่ใช่ null
+              const datedb = moment(item.date.toDate()).format("DD/MM/YYYY");
+              if (dateTime == datedb) {
+                return (
+                  <View style={{ paddingTop: 4, paddingLeft: 10 }}>
+                    <Text style={styles.textF}>{item.menstrual_volume}</Text>
+                  </View>
+                );
+              }
+            }
+          })}
+        </View>
+        <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
+          <Image
+            source={require('../assets/Home/notes02-icon.png')}
+          />
+          {Object.keys(dataMSummary).map(key => {
+            const item = dataMSummary[key];
+            if (item.date) { // ตรวจสอบว่า item.date ไม่ใช่ null
+              const datedb = moment(item.date.toDate()).format("DD/MM/YYYY");
+              if (dateTime == datedb) {
+                return (
+                  <View style={{ paddingTop: 4, paddingLeft: 15 }}>
+                    <Text style={styles.textF}>{item.menstrual_notes}</Text>
+                  </View>
+                );
+              }
+            }
+          })}
+        </View>
+        <TouchableOpacity onPress={EditIcon}>
+          <Image style={{ marginLeft: 250, marginVertical: 10, width: 30, height: 30 }}
+            source={require('../assets/Home/edit01-icon.png')}
+          />
+        </TouchableOpacity>
+        <EditInfo visible={modalVisibleEdit} onClose={EditIcon} />
+        <View >
+        </View>
+      </LinearGradient>
+
     </View>
   )
 }
