@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable, Button } from 'react-native';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import firebase from '../data/firebaseDB';
 import moment from 'moment';
+
 
 //import component
 import MenstrualLevelModel from '../components/MenstrualLevelModel';
@@ -75,51 +77,80 @@ const HomeScreen = ({ navigation, route }) => {
     }
 
     const AddMonthlySummary = () => {
-    // สร้างวันที่
-    const desiredDate = new Date();
-    const formattedDate = moment(desiredDate).format("DD/MM/YYYY");
+        // สร้างวันที่
+        const desiredDate = new Date();
+        const formattedDate = moment(desiredDate).format("DD/MM/YYYY");
 
-    // สร้าง reference ไปยัง collection "monthly_summary"
-    const databaseRef = firebase.firestore().collection("monthly_summary");
+        // สร้าง reference ไปยัง collection "monthly_summary"
+        const databaseRef = firebase.firestore().collection("monthly_summary");
 
-    //เรียกข้อมูลที่ตรงกับ formattedDate
-    const query = databaseRef.where("date", "==", formattedDate);
+        //เรียกข้อมูลที่ตรงกับ formattedDate
+        const query = databaseRef.where("date", "==", formattedDate);
 
-    // ดึงข้อมูลที่ตรงกับเงื่อนไข
-    query.get().then((querySnapshot) => {
-        if (querySnapshot.empty) {
-            console.log("ไม่พบข้อมูลที่ตรงกับวันที่ " + formattedDate);
-            // ข้อมูลที่ต้องการเพิ่ม
-            const dataToAdd = {
-                date: moment(desiredDate).format("DD/MM/YYYY"),
-                menstrual_color: colorM,
-                menstrual_volume: volumM,
-                menstrual_notes: notesM,
-            };
+        // ดึงข้อมูลที่ตรงกับเงื่อนไข
+        query.get().then((querySnapshot) => {
+            if (querySnapshot.empty) {
+                console.log("ไม่พบข้อมูลที่ตรงกับวันที่ " + formattedDate);
+                // ข้อมูลที่ต้องการเพิ่ม
+                if(colorM == 'เลือกสีประจำเดือน' || volumM == 'เลือกปริมาณประจำเดือน' || notesM == 'ข้อมูลเพิ่มเติม'){
+                    Dialog.show({
+                        type: ALERT_TYPE.WARNING,
+                        title: (
+                            <Text style={styles.textNormal}>กรุณากรอกข้อมูลให้ครบถ้วน</Text>
+                        ),
+                        button: 'OK',
+                    });
+                }
+                else{
+                const dataToAdd = {
+                    date: moment(desiredDate).format("DD/MM/YYYY"),
+                    menstrual_color: colorM,
+                    menstrual_volume: volumM,
+                    menstrual_notes: notesM,
+                };
 
-            //สร้าง collection
-            const databaseRef = firebase.firestore().collection("monthly_summary");
+                //สร้าง collection
+                const databaseRef = firebase.firestore().collection("monthly_summary");
 
-            // เพิ่มข้อมูลลง firebase
-            databaseRef.add(dataToAdd)
-                .then((docRef) => {
-                    console.log("เพิ่มข้อมูลสำเร็จ: ", docRef.id);
-                })
-                .catch((error) => {
-                    console.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ", error);
+                // เพิ่มข้อมูลลง firebase
+                databaseRef.add(dataToAdd)
+                    .then((docRef) => {
+                        // เรียก Dialog.show ที่นี่เพื่อแสดง Dialog หลังจากที่พบข้อมูลที่ตรงกัน
+                        Dialog.show({
+                            type: ALERT_TYPE.SUCCESS,
+                            title: (
+                                <Text style={styles.textNormal}>เพิ่มข้อมูลรอบเดือนประจำวันสำเร็จ</Text>
+                            ),
+                            button: 'OK',
+                        });
+                        console.log("เพิ่มข้อมูลสำเร็จ: ", docRef.id);
+                    })
+                    .catch((error) => {
+                        console.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ", error);
+                    });
+                }
+            } else {
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    // เรียก Dialog.show ที่นี่เพื่อแสดง Dialog หลังจากที่พบข้อมูลที่ตรงกัน
+                    Dialog.show({
+                        type: ALERT_TYPE.WARNING,
+                        title: (
+                            <Text style={styles.textNormal}>คุณได้เพิ่มรอบเดือนประจำวันแล้ว</Text>
+                        ),
+                        button: 'OK',
+                    });
+                    // console.log("มีข้อมูลที่ตรงกับวันที่นี้แล้ว", data);
                 });
-        } else {
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                console.log("มีข้อมูลที่ตรงกับวันที่นี้แล้ว", data);
-            });
-        }
-    }).catch((error) => {
-        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล: ", error);
-    });}
+            }
+        }).catch((error) => {
+            console.error("เกิดข้อผิดพลาดในการดึงข้อมูล: ", error);
+        });
+    }
 
     return (
         <View style={styles.screen}>
+
             <CalendarStripC />
 
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -110 }}>
@@ -205,7 +236,9 @@ const HomeScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
                 <NotesModel visible={modalVisibleNotes} onClose={NotesIcon} navigation={navigation}></NotesModel>
             </View>
-
+            {/* เรียกใช้ alert */}
+            <AlertNotificationRoot>
+            </AlertNotificationRoot>
         </View>
     );
 };
