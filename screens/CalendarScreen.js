@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
 import { TimeDatePicker, Modes } from "react-native-time-date-picker";
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import { LinearGradient } from 'expo-linear-gradient';
 import firebase from '../data/firebaseDB';
 import moment from 'moment';
@@ -15,6 +16,7 @@ const CalendarScreen = () => {
   const [dataMSummary, setDataMSummary] = useState({});//เก็บข้อมูลทั้งหมดที่อยู่ใน firebase
   const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
   const [dateTime, setdateTime] = useState('วันที่และเวลา')
+  const [filteredId, setFilteredId] = useState([])
   const now = moment().valueOf();
 
   //
@@ -22,7 +24,11 @@ const CalendarScreen = () => {
     const unsubscribe = databaseRef.onSnapshot((querySnapshot) => {
       const dataMSummary = {};
       querySnapshot.forEach((doc) => {
-        dataMSummary[doc.id] = doc.data()
+        dataMSummary[doc.id] = {
+          id: doc.id, // เพิ่ม id เข้าไปในข้อมูล
+          ...doc.data(),
+        };
+        // console.log('dataMSummary ', doc.id)
       });
       setDataMSummary(dataMSummary)
     });
@@ -50,17 +56,13 @@ const CalendarScreen = () => {
       if (item.date) {
         if (dateTime === item.date) {
           if (key === "color") {
-            itemsToRender.push(
-              <Text key={itemKey} style={styles.textNormal}>{item.menstrual_color}</Text>
-            );
+            itemsToRender.push(item.menstrual_color);
           } else if (key === "volume") {
-            itemsToRender.push(
-              <Text key={itemKey} style={styles.textNormal}>{item.menstrual_volume}</Text>
-            );
+            itemsToRender.push(item.menstrual_volume);
           } else if (key === "notes") {
-            itemsToRender.push(
-              <Text key={itemKey} style={styles.textNormal}>{item.menstrual_notes}</Text>
-            );
+            itemsToRender.push(item.menstrual_notes);
+          } else if (key === "id") {
+            itemsToRender.push(item.id);
           }
         }
       }
@@ -71,6 +73,7 @@ const CalendarScreen = () => {
   const selectedColor = renderData("color");
   const selectedVolume = renderData("volume");
   const selectedNotes = renderData("notes");
+  const selectedId = renderData("id");
 
   return (
 
@@ -139,7 +142,7 @@ const CalendarScreen = () => {
             source={require('../assets/Home/edit01-icon.png')}
           />
         </TouchableOpacity>
-        <EditInfo visible={modalVisibleEdit} onClose={EditIcon} selectedColor={selectedColor} selectedVolume={selectedVolume} selectedNotes={selectedNotes} />
+        <EditInfo visible={modalVisibleEdit} onClose={EditIcon} selectedColor={selectedColor} selectedVolume={selectedVolume} selectedNotes={selectedNotes} selectedId={selectedId}/>
         <View >
         </View>
       </LinearGradient>

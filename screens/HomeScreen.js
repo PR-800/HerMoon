@@ -119,7 +119,7 @@ const HomeScreen = ({ navigation, route }) => {
                         Dialog.show({
                             type: ALERT_TYPE.SUCCESS,
                             title: (
-                                <Text style={styles.textNormal}>เพิ่มข้อมูลรอบเดือนประจำวันสำเร็จ</Text>
+                                <Text style={{fontFamily: 'MitrRegular', fontSize: 18}}>เพิ่มข้อมูลรอบเดือนประจำวันสำเร็จ</Text>
                             ),
                             button: 'OK',
                         });
@@ -136,7 +136,10 @@ const HomeScreen = ({ navigation, route }) => {
                     Dialog.show({
                         type: ALERT_TYPE.WARNING,
                         title: (
-                            <Text style={styles.textNormal}>คุณได้เพิ่มรอบเดือนประจำวันแล้ว</Text>
+                            <Text style={{fontFamily: 'MitrRegular', fontSize: 18}}>คุณได้เพิ่มรอบเดือนประจำวันแล้ว</Text>
+                        ),
+                        textBody: (
+                            <Text style={{fontFamily: 'MitrRegular', fontSize: 14}}>หากคุณต้องการแก้ไขข้อมูล {'\n'} สามารถแก้ไขได้ที่หน้า Calendar ค่ะ</Text>
                         ),
                         button: 'OK',
                     });
