@@ -143,16 +143,18 @@ class LoginScreen extends Component {
                             </Text>
                         </TouchableOpacity>
         
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             style={styles.button}
                             onPress={() => {
                                 // this.findAccount()
                                 this.state.all_data.map((item, i) => {
                                     if (this.state.username === item.username && this.state.password === item.password) {
                                         match = true
-                                        this.props.navigation.navigate("tutorial", {
+                                        this.props.navigation.navigate("homePage", "homePage", {
                                             key: item.key,
+                                            username: item.username,
                                         });
+                                        console.log('item send', item)
                                     } 
                                 })  
                                 if (match == false) {

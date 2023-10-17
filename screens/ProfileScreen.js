@@ -195,7 +195,7 @@ class ProfileScreen extends Component {
                                     source={require('../assets/profile/logout.png')}
                                     style={styles.icon}
                                 />
-                                <Text style={{...styles.content, color:'white'}}>Logout</Text>
+                                <Text style={{...styles.content, color:'black'}}>Logout</Text>
                             </View>
                             
                         </Pressable>
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     logoutButton: {
-        marginTop: 25, paddingHorizontal: 10, backgroundColor: '#E67B95', borderRadius: 25,
+        marginTop: 25, paddingHorizontal: 10, backgroundColor: 'white', borderRadius: 25,
         // shadow
         // borderWidth: 2,
         // borderColor: "black",

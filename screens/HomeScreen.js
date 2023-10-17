@@ -22,10 +22,63 @@ class HomeScreen extends Component {
             colorM: 'เลือกสีประจำเดือน',
             volumM: 'เลือกปริมาณประจำเดือน',
             notesM: 'ข้อมูลเพิ่มเติม',
+
+            //Fluk
+            key: "",
+            username: "",
         };
     }
 
+
+    //Fluk
     componentDidMount() {
+        const accountDoc = firebase
+
+            .firestore()
+            .collection("accounts")
+            .doc(this.props.route.params.key);
+        console.log("this.props.root.params()", this.props.route.params.key)
+        accountDoc.get().then((res) => {
+            if (res.exists) {
+                const account = res.data();
+                this.setState({
+                    key: res.id,
+                    username: account.username,
+                });
+                console.log('account.username : ', this.state.username)
+            } else {
+                console.log("Document does not exist!!");
+            }
+        });
+    }
+    
+
+    componentDidMount() {
+        
+        // const { key, username } = this.props.route.params;
+
+        // const accountDoc = firebase
+        //     .firestore()
+        //     .collection("accounts")
+        //     .doc(key);
+
+        // console.log("Key received in HomeScreen:", key);
+        // console.log("Username received in HomeScreen:", username);
+
+        // accountDoc.get().then((res) => {
+        //     if (res.exists) {
+        //         const account = res.data();
+        //         this.setState({
+        //             key: res.id,
+        //             username: account.username,
+        //         });
+        //         console.log('account.username : ', this.state.username);
+        //     } else {
+        //         console.log("Document does not exist!!");
+        //     }
+        // });
+
+        
         // Check if route.params is available and set state accordingly
         if (this.props.route.params) {
             const { dataColorModel, dataVolumeModel, dataNotesModel } = this.props.route.params;
@@ -138,7 +191,9 @@ class HomeScreen extends Component {
     
                 <View style={{ marginLeft: -180, marginBottom: 20, marginTop: 80 }}>
                     <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>Welcome</Text>
-                    <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', }}>Leslie Alexander</Text>
+                    <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', }}>
+                        {this.state.username}
+                    </Text>
                 </View>
     
                 <View style={{ marginLeft: -250 }}>
