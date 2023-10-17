@@ -23,7 +23,6 @@ class ProfileScreen extends Component {
         console.log(this.props.route)
 
         // subjDoc.get().then((res) => {
-        //     if (res.exists) {
         //         const subj = res.data();
         //         this.setState({
         //             key: res.id, 
@@ -75,6 +74,7 @@ class ProfileScreen extends Component {
     // }
 
     render() {
+        const {navigation} = this.props
         return ( 
             <View style={styles.screen}>
                 <LinearGradient

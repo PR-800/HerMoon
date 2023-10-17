@@ -21,7 +21,8 @@ class TutorialScreen extends Component {
     }
 
     render() {
-        // console.log(this.props.route.params.key)
+        const keyId = this.props.route.params.key
+        console.log("Tutorial: " + keyId)
         return (
             <View style={styles.screen}>
                 <LinearGradient
@@ -51,7 +52,7 @@ class TutorialScreen extends Component {
                         <TouchableOpacity 
                             onPress={() => {
                                 this.props.navigation.navigate("homePage", {
-                                    key: this.props.route.params.key
+                                    key: keyId
                                 });
                             }}
                         >
