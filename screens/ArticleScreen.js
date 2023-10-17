@@ -84,17 +84,28 @@ class ArticleScreen extends Component {
                     <Text style={styles.header}>Article</Text>
                 </LinearGradient>
 
-
                 <ScrollView>
-                {this.state.article_list.map((item, i) => {
+                    {this.state.article_list.map((item, i) => {
                         return (
-                            <TouchableOpacity style={styles.boxList}>
-
-                                <View key={i}>
+                            <TouchableOpacity style={styles.boxList} key={i}
+                                onPress={() => {
+                                    navigation.navigate("articleDetail", {
+                                        key: item.key,
+                                        name: item.name,
+                                        nameImg: item.nameImg,
+                                        title: item.title,
+                                        description: item.description,
+                                        date: item.date,
+                                        coverImg: item.coverImg,
+                                    });
+                                    // console.log('item', item)
+                                }}
+                            >
+                                <View>
                                     <View style={styles.groupUsername}>
                                         <Image
-                                        style={styles.userIcon}
-                                        source={{ uri: item.nameImg }}
+                                            style={styles.userIcon}
+                                            source={{ uri: item.nameImg }}
                                         />
                                         <Text style={styles.name}>
                                             {item.name}
@@ -102,30 +113,30 @@ class ArticleScreen extends Component {
                                     </View>
                                     <View style={styles.groupBox}>
                                         <View style={styles.groupLeft}>
-                                        <Text style={styles.title} numberOfLines={3}>
-                                        {item.title}
-                                        </Text>
+                                            <Text style={styles.title} numberOfLines={3}>
+                                                {item.title}
+                                            </Text>
                                         </View>
                                         <View style={styles.groupRight}>
-                                        <Image
-                                            style={styles.coverImage}
-                                            source={item.coverImg}
-                                        />
+                                            <Image
+                                                style={styles.coverImg}
+                                                source={{ uri: item.coverImg }}
+                                                />
                                         </View>
+                                        <Text style={{display:'none'}} >{ item.coverImg }</Text>
                                     </View>
                                     <Text style={styles.timestamp}>
                                         {item.date}
                                     </Text>
                                     <Text style={styles.detail} numberOfLines={2}>
                                         {item.description}
-                                        {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. */}
                                     </Text>
                                 </View>
-
-                                
                             </TouchableOpacity>
-                        );
-                })}
+                        )}
+                    )}
+
+
                 </ScrollView>
 
             </View>
@@ -139,7 +150,6 @@ class ArticleScreen extends Component {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        // backgroundColor: "white",
         alignItems: "center",
     },
     gradientBackground: {
@@ -202,9 +212,11 @@ const styles = StyleSheet.create({
     },
     userIcon: {
         marginHorizontal: 5,
+        objectFit: 'cover',
+        borderRadius: 50,
         bottom: 2,
-        width: 25,
-        height: 25
+        width: 30,
+        height: 30
     },
     groupUsername: {
         flexDirection: "row",
@@ -220,7 +232,7 @@ const styles = StyleSheet.create({
     groupRight: {
         width: "50%"
     },
-    coverImage: {
+    coverImg: {
         display: "flex",
         resizeMode: 'contain',
         borderRadius: 10,

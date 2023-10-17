@@ -18,24 +18,24 @@ const ContactScreen = ({ route, navigation }) => {
   return (
     <View style={styles.screen}>
         <LinearGradient
-            start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+            start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
             colors={['#9F79EB', '#FC7D7B',]}
             style={styles.gradientBackground}
         >
-        <View style={styles.navbar}>
-                    <Pressable onPress={() => {
-                                navigation.navigate("Profile", {});
-                            }}>
-                        <Image
+            <View style={styles.navbar}>
+                <Pressable onPress={() => {
+                    navigation.navigate("Profile", {});
+                }}>
+                    <Image
                         style={styles.icon}
                         source={require('../assets/article/arrow-left-white.png')}
-                        />
-                    </Pressable>
-                    <Text style={styles.header}>Group members</Text>
-                    <Text></Text>
-                </View>
-                {/* <Text style={styles.header}>รายชื่อสมาชิกกลุ่ม</Text> */}
-            </LinearGradient>
+                    />
+                </Pressable>
+                <Text style={styles.header}>Group members</Text>
+                <Text></Text>
+            </View>
+            {/* <Text style={styles.header}>รายชื่อสมาชิกกลุ่ม</Text> */}
+        </LinearGradient>
             <View style={styles.content}>
                 <Text style={styles.text}>64070014 นายจิรโรจน์ เลิศอัครนานนท์</Text>
                 <Text style={styles.text}>64070025 นางสาวฐิติภา เอี่ยมสิริวงศ์</Text>

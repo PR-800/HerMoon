@@ -21,11 +21,12 @@ import StepThreeScreen from "../screens/StepThreeScreen";
 
 import HomeScreen from "../screens/HomeScreen"
 import CalendarScreen from "../screens/CalendarScreen";
-import ArticleScreen from "../screens/ArticleScreen";
-import ProfileScreen from "../screens/ProfileScreen";
 
+import ArticleScreen from "../screens/ArticleScreen";
+import ArticleDetailScreen from "../screens/ArticleDetailScreen";
+
+import ProfileScreen from "../screens/ProfileScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
-// import EditProfileScreen from "../screens/TestEdit";
 
 import NotificationScreen from "../screens/NotificationScreen";
 import ContactScreen from "../screens/ContactScreen";
@@ -98,6 +99,11 @@ function MyPageNavigator() {
                 }}
             />
             <PageNavigator.Screen name="privacy" component={PrivacyScreen} 
+                options={{
+                    headerShown: false
+                }}
+            />
+            <PageNavigator.Screen name="articleDetail" component={ArticleDetailScreen} 
                 options={{
                     headerShown: false
                 }}

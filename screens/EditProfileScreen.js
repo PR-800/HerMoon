@@ -76,7 +76,6 @@ const EditProfileScreen = ({ route, navigation }) => {
         <View style={styles.headerGroup}>
           <Pressable onPress={() => {
                       navigation.navigate("Profile", {});
-                      return console.log("go Profile")
                   }}>
             <Image
               source={require('../assets/profile/arrow-left.png')}
