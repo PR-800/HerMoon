@@ -6,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 
 import firebase from "../data/firebaseDB";
+import { Icon } from '@iconify/react';
 
 class ProfileScreen extends Component {
 
@@ -184,6 +185,23 @@ class ProfileScreen extends Component {
                         </Pressable>
         
                     </View>
+
+                    <View style={{...styles.logoutButton, justifyContent: 'flex-end'}}>
+                        <Pressable onPress={() => {
+                            // navigation.navigate("privacy", {});
+                        }}>
+                            <View style={styles.group}>
+                                <Image
+                                    source={require('../assets/profile/logout.png')}
+                                    style={styles.icon}
+                                />
+                                <Text style={{...styles.content, color:'white'}}>Logout</Text>
+                            </View>
+                            
+                        </Pressable>
+                    </View>
+
+
                 </LinearGradient>
             </View>
         )
@@ -205,7 +223,6 @@ class ProfileScreen extends Component {
 
 const styles = StyleSheet.create({
     screen: {
-        // marginTop: 50,
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
@@ -281,7 +298,6 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        // opacity: 0.5
     },
     navbar: {
         padding: 30,
@@ -301,6 +317,21 @@ const styles = StyleSheet.create({
         height: '15%',
         justifyContent: 'center',
     },
+    logoutButton: {
+        marginTop: 25, paddingHorizontal: 10, backgroundColor: '#E67B95', borderRadius: 25,
+        // shadow
+        // borderWidth: 2,
+        // borderColor: "black",
+        borderRadius: 20,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 2,
+        elevation: 5,
+    }
 });
 
 export default ProfileScreen

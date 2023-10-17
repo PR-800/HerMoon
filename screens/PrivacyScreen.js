@@ -36,10 +36,10 @@ const PrivacyScreen = ({ route, navigation }) => {
                 </View>
                 {/* <Text style={styles.header}>รายชื่อสมาชิกกลุ่ม</Text> */}
             </LinearGradient>
-            <View style={styles.content}>
-                <Text style={styles.text}>วิชานี้เป็นส่วนหนึ่งของวิชา</Text>
-                <Text style={styles.text}>Mobile Device Programming (1/2023)</Text>
-            </View>
+            <Text style={styles.content}>
+                วิชานี้เป็นส่วนหนึ่งของวิชา {'\n'}
+                Mobile Device Programming (1/2023)
+            </Text>
     </View>
   )
 }
@@ -69,11 +69,8 @@ header: {
     marginTop: -8,
 },
 content: {
-    alignItems: "center",
+    textAlign: 'center',
     margin: 50,
-    fontSize: 20,
-},
-text: {
     fontFamily: 'MitrRegular',
     fontSize: 17,
     lineHeight: 30,
