@@ -1,126 +1,186 @@
-import React from "react";
+import React, { Component } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { useFonts } from 'expo-font'; 
 
-const LoginScreen = ({navigation}) => {
+import firebase from "../data/firebaseDB";
 
-    const [username, setUsername] = React.useState("");
-    const [password, setPassword] = React.useState("");
+class LoginScreen extends Component {
 
-    const [loaded] = useFonts({
-        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
-        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
-    });
+    constructor() {
+        super();
+        this.accountCollection = firebase.firestore().collection("accounts");
+        this.state = {username: "", password: "", showPassword: true, all_data: []};
+    }
+       
+    inputValueUpdate = (val, prop) => {
+        const state = this.state;
+        state[prop] = val;
+        this.setState(state);
+    };
 
-    if (!loaded) {
-        return null;
+    getCollection = (querySnapshot) => {
+        querySnapshot.forEach((res) => {
+            const { username, password } = res.data();
+            this.state.all_data.push({ key: res.id, username, password });
+        });
+    };
+
+    componentDidMount() {
+        this.unsubscribe = this.accountCollection.onSnapshot(this.getCollection);
     }
 
-    return (
-        <View style={styles.screen}>
-            <LinearGradient
-                colors={['#FC7D7B', '#9F79EB']}
-                style={styles.gradientBackground}
-            >
-                <View style={styles.header}>
-                    <Image
-                        source={ require('../assets/logo.png') }
-                    />
-                    <View>
-                        <Text style={[styles.headerText, {
-                            textShadowColor: '#9F79EB',
-                            textShadowOffset: {width: 1, height: 0.5},
-                            textShadowRadius: 35,
-                            marginTop: 15,
-                        }]}>Her</Text>
-                        <Text style={[styles.headerText, {
-                            textShadowColor: '#9F79EB',
-                            textShadowOffset: {width: 1, height: 0.5},
-                            textShadowRadius: 35,
-                        }]}>Moon</Text>
+    componentWillUnmount() {
+        this.unsubscribe();    
+    }   
+
+    findAccount() {
+        this.state.all_data.map((item, i) => {
+            console.log(item)
+        })
+    }
+
+    // storeAccount() {
+    //     this.accountCollection.add({
+    //         username: this.state.username,
+    //         password: this.state.password,
+    //     })
+    //     .then((res) => {
+    //         this.setState({username: "", password: ""});
+    //     });
+    // }
+
+    render() {
+
+        let match = false;
+
+        return (
+            <View style={styles.screen}>
+                <LinearGradient
+                    colors={['#FC7D7B', '#9F79EB']}
+                    style={styles.gradientBackground}
+                >
+                    <View style={styles.header}>
+                        <Image
+                            source={ require('../assets/logo.png') }
+                        />
+                        <View>
+                            <Text style={[styles.headerText, {
+                                textShadowColor: '#9F79EB',
+                                textShadowOffset: {width: 1, height: 0.5},
+                                textShadowRadius: 35,
+                                marginTop: 15,
+                            }]}>Her</Text>
+                            <Text style={[styles.headerText, {
+                                textShadowColor: '#9F79EB',
+                                textShadowOffset: {width: 1, height: 0.5},
+                                textShadowRadius: 35,
+                            }]}>Moon</Text>
+                        </View>
                     </View>
-                </View>
-
-                <TextInput 
-                    style={[styles.input, {}]} 
-                    theme={{ 
-                        roundness: 50, 
-                        colors: { onSurfaceVariant: 'grey'} ,
-                    }} 
-                    underlineColor="transparent"
-                    activeUnderlineColor="grey"
-                    textColor="black"
-
-                    label="Username"
-                    value={username}
-                    onChangeText={username => setUsername(username)}
-                />
-
-                <TextInput 
-                    style={styles.input} 
-                    theme={{ 
-                        roundness: 50, 
-                        colors: { onSurfaceVariant: 'grey'} 
-                    }} 
-                    underlineColor="transparent"
-                    activeUnderlineColor="grey"
-                    textColor="black"
-
-                    label="Password"
-                    value={password}
-                    onChangeText={password => setPassword(password)}
-                />
-
-                <TouchableOpacity 
-                    // onPress={() => {
-                    //     navigation.navigate("tutorial", {});
-                    // }}
-                >
-                    <Text style={[styles.text, { 
-                            left: 80, 
-                            bottom: 5,
-                            // textShadowColor: 'rgba(0, 0, 0, 0.5)',
-                            // textShadowOffset: {width: -1, height: 2},
-                            // textShadowRadius: 15,
-                        }]}>
-                        Forgot password
-                    </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity 
-                    style={styles.button}
-                    onPress={() => {
-                        navigation.navigate("tutorial", {});
-                    }}
-                >
-                    <Text style={styles.textButton}>Log in</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity 
-                    onPress={() => {
-                        navigation.navigate("register", {});
-                    }}
-                >
-                    <Text style={[styles.text, { 
-                        top: 15,
-                        textShadowColor: 'rgba(0, 0, 0, 0.5)',
-                        textShadowOffset: {width: -1, height: 2},
-                        textShadowRadius: 15,
-                    }]}>
-                        Doesn't have an account? {" "}
-                        <Text style={{ textDecorationLine: "underline"}}>
-                            Register
-                        </Text>
-                    </Text>
-                </TouchableOpacity>
                     
-            </LinearGradient>
-        </View>
-    );
-};
+                    <TextInput 
+                        style={[styles.input, {}]} 
+                        theme={{ 
+                            roundness: 50, 
+                            colors: { onSurfaceVariant: 'grey'} ,
+                        }} 
+                        underlineColor="transparent"
+                        activeUnderlineColor="grey"
+                        textColor="black"
+    
+                        label="Username"
+                        onChangeText={(val) => this.inputValueUpdate(val, "username")}
+                        value={this.state.username}
+                    />
+
+                    <View style={{flexDirection: 'row'}}>
+                        <TextInput 
+                            style={styles.input} 
+                            theme={{ 
+                                roundness: 50, 
+                                colors: { onSurfaceVariant: 'grey'} 
+                            }} 
+                            underlineColor="transparent"
+                            activeUnderlineColor="grey"
+                            textColor="black"
+                            secureTextEntry={this.state.showPassword} 
+        
+                            label="Password"
+                            onChangeText={(val) => this.inputValueUpdate(val, "password")}
+                            value={this.state.password}
+                        />
+                        <MaterialCommunityIcons 
+                            name={this.state.showPassword ? 'eye-off' : 'eye'} 
+                            size={24} 
+                            color="#aaa"
+                            onPress={() => this.setState({ showPassword: !this.state.showPassword })} 
+                            style={{position:'absolute', right: 40, top: 30}}
+                        />
+                    </View>
+    
+                    <TouchableOpacity 
+                        // onPress={() => {
+                        //     navigation.navigate("tutorial", {});
+                        // }}
+                    >
+                        <Text style={[styles.text, { 
+                                left: 80, 
+                                bottom: 5,
+                                textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                                textShadowOffset: {width: -1, height: 2},
+                                textShadowRadius: 15,
+                            }]}>
+                            Forgot password
+                        </Text>
+                    </TouchableOpacity>
+    
+                    <TouchableOpacity 
+                        style={styles.button}
+                        onPress={() => {
+                            // this.findAccount()
+                            this.state.all_data.map((item, i) => {
+                                if (this.state.username === item.username && this.state.password === item.password) {
+                                    match = true
+                                    this.props.navigation.navigate("tutorial", {
+                                        key: item.key,
+                                    });
+                                } 
+                            })  
+                            if (match == false) {
+                                alert('Invalid username or password')
+                            }                      
+                        }}
+                    >
+                        <Text style={styles.textButton}>Log in</Text>
+                    </TouchableOpacity>
+    
+                    <TouchableOpacity 
+                        onPress={() => {
+                            this.props.navigation.navigate("register", {});
+                        }}
+                    >
+                        <Text style={[styles.text, { 
+                            top: 15,
+                            textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                            textShadowOffset: {width: -1, height: 2},
+                            textShadowRadius: 15,
+                        }]}>
+                            Doesn't have an account? {" "}
+                            <Text style={{ textDecorationLine: "underline"}}>
+                                Register
+                            </Text>
+                        </Text>
+                    </TouchableOpacity>
+                        
+                </LinearGradient>
+            </View>
+        );
+    }
+}
 
 const styles = StyleSheet.create({
     screen: {

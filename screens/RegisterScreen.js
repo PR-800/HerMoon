@@ -3,15 +3,10 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Hoverable, Pressable, } from 'react-native-web-hover' 
 
 import { useFonts } from 'expo-font';
 
 import firebase from "../data/firebaseDB";
-
-// const [username, setUsername] = React.useState("");
-// const [password, setPassword] = React.useState("");
-// const [confirmPassword, setConfirmPassword] = React.useState("");
 
 class SignUpScreen extends Component {
 
