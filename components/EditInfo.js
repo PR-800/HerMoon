@@ -1,12 +1,41 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity, TextInput } from 'react-native';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import { RadioButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import firebase from '../data/firebaseDB';
 
-const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNotes }) => {
-    const [dataColor, setDataColor] = useState(''); //เก็บข้อมูลสีประจำเดือนที่ต้องการอัพเดต
-    const [dataVolume, setDataVolume] = useState(''); //เก็บข้อมูลปริมาณประจำเดือนที่ต้องการอัพเดต
-    const [dataNotes, setDataNotes] = useState(''); //เก็บข้อมูลอาการเพิ่มเติมที่ต้องการอัพเดต
+const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNotes, selectedId }) => {
+    const [dataColor, setDataColor] = useState(selectedColor); //เก็บข้อมูลสีประจำเดือนที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
+    const [dataVolume, setDataVolume] = useState(selectedVolume); //เก็บข้อมูลปริมาณประจำเดือนที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
+    const [dataNotes, setDataNotes] = useState(selectedNotes); //เก็บข้อมูลอาการเพิ่มเติมที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
+
+    //update data ลง firebase
+    const UpdateMonthlySummary = () => {
+        const databaseRef = firebase.firestore().collection("monthly_summary").doc(selectedId[0]);
+
+        const updatedData = {
+            menstrual_color: dataColor,
+            menstrual_volume: dataVolume,
+            menstrual_notes: dataNotes,
+        };
+
+        // ทำการอัปเดตข้อมูล
+        databaseRef.update(updatedData)
+            .then(() => {
+                Dialog.show({
+                    type: ALERT_TYPE.SUCCESS,
+                    title: (
+                        <Text style={{fontFamily: 'MitrRegular', fontSize: 18}}>อัพเดตข้อมูลรอบเดือนสำเร็จ</Text>
+                    ),
+                    button: 'OK',
+                });
+                // console.log('อัปเดตข้อมูลสำเร็จ');
+            })
+            .catch((error) => {
+                console.error('เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ', error);
+            });
+    }
     return (
         <Modal
             transparent={true}
@@ -29,7 +58,7 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                                 source={require('../assets/Home/blood01-icon.png')}
                             />
                             <View style={{ paddingTop: 3, paddingLeft: 5 }}>
-                                <Text style={{ color: 'gray', }}>{selectedColor}</Text>
+                                <Text style={[styles.textNormal]}>{selectedColor}</Text>
                             </View>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -109,7 +138,7 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                             <Image style={{ marginTop: -5, marginLeft: -5 }}
                                 source={require('../assets/Home/sanitarypad02-icon.png')}
                             />
-                            <Text style={{ paddingTop: 3, paddingLeft: 2, color: 'gray' }}>
+                            <Text style={[styles.textNormal, { paddingTop: 3, paddingLeft: 2 }]}>
                                 {selectedVolume}
                             </Text>
                         </View>
@@ -151,7 +180,7 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                                 <Image
                                     source={require('../assets/Home/notes02-icon.png')}
                                 />
-                                <Text style={{ paddingTop: 3, paddingLeft: 10, color: 'gray' }} numberOfLines={1} ellipsizeMode="tail">
+                                <Text style={[styles.textNormal, { paddingTop: 3, paddingLeft: 10 }]} numberOfLines={1} ellipsizeMode="tail">
                                     {selectedNotes}
                                 </Text>
                             </View>
@@ -177,7 +206,7 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                         </View>
 
                         <View style={{ marginLeft: 170 }}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={UpdateMonthlySummary}>
                                 <Image
 
                                     source={require('../assets/Home/save01-icon.png')}
@@ -195,8 +224,13 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                             />
                         </TouchableOpacity>
                     </View>
+                    {/* เรียกใช้ alert */}
+                    <AlertNotificationRoot>
+                    </AlertNotificationRoot>
                 </LinearGradient>
             </View>
+
+
         </Modal>)
 }
 
@@ -242,11 +276,10 @@ const styles = StyleSheet.create({
         borderColor: 'pink',
         borderWidth: 1
     },
-    textF: {
+    textNormal: {
         fontFamily: 'MitrRegular',
         fontSize: 16,
     },
-
 })
 
 export default EditInfo;
