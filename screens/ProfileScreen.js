@@ -95,10 +95,10 @@ class ProfileScreen extends Component {
                         />
                     </Pressable>
                     <Text style={styles.headers}>
-                        Name
+                        ชื่อผู้ใช้งาน
                     </Text>
                     <Text style={styles.subheader}>
-                        Description 1 | Description 2
+                        รายละเอียด 1 | รายละเอียด 2
                     </Text>
                     <View style={styles.box} >
                         <Pressable onPress={() => {
@@ -110,7 +110,7 @@ class ProfileScreen extends Component {
                                     source={require('../assets/profile/editprofile.png')}
                                     style={styles.icon}
                                 />
-                                <Text style={styles.content}>Edit profile</Text>
+                                <Text style={styles.content}>แก้ไขข้อมูล</Text>
                             </View>
                         
                         </Pressable> 
@@ -124,7 +124,7 @@ class ProfileScreen extends Component {
                                     source={require('../assets/profile/notification.png')}
                                     style={styles.icon}
                                 />
-                                <Text style={styles.content}>Notifications</Text>
+                                <Text style={styles.content}>การแจ้งเตือน</Text>
                             </View>
                         </Pressable>
         
@@ -153,7 +153,7 @@ class ProfileScreen extends Component {
                                     source={require('../assets/profile/support.png')}
                                     style={styles.icon}
                                 />
-                                <Text style={styles.content}>Tutorial</Text>
+                                <Text style={styles.content}>คู่มือการใช้งาน</Text>
                             </View>
                         
                         </Pressable> 
@@ -167,7 +167,7 @@ class ProfileScreen extends Component {
                                     source={require('../assets/profile/contact.png')}
                                     style={styles.icon}
                                 />
-                                <Text style={styles.content}>Contact us</Text>
+                                <Text style={styles.content}>ติดต่อเรา</Text>
                             </View>
                         </Pressable>
         
@@ -179,7 +179,7 @@ class ProfileScreen extends Component {
                                     source={require('../assets/profile/privacy.png')}
                                     style={styles.icon}
                                 />
-                                <Text style={styles.content}>Privacy policy</Text>
+                                <Text style={styles.content}>นโยบายความเป็นส่วนตัว</Text>
                             </View>
                             
                         </Pressable>
@@ -195,7 +195,7 @@ class ProfileScreen extends Component {
                                     source={require('../assets/profile/logout.png')}
                                     style={styles.icon}
                                 />
-                                <Text style={{...styles.content, color:'black'}}>Logout</Text>
+                                <Text style={{...styles.content, color:'black'}}>ออกจากระบบ</Text>
                             </View>
                             
                         </Pressable>

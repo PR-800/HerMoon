@@ -51,7 +51,21 @@ const EditProfileScreen = ({ route, navigation }) => {
 
   const [selectedTags, setSelectedTags] = useState([]);
 
-  const tags = ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5', 'Tag6', 'Tag7', 'Tag8', 'Tag9', 'Tag10', 'Tag11'];
+  const tags = [
+    'ประจำเดือนไม่มาตามรอบ', 
+    'มีเลือดออกกะปริบกะปรอย',
+    'ประจำเดือนมานาน (มากกว่า 7 วัน)', 
+    'มาถี่ (น้อยกว่า 24 วัน)',
+    'มาห่างเกิน 38 วัน',
+    'Tag4', 
+    'Tag5', 
+    'Tag6', 
+    'Tag7', 
+    'มีการใช้ยาฮอร์โมน',
+    'มีฮอร์โมนเอสโตเจนต่ำ', 
+    'Tag10', 
+    'โรคอ้วน'
+  ];
 
   const toggleTag = (tag) => {
     if (selectedTags.includes(tag)) {
@@ -82,7 +96,7 @@ const EditProfileScreen = ({ route, navigation }) => {
               style={styles.arrowleft}
             />
           </Pressable>
-          <Text style={styles.header}>Edit Profile</Text>
+          <Text style={styles.header}>แก้ไขข้อมูล</Text>
         </View>
 
         <ScrollView>
@@ -202,8 +216,8 @@ const EditProfileScreen = ({ route, navigation }) => {
         <Pressable
           style={[styles.button, styles.buttonOpen]}
           onPress={() => setModalVisible(true)}>
-          <Text style={styles.textStyle}>Select Description</Text>
-          <Text style={styles.selectedTagsText}>{selectedTags.length >= 1 ? 'Selected Tags : '+  selectedTags.join(', ') : ''}</Text>
+          <Text style={styles.textStyle}>ระบุรายละเอียดเพิ่มเติม</Text>
+          <Text style={{...styles.selectedTagsText, margin: 3}}>{selectedTags.length >= 1 ? 'รายการที่เลือกแล้ว : '+  selectedTags.join(', ') : ''}</Text>
         </Pressable>
         
         </ScrollView>
@@ -235,7 +249,7 @@ const EditProfileScreen = ({ route, navigation }) => {
             }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text style={styles.modalText}>Hello World!</Text>
+                <Text style={styles.modalText}>ระบุรายละเอียดเพิ่มเติม</Text>
 
                 {/* TAG */}
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tagContainer}>
@@ -253,7 +267,7 @@ const EditProfileScreen = ({ route, navigation }) => {
                   ))}
                 </ScrollView>
                 <View style={styles.selectedTagsContainer}>
-                  <Text style={styles.selectedTagsText}>Selected Tags : {selectedTags.join(', ')}</Text>
+                  <Text style={styles.selectedTagsText}>รายการที่เลือกแล้ว : {selectedTags.join(', ')}</Text>
                 </View>
 
               <Pressable
@@ -263,7 +277,7 @@ const EditProfileScreen = ({ route, navigation }) => {
                 colors={['#9F79EB', '#FC7D7B',]}
                 style={styles.linearGradientModal}
                 >
-                    <Text style={styles.buttonClose}>CONFIRM</Text>
+                    <Text style={styles.buttonClose}>ยืนยัน</Text>
                 </LinearGradient>
                   </Pressable>
 
@@ -390,7 +404,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   linearGradientModal: {
-    width: 350,
+    width: 250,
     height: 50,
     borderRadius: 25,
     alignItems: "center",
@@ -429,6 +443,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   selectedTagsText: {
+    marginBottom: 5,
     fontSize: 16,
     fontFamily: "MitrMedium",
     color: '#A43BA6',

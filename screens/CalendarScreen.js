@@ -112,7 +112,7 @@ const CalendarScreen = () => {
       />
 
       <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.box}>
-        <Text style={styles.textNormal}>date: {dateTime}</Text>
+        <Text style={styles.textNormal}>วันที่ : {dateTime}</Text>
         <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
           <Image
             source={require('../assets/Home/blood01-icon.png')}
