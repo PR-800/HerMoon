@@ -1,64 +1,88 @@
-import React from "react";
+import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { useFonts } from 'expo-font';
+import * as Font from 'expo-font';
 
-const TutorialScreen = ({navigation, images}) => {
+import firebase from "../data/firebaseDB";
 
-    const [loaded] = useFonts({
-        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
-        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
-    });
+class TutorialScreen extends Component {
 
-    if (!loaded) {
-        return null;
+    constructor() {
+        super();
+        this.accountCollection = firebase.firestore().collection("accounts");
     }
+
+    async componentDidMount() {
+        await Font.loadAsync({
+            MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+            MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+        });
+    }
+
+    render() {
+        // console.log(this.props.route.params.key)
+        return (
+            <View style={styles.screen}>
+                <LinearGradient
+                    colors={['#FC7D7B', '#9F79EB']}
+                    style={styles.gradientBackground}
+                >
+                    <View style={styles.top}>
+                        <Text>progress bar</Text>
+                    </View>
     
-    return (
-        <View style={styles.screen}>
-            <LinearGradient
-                colors={['#FC7D7B', '#9F79EB']}
-                style={styles.gradientBackground}
-            >
-                <View style={styles.top}>
-                    <Text>progress bar</Text>
-                </View>
+                    <View style={styles.content}>
+                        <Text>tutorial details</Text>
+                    </View>
+    
+                    <View style={styles.bottom}>
+                        <TouchableOpacity 
+                            style={styles.button}
+                            onPress={() => {
+                                this.props.navigation.navigate("stepOne", {
+                                    
+                                });
+                            }}
+                        >
+                            <Text style={styles.textButton}>Start tutorial</Text>
+                        </TouchableOpacity>
+    
+                        <TouchableOpacity 
+                            onPress={() => {
+                                this.props.navigation.navigate("homePage", {
+                                    key: this.props.route.params.key
+                                });
+                            }}
+                        >
+                            <Text style={[styles.text, { 
+                                top: 15,
+                                textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                                textShadowOffset: {width: -1, height: 2},
+                                textShadowRadius: 15,
+                            }]}>
+                                Skip for now
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    
+                </LinearGradient>
+            </View>
+        );
+    }
+}
 
-                <View style={styles.content}>
-                    <Text>tutorial details</Text>
-                </View>
+// const TutorialScreen = ({navigation, images}) => {
 
-                <View style={styles.bottom}>
-                    <TouchableOpacity 
-                        style={styles.button}
-                        onPress={() => {
-                            navigation.navigate("stepOne", {});
-                        }}
-                    >
-                        <Text style={styles.textButton}>Start tutorial</Text>
-                    </TouchableOpacity>
+    // const [loaded] = useFonts({
+    //     MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+    //     MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+    // });
 
-                    <TouchableOpacity 
-                        onPress={() => {
-                            navigation.navigate("homePage", {});
-                        }}
-                    >
-                        <Text style={[styles.text, { 
-                            top: 15,
-                            textShadowColor: 'rgba(0, 0, 0, 0.5)',
-                            textShadowOffset: {width: -1, height: 2},
-                            textShadowRadius: 15,
-                        }]}>
-                            Skip for now
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                
-            </LinearGradient>
-        </View>
-    );
-};
+    // if (!loaded) {
+    //     return null;
+    // }
+// };
 
 const styles = StyleSheet.create({
     screen: {

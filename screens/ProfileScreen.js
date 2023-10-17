@@ -1,134 +1,207 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { StyleSheet, Text, View, Image, Pressable  } from 'react-native';
 import { Button } from 'react-native-web';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useFonts } from 'expo-font';
 
-const ProfileScreen = ({ route, navigation }) => {
+import firebase from "../data/firebaseDB";
 
-    const [loaded] = useFonts({
-        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
-        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
-    });
+class ProfileScreen extends Component {
 
-    if (!loaded) {
-        return null;
+    constructor() {
+        super();
+        this.accountCollection = firebase.firestore().collection("accounts");
+        // this.state = {data};
     }
-    
-    return ( 
-        <View style={styles.screen}>
-            <LinearGradient
-                colors={['#FC7D7B', '#9F79EB']}
-                style={[styles.gradientBackground, {}]}
-            >
-            <Image
-                source={require('../assets/profile/blank-profile.jpg')}
-                style={styles.image}
-            />
-            <Pressable onPress={() => {
-                    return console.log("Edit image")
-                }}>
-                <Image
-                    source={require('../assets/profile/edit-profile.png')}
-                    style={{width:50, height:50,bottom:50, left:55,}}
-                />
-            </Pressable>
-            <Text style={styles.headers}>
-                Name
-            </Text>
-            <Text style={styles.subheader}>
-                Description 1 | Description 2
-            </Text>
-            <View style={styles.box} >
-                <Pressable onPress={() => {
-                    navigation.navigate("editProfile", {});
-                    return console.log("Edit profile")
-                }}>
-                    <View style={styles.group}>
-                        <Image
-                            source={require('../assets/profile/editprofile.png')}
-                            style={styles.icon}
-                        />
-                        <Text style={styles.content}>Edit profile</Text>
-                    </View>
-                
-                </Pressable> 
-                
-                <Pressable onPress={() => {
-                    navigation.navigate("notification", {});
-                    return console.log("Notifications")
-                }}>
-                    <View style={styles.group}>
-                        <Image
-                            source={require('../assets/profile/notification.png')}
-                            style={styles.icon}
-                        />
-                        <Text style={styles.content}>Notifications</Text>
-                    </View>
-                </Pressable>
 
-                {/* <Pressable onPress={() => {
-                    return console.log("Language")
-                }}>
-                    <View style={styles.group}>
-                        <Image
-                            source={require('../assets/profile/translate.png')}
-                            style={styles.icon}
-                        />
-                        <Text style={styles.content}>Language</Text>
-                    </View>
-                    
-                </Pressable> */}
+    componentDidMount() {
 
+        const accountDoc = firebase.firestore().collection("accounts")
+        // .doc(this.props.route.params.key);
+
+        console.log(this.props.route)
+
+        // subjDoc.get().then((res) => {
+        //     if (res.exists) {
+        //         const subj = res.data();
+        //         this.setState({
+        //             key: res.id, 
+        //             id: subj.id,
+        //             name: subj.name, 
+        //             GPA: subj.GPA,
+        //         });
+        //     }
+        //     else {
+        //         console.log("Document does not exist");
+        //     }
+        // });
+    }
+    // inputValueUpdate = (val, prop) => {
+    //     const state = this.state;
+    //     state[prop] = val;
+    //     this.setState(state);
+    // };
+
+    // getCollection = (querySnapshot) => {
+    //     querySnapshot.forEach((res) => {
+    //         const { username, password } = res.data();
+    //         this.state.all_data.push({ key: res.id, username, password });
+    //     });
+    // };
+
+    // componentDidMount() {
+    //     this.unsubscribe = this.accountCollection.onSnapshot(this.getCollection);
+    // }
+
+    // componentWillUnmount() {
+    //     this.unsubscribe();    
+    // }   
+
+    // findAccount() {
+    //     this.state.all_data.map((item, i) => {
+    //         console.log(item)
+    //     })
+    // }
+
+    // storeAccount() {
+    //     this.accountCollection.add({
+    //         username: this.state.username,
+    //         password: this.state.password,
+    //     })
+    //     .then((res) => {
+    //         this.setState({username: "", password: ""});
+    //     });
+    // }
+
+    render() {
+        return ( 
+            <View style={styles.screen}>
+                <LinearGradient
+                    colors={['#FC7D7B', '#9F79EB']}
+                    style={[styles.gradientBackground, {}]}
+                >
+                    <Image
+                        source={require('../assets/profile/blank-profile.jpg')}
+                        style={styles.image}
+                    />
+                    <Pressable onPress={() => {
+                            return console.log("Edit image")
+                        }}>
+                        <Image
+                            source={require('../assets/profile/edit-profile.png')}
+                            style={{width:50, height:50,bottom:50, left:55,}}
+                        />
+                    </Pressable>
+                    <Text style={styles.headers}>
+                        Name
+                    </Text>
+                    <Text style={styles.subheader}>
+                        Description 1 | Description 2
+                    </Text>
+                    <View style={styles.box} >
+                        <Pressable onPress={() => {
+                            navigation.navigate("editProfile", {});
+                            return console.log("Edit profile")
+                        }}>
+                            <View style={styles.group}>
+                                <Image
+                                    source={require('../assets/profile/editprofile.png')}
+                                    style={styles.icon}
+                                />
+                                <Text style={styles.content}>Edit profile</Text>
+                            </View>
+                        
+                        </Pressable> 
+                        
+                        <Pressable onPress={() => {
+                            navigation.navigate("notification", {});
+                            return console.log("Notifications")
+                        }}>
+                            <View style={styles.group}>
+                                <Image
+                                    source={require('../assets/profile/notification.png')}
+                                    style={styles.icon}
+                                />
+                                <Text style={styles.content}>Notifications</Text>
+                            </View>
+                        </Pressable>
+        
+                        {/* <Pressable onPress={() => {
+                            return console.log("Language")
+                        }}>
+                            <View style={styles.group}>
+                                <Image
+                                    source={require('../assets/profile/translate.png')}
+                                    style={styles.icon}
+                                />
+                                <Text style={styles.content}>Language</Text>
+                            </View>
+                            
+                        </Pressable> */}
+        
+                    </View>
+        
+                    <View style={styles.box} >
+                        <Pressable onPress={() => {
+                            navigation.navigate("tutorial", {});
+                            return console.log("tutorial")
+                        }}>
+                            <View style={styles.group}>
+                                <Image
+                                    source={require('../assets/profile/support.png')}
+                                    style={styles.icon}
+                                />
+                                <Text style={styles.content}>Tutorial</Text>
+                            </View>
+                        
+                        </Pressable> 
+                        
+                        <Pressable onPress={() => {
+                            navigation.navigate("contact", {});
+                            return console.log("Contact")
+                        }}>
+                            <View style={styles.group}>
+                                <Image
+                                    source={require('../assets/profile/contact.png')}
+                                    style={styles.icon}
+                                />
+                                <Text style={styles.content}>Contact us</Text>
+                            </View>
+                        </Pressable>
+        
+                        <Pressable onPress={() => {
+                            navigation.navigate("privacy", {});
+                        }}>
+                            <View style={styles.group}>
+                                <Image
+                                    source={require('../assets/profile/privacy.png')}
+                                    style={styles.icon}
+                                />
+                                <Text style={styles.content}>Privacy policy</Text>
+                            </View>
+                            
+                        </Pressable>
+        
+                    </View>
+                </LinearGradient>
             </View>
-
-            <View style={styles.box} >
-                <Pressable onPress={() => {
-                    navigation.navigate("tutorial", {});
-                    return console.log("tutorial")
-                }}>
-                    <View style={styles.group}>
-                        <Image
-                            source={require('../assets/profile/support.png')}
-                            style={styles.icon}
-                        />
-                        <Text style={styles.content}>Tutorial</Text>
-                    </View>
-                
-                </Pressable> 
-                
-                <Pressable onPress={() => {
-                    navigation.navigate("contact", {});
-                    return console.log("Contact")
-                }}>
-                    <View style={styles.group}>
-                        <Image
-                            source={require('../assets/profile/contact.png')}
-                            style={styles.icon}
-                        />
-                        <Text style={styles.content}>Contact us</Text>
-                    </View>
-                </Pressable>
-
-                <Pressable onPress={() => {
-                    navigation.navigate("privacy", {});
-                }}>
-                    <View style={styles.group}>
-                        <Image
-                            source={require('../assets/profile/privacy.png')}
-                            style={styles.icon}
-                        />
-                        <Text style={styles.content}>Privacy policy</Text>
-                    </View>
-                    
-                </Pressable>
-
-            </View>
-            </LinearGradient>
-        </View>
-    )
+        )
+    }
 }
+
+// const ProfileScreen = ({ route, navigation }) => {
+
+//     const [loaded] = useFonts({
+//         MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+//         MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+//     });
+
+//     if (!loaded) {
+//         return null;
+//     }
+
+// }
 
 const styles = StyleSheet.create({
     screen: {

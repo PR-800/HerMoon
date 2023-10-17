@@ -4,7 +4,7 @@ import { TextInput } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { useFonts } from 'expo-font';
+import * as Font from 'expo-font';
 
 import firebase from "../data/firebaseDB";
 
@@ -16,6 +16,13 @@ class SignUpScreen extends Component {
         this.state = {username: "", password: "", confirmPassword: "", showPassword: true, showConfirmPassword: true};
     }
        
+    async componentDidMount() {
+        await Font.loadAsync({
+            MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+            MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+        });
+    }
+
     inputValueUpdate = (val, prop) => {
         const state = this.state;
         state[prop] = val;
