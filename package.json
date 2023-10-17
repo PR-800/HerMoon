@@ -39,6 +39,7 @@
     "react-native-slideable-calendar-strip": "^0.4.0",
     "react-native-time-date-picker": "^1.2.0",
     "react-native-web": "~0.19.6",
+    "react-native-web-hover": "^0.2.9",
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
     "toggle-switch-react-native": "^3.3.0"

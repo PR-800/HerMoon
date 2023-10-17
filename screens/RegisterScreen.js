@@ -1,113 +1,162 @@
-import React from "react";
+import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Hoverable, Pressable, } from 'react-native-web-hover' 
 
 import { useFonts } from 'expo-font';
 
-const SignUpScreen = ({navigation}) => {
-    const [username, setUsername] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [confirmPassword, setConfirmPassword] = React.useState("");
+import firebase from "../data/firebaseDB";
 
-    const [loaded] = useFonts({
-        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
-        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
-    });
+// const [username, setUsername] = React.useState("");
+// const [password, setPassword] = React.useState("");
+// const [confirmPassword, setConfirmPassword] = React.useState("");
 
-    if (!loaded) {
-        return null;
+class SignUpScreen extends Component {
+
+    constructor() {
+        super();
+        this.accountCollection = firebase.firestore().collection("accounts");
+        this.state = {username: "", password: "", confirmPassword: "", showPassword: true, showConfirmPassword: true};
+    }
+       
+    inputValueUpdate = (val, prop) => {
+        const state = this.state;
+        state[prop] = val;
+        this.setState(state);
+    };
+
+    storeAccount() {
+        this.accountCollection.add({
+            username: this.state.username,
+            password: this.state.password,
+        })
+        .then((res) => {
+            this.setState({username: "", password: ""});
+        });
     }
 
-    return (
-        <View style={styles.screen}>
-            <LinearGradient
-                colors={['#FC7D7B', '#9F79EB']}
-                style={styles.gradientBackground}
-            >
-                <View style={styles.header}>
-                    <View>
-                        <Text style={styles.headerText}>Create</Text>
-                        <Text style={styles.headerText}>an account</Text>
+    render() {
+
+        return (
+            <View style={styles.screen}>
+                <LinearGradient
+                    colors={['#FC7D7B', '#9F79EB']}
+                    style={styles.gradientBackground}
+                >
+                    <View style={styles.header}>
+                        <View>
+                            <Text style={styles.headerText}>Create</Text>
+                            <Text style={styles.headerText}>an account</Text>
+                        </View>
                     </View>
-                </View>
 
-                <TextInput 
-                    style={styles.input} 
-                    theme={{ 
-                        roundness: 50, 
-                        colors: { onSurfaceVariant: 'grey'} 
-                    }} 
-                    underlineColor="transparent"
-                    activeUnderlineColor="grey"
-                    textColor="black"
+                    <TextInput 
+                        style={styles.input} 
+                        theme={{ 
+                            roundness: 50, 
+                            colors: { onSurfaceVariant: 'grey'} 
+                        }} 
+                        underlineColor="transparent"
+                        activeUnderlineColor="grey"
+                        textColor="black"
 
-                    label="Username"
-                    value={username}
-                    onChangeText={username => setUsername(username)}
-                />
+                        label="Username"
+                        onChangeText={(val) => this.inputValueUpdate(val, "username")}
+                        value={this.state.username}
+                    />
 
-                <TextInput 
-                    style={styles.input} 
-                    theme={{ 
-                        roundness: 50, 
-                        colors: { onSurfaceVariant: 'grey'} 
-                    }} 
-                    underlineColor="transparent"
-                    activeUnderlineColor="grey"
-                    textColor="black"
+                    <View style={{flexDirection: 'row'}}>
+                        <TextInput 
+                                style={styles.input} 
+                                theme={{ 
+                                    roundness: 50, 
+                                    colors: { onSurfaceVariant: 'grey'} 
+                                }} 
+                                underlineColor="transparent"
+                                activeUnderlineColor="grey"
+                                textColor="black"
+                                secureTextEntry={this.state.showPassword} 
 
-                    label="Password"
-                    value={password}
-                    onChangeText={password => setPassword(password)}
-                />
-
-                <TextInput 
-                    style={styles.input} 
-                    theme={{ 
-                        roundness: 50, 
-                        colors: { onSurfaceVariant: 'grey'} 
-                    }} 
-                    underlineColor="transparent"
-                    activeUnderlineColor="grey"
-                    textColor="black"
-
-                    label="Confirm Password"
-                    value={confirmPassword}
-                    onChangeText={confirmPassword => setConfirmPassword(confirmPassword)}
-                />
-
-                <TouchableOpacity 
-                    style={styles.button}
-                    onPress={() => {
-                        navigation.navigate("login", {});
-                    }}
-                >
-                    <Text style={styles.textButton}>Register</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity 
-                    onPress={() => {
-                        navigation.navigate("login", {});
-                    }}
-                >
-                    <Text style={[styles.text, { 
-                        top: 15,
-                        textShadowColor: 'rgba(0, 0, 0, 0.5)',
-                        textShadowOffset: {width: -1, height: 2},
-                        textShadowRadius: 15,
-                    }]}>
-                        Have an account already? {" "}
-                        <Text style={{ textDecorationLine: "underline"}}>
-                            Login
-                        </Text>
-                    </Text>
-                </TouchableOpacity>
+                                label="Password"
+                                onChangeText={(val) => this.inputValueUpdate(val, "password")}
+                                value={this.state.password}
+                            />
+                            <MaterialCommunityIcons 
+                                name={this.state.showPassword ? 'eye-off' : 'eye'} 
+                                size={24} 
+                                color="#aaa"
+                                onPress={() => this.setState({ showPassword: !this.state.showPassword })} 
+                                style={{position:'absolute', right: 40, top: 30}}
+                            />
+                    </View>
                     
-            </LinearGradient>
-        </View>
-    );
-};
+                    <View style={{flexDirection: 'row'}}>
+                        <TextInput 
+                            style={styles.input} 
+                            theme={{ 
+                                roundness: 50, 
+                                colors: { onSurfaceVariant: 'grey'} 
+                            }} 
+                            underlineColor="transparent"
+                            activeUnderlineColor="grey"
+                            textColor="black"
+                            secureTextEntry={this.state.showConfirmPassword}
+
+                            label="Confirm Password"
+                            onChangeText={(val) => this.inputValueUpdate(val, "confirmPassword")}
+                            value={this.state.confirmPassword}
+                        />
+                        <MaterialCommunityIcons 
+                            name={this.state.showConfirmPassword ? 'eye-off' : 'eye'} 
+                            size={24} 
+                            color="#aaa"
+                            onPress={() => this.setState({ showConfirmPassword: !this.state.showConfirmPassword })} 
+                            style={{position:'absolute', right: 40, top: 30}}
+                        />
+                    </View>
+                    
+
+                    <TouchableOpacity 
+                        style={styles.button}
+                        onPress={() => {
+                            if ((this.state.password === this.state.confirmPassword) && this.state.username != "" && this.state.password != "" && this.state.confirmPassword != "") {
+                                this.storeAccount()
+                                alert('Sign Up Successfully')
+                                this.props.navigation.navigate("login", {});
+                            }
+                            else {
+                                alert('Invalid username or password')
+                            }
+                        }}
+                    >
+                        <Text style={styles.textButton}>Register</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity 
+                        onPress={() => {
+                            this.props.navigation.navigate("login", {});
+                        }}
+                    >
+                        <Text style={[styles.text, { 
+                            top: 15,
+                            textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                            textShadowOffset: {width: -1, height: 2},
+                            textShadowRadius: 15,
+                        }]}>
+                            Have an account already? {" "}
+                            <Text style={{ textDecorationLine: "underline"}}>
+                                Login
+                            </Text>
+                        </Text>
+                    </TouchableOpacity>
+                        
+                </LinearGradient>
+            </View>
+        );
+    }
+}
 
 const styles = StyleSheet.create({
     screen: {
