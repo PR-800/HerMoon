@@ -13,69 +13,58 @@ class ProfileScreen extends Component {
     constructor() {
         super();
         this.accountCollection = firebase.firestore().collection("accounts");
-        // this.state = {data};
+        this.state = {activeUser: null,};
     }
 
     componentDidMount() {
 
+        // if (this.props.route.params && this.props.route.params.activeUser) {
+        //     this.state.activeUser = this.props.route.params.activeUser;
+        //     console.log('--- ActiveUser at ProfileScreen:', this.state.activeUser);
+        // }
+
+        // // if (this.props.route.params && this.props.route.params.screen === "Calendar") {
+        // //     this.props.navigation.navigate("Calendar", {
+        // //         activeUser: this.props.route.params.activeUser,
+        // //     });
+        // // }
+
+        // if (this.props.route.params && this.props.route.params.screen === "Home") {
+        //     this.props.navigation.navigate("Home", {
+        //         activeUser: this.props.route.params.activeUser,
+        //     });
+        // }
+
+        // const user = this.state.activeUser
+
         const accountDoc = firebase.firestore().collection("accounts")
         // .doc(this.props.route.params.key);
 
-        console.log(this.props.route)
+        // console.log(this.props.route)
 
-        // subjDoc.get().then((res) => {
-        //         const subj = res.data();
-        //         this.setState({
-        //             key: res.id, 
-        //             id: subj.id,
-        //             name: subj.name, 
-        //             GPA: subj.GPA,
-        //         });
-        //     }
-        //     else {
-        //         console.log("Document does not exist");
-        //     }
-        // });
     }
-    // inputValueUpdate = (val, prop) => {
-    //     const state = this.state;
-    //     state[prop] = val;
-    //     this.setState(state);
-    // };
 
-    // getCollection = (querySnapshot) => {
-    //     querySnapshot.forEach((res) => {
-    //         const { username, password } = res.data();
-    //         this.state.all_data.push({ key: res.id, username, password });
-    //     });
-    // };
-
-    // componentDidMount() {
-    //     this.unsubscribe = this.accountCollection.onSnapshot(this.getCollection);
-    // }
-
-    // componentWillUnmount() {
-    //     this.unsubscribe();    
-    // }   
-
-    // findAccount() {
-    //     this.state.all_data.map((item, i) => {
-    //         console.log(item)
-    //     })
-    // }
-
-    // storeAccount() {
-    //     this.accountCollection.add({
-    //         username: this.state.username,
-    //         password: this.state.password,
-    //     })
-    //     .then((res) => {
-    //         this.setState({username: "", password: ""});
-    //     });
-    // }
 
     render() {
         const {navigation} = this.props
+
+        if (this.props.route.params && this.props.route.params.activeUser) {
+            this.state.activeUser = this.props.route.params.activeUser;
+            console.log('--- ActiveUser at ProfileScreen:', this.state.activeUser);
+        }
+
+        // if (this.props.route.params && this.props.route.params.screen === "Calendar") {
+        //     this.props.navigation.navigate("Calendar", {
+        //         activeUser: this.props.route.params.activeUser,
+        //     });
+        // }
+
+        if (this.props.route.params && this.props.route.params.screen === "Home") {
+            this.props.navigation.navigate("Home", {
+                activeUser: this.props.route.params.activeUser,
+            });
+        }
+
         return ( 
             <View style={styles.screen}>
                 <LinearGradient
@@ -95,7 +84,7 @@ class ProfileScreen extends Component {
                         />
                     </Pressable>
                     <Text style={styles.headers}>
-                        ชื่อผู้ใช้งาน
+                        {this.state.activeUser.username}
                     </Text>
                     <Text style={styles.subheader}>
                         รายละเอียด 1 | รายละเอียด 2

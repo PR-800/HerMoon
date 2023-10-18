@@ -13,7 +13,7 @@ class LoginScreen extends Component {
     constructor() {
         super();
         this.accountCollection = firebase.firestore().collection("accounts");
-        this.state = {username: "", password: "", showPassword: true, all_data: [], appIsReady: false};
+        this.state = {username: "", password: "", showPassword: true, all_data: [], appIsReady: false, activeUser: null,};
     }
 
     prepareResources = async () => {
@@ -48,12 +48,6 @@ class LoginScreen extends Component {
         this.setState({ appIsReady: true });
     };
 
-    findAccount() {
-        this.state.all_data.map((item, i) => {
-            console.log(item)
-        })
-    }
-
     render() {
 
         if (!this.state.appIsReady) {
@@ -63,128 +57,133 @@ class LoginScreen extends Component {
         let match = false;
 
         return (
-                <View style={styles.screen}>
-                    <LinearGradient
-                        colors={['#FC7D7B', '#9F79EB']}
-                        style={styles.gradientBackground}
-                    >
-                        <View style={styles.header}>
-                            <Image
-                                source={ require('../assets/logo.png') }
-                            />
-                            <View>
-                                <Text style={[styles.headerText, {
-                                    textShadowColor: '#9F79EB',
-                                    textShadowOffset: {width: 1, height: 0.5},
-                                    textShadowRadius: 35,
-                                    marginTop: 15,
-                                }]}>Her</Text>
-                                <Text style={[styles.headerText, {
-                                    textShadowColor: '#9F79EB',
-                                    textShadowOffset: {width: 1, height: 0.5},
-                                    textShadowRadius: 35,
-                                }]}>Moon</Text>
-                            </View>
+            <View style={styles.screen}>
+                <LinearGradient
+                    colors={['#FC7D7B', '#9F79EB']}
+                    style={styles.gradientBackground}
+                >
+                    <View style={styles.header}>
+                        <Image
+                            source={ require('../assets/logo.png') }
+                        />
+                        <View>
+                            <Text style={[styles.headerText, {
+                                textShadowColor: '#9F79EB',
+                                textShadowOffset: {width: 1, height: 0.5},
+                                textShadowRadius: 35,
+                                marginTop: 15,
+                            }]}>Her</Text>
+                            <Text style={[styles.headerText, {
+                                textShadowColor: '#9F79EB',
+                                textShadowOffset: {width: 1, height: 0.5},
+                                textShadowRadius: 35,
+                            }]}>Moon</Text>
                         </View>
-                        
+                    </View>
+                    
+                    <TextInput 
+                        style={[styles.input, {}]} 
+                        theme={{ 
+                            roundness: 50, 
+                            colors: { onSurfaceVariant: 'grey'} ,
+                        }} 
+                        underlineColor="transparent"
+                        activeUnderlineColor="grey"
+                        textColor="black"
+    
+                        label="Username"
+                        onChangeText={(val) => this.inputValueUpdate(val, "username")}
+                        value={this.state.username}
+                    />
+
+                    <View style={{flexDirection: 'row'}}>
                         <TextInput 
-                            style={[styles.input, {}]} 
+                            style={styles.input} 
                             theme={{ 
                                 roundness: 50, 
-                                colors: { onSurfaceVariant: 'grey'} ,
+                                colors: { onSurfaceVariant: 'grey'} 
                             }} 
                             underlineColor="transparent"
                             activeUnderlineColor="grey"
                             textColor="black"
+                            secureTextEntry={this.state.showPassword} 
         
-                            label="Username"
-                            onChangeText={(val) => this.inputValueUpdate(val, "username")}
-                            value={this.state.username}
+                            label="Password"
+                            onChangeText={(val) => this.inputValueUpdate(val, "password")}
+                            value={this.state.password}
                         />
-
-                        <View style={{flexDirection: 'row'}}>
-                            <TextInput 
-                                style={styles.input} 
-                                theme={{ 
-                                    roundness: 50, 
-                                    colors: { onSurfaceVariant: 'grey'} 
-                                }} 
-                                underlineColor="transparent"
-                                activeUnderlineColor="grey"
-                                textColor="black"
-                                secureTextEntry={this.state.showPassword} 
-            
-                                label="Password"
-                                onChangeText={(val) => this.inputValueUpdate(val, "password")}
-                                value={this.state.password}
-                            />
-                            <MaterialCommunityIcons 
-                                name={this.state.showPassword ? 'eye-off' : 'eye'} 
-                                size={24} 
-                                color="#aaa"
-                                onPress={() => this.setState({ showPassword: !this.state.showPassword })} 
-                                style={{position:'absolute', right: 40, top: 30}}
-                            />
-                        </View>
-        
-                        <TouchableOpacity 
-                            // onPress={() => {
-                            //     navigation.navigate("tutorial", {});
-                            // }}
-                        >
-                            <Text style={[styles.text, { 
-                                    left: 80, 
-                                    bottom: 5,
-                                    textShadowColor: 'rgba(0, 0, 0, 0.5)',
-                                    textShadowOffset: {width: -1, height: 2},
-                                    textShadowRadius: 15,
-                                }]}>
-                                Forgot password
-                            </Text>
-                        </TouchableOpacity>
-        
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => {
-                                // this.findAccount()
-                                this.state.all_data.map((item, i) => {
-                                    if (this.state.username === item.username && this.state.password === item.password) {
-                                        match = true
-                                        this.props.navigation.navigate("homePage", "homePage", {
-                                            key: item.key,
-                                            username: item.username,
-                                        });
-                                        console.log('item send', item)
-                                    } 
-                                })  
-                                if (match == false) {
-                                    alert('Invalid username or password')
-                                }                      
-                            }}
-                        >
-                            <Text style={styles.textButton}>Log in</Text>
-                        </TouchableOpacity>
-        
-                        <TouchableOpacity 
-                            onPress={() => {
-                                this.props.navigation.navigate("register", {});
-                            }}
-                        >
-                            <Text style={[styles.text, { 
-                                top: 15,
+                        <MaterialCommunityIcons 
+                            name={this.state.showPassword ? 'eye-off' : 'eye'} 
+                            size={24} 
+                            color="#aaa"
+                            onPress={() => this.setState({ showPassword: !this.state.showPassword })} 
+                            style={{position:'absolute', right: 40, top: 30}}
+                        />
+                    </View>
+    
+                    <TouchableOpacity 
+                        // onPress={() => {
+                        //     navigation.navigate("tutorial", {});
+                        // }}
+                    >
+                        <Text style={[styles.text, { 
+                                left: 80, 
+                                bottom: 5,
                                 textShadowColor: 'rgba(0, 0, 0, 0.5)',
                                 textShadowOffset: {width: -1, height: 2},
                                 textShadowRadius: 15,
                             }]}>
-                                Doesn't have an account? {" "}
-                                <Text style={{ textDecorationLine: "underline"}}>
-                                    Register
-                                </Text>
+                            Forgot password
+                        </Text>
+                    </TouchableOpacity>
+    
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => {
+                            this.state.all_data.map((item, i) => {
+                                if (this.state.username === item.username && this.state.password === item.password) {
+                                    match = true
+                                    this.props.navigation.navigate("homePage", {
+                                        screen: "Profile",
+                                        // screen: "Calendar",
+                                        params: {
+                                            activeUser: item,
+                                            screen: 'Home'
+                                        },
+                                    });
+                                    console.log('-- ActiveUser from Login : ', item);
+                                } 
+                            })  
+                            if (!match) {
+                                alert('Invalid username or password')
+                            }                      
+                        }}
+                    >
+                        <Text style={styles.textButton}>Log in</Text>
+                    </TouchableOpacity>
+
+                    {/* <HomeScreen user={this.state.activeUser} /> */}
+    
+                    <TouchableOpacity 
+                        onPress={() => {
+                            this.props.navigation.navigate("register", {});
+                        }}
+                    >
+                        <Text style={[styles.text, { 
+                            top: 15,
+                            textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                            textShadowOffset: {width: -1, height: 2},
+                            textShadowRadius: 15,
+                        }]}>
+                            Doesn't have an account? {" "}
+                            <Text style={{ textDecorationLine: "underline"}}>
+                                Register
                             </Text>
-                        </TouchableOpacity>
-                            
-                    </LinearGradient>
-                </View>
+                        </Text>
+                    </TouchableOpacity>
+                        
+                </LinearGradient>
+            </View>
         );
     }
 }
