@@ -145,10 +145,9 @@ class LoginScreen extends Component {
                                     match = true
                                     this.props.navigation.navigate("homePage", {
                                         screen: "Profile",
-                                        // screen: "Calendar",
                                         params: {
                                             activeUser: item,
-                                            screen: 'Home'
+                                            screen: "Calendar"
                                         },
                                     });
                                     console.log('-- ActiveUser from Login : ', item);

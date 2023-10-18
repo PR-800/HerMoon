@@ -18,32 +18,15 @@ class ProfileScreen extends Component {
 
     componentDidMount() {
 
-        // if (this.props.route.params && this.props.route.params.activeUser) {
-        //     this.state.activeUser = this.props.route.params.activeUser;
-        //     console.log('--- ActiveUser at ProfileScreen:', this.state.activeUser);
-        // }
-
-        // // if (this.props.route.params && this.props.route.params.screen === "Calendar") {
-        // //     this.props.navigation.navigate("Calendar", {
-        // //         activeUser: this.props.route.params.activeUser,
-        // //     });
-        // // }
-
-        // if (this.props.route.params && this.props.route.params.screen === "Home") {
-        //     this.props.navigation.navigate("Home", {
-        //         activeUser: this.props.route.params.activeUser,
-        //     });
-        // }
-
-        // const user = this.state.activeUser
+        if (this.props.route.params && this.props.route.params.screen === "Calendar") {
+            this.props.navigation.navigate("Calendar", {
+                activeUser: this.props.route.params.activeUser,
+            });
+        }
 
         const accountDoc = firebase.firestore().collection("accounts")
-        // .doc(this.props.route.params.key);
-
-        // console.log(this.props.route)
 
     }
-
 
     render() {
         const {navigation} = this.props
@@ -51,18 +34,6 @@ class ProfileScreen extends Component {
         if (this.props.route.params && this.props.route.params.activeUser) {
             this.state.activeUser = this.props.route.params.activeUser;
             console.log('--- ActiveUser at ProfileScreen:', this.state.activeUser);
-        }
-
-        // if (this.props.route.params && this.props.route.params.screen === "Calendar") {
-        //     this.props.navigation.navigate("Calendar", {
-        //         activeUser: this.props.route.params.activeUser,
-        //     });
-        // }
-
-        if (this.props.route.params && this.props.route.params.screen === "Home") {
-            this.props.navigation.navigate("Home", {
-                activeUser: this.props.route.params.activeUser,
-            });
         }
 
         return ( 

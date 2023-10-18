@@ -1,60 +1,73 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable } from 'react-native';
-import { ALERT_TYPE, Dialog, AlertNotificationRoot } from 'react-native-alert-notification';
+import React, { useState, useRef, useEffect } from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable, Button } from 'react-native';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import firebase from '../data/firebaseDB';
 import moment from 'moment';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-// Import component
+//import component
 import MenstrualLevelModel from '../components/MenstrualLevelModel';
 import MenstrualVolumeLevelModel from '../components/MenstrualVolumeLevelModel';
 import NotesModel from '../components/NotesModel';
 import CalendarStripC from '../components/CalendarStrip';
 
-class HomeScreen extends Component {
-    constructor() {
-        super();
-        this.state = {
-            modalVisibleBlood: false,
-            modalVisibleSanitaryPad: false,
-            modalVisibleNotes: false,
-            colorM: 'เลือกสีประจำเดือน',
-            volumM: 'เลือกปริมาณประจำเดือน',
-            notesM: 'ข้อมูลเพิ่มเติม',
-            activeUser: null,
-        };
-    }
+const HomeScreen = (props) => {
+    const navigation = useNavigation();
+    const route = useRoute();
 
-    componentDidMount() {
-        // Check if route.params is available and set state accordingly
-        if (this.props.route.params) {
-            const { dataColorModel, dataVolumeModel, dataNotesModel } = this.props.route.params;
+    const [activeUser, setActiveUser] = useState({});
+
+    const [modalVisibleBlood, setModalVisibleBlood] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualLevelModel
+    const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualVolumeLevelModel
+    const [modalVisibleNotes, setModalVisibleNotes] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component NotesModel
+
+    const [colorM, setColorM] = useState('เลือกสีประจำเดือน'); //เก็บค่าสีของประจำเดือนที่ส่งผ่าน route
+    const [volumM, setVolumM] = useState('เลือกปริมาณประจำเดือน'); //เก็บค่าปริมาณประจำเดือนที่ส่งผ่าน route
+    const [notesM, setNoteM] = useState('ข้อมูลเพิ่มเติม'); //เก็บข้อมูลเพิ่มเติมของประจำเดือนที่ส่งผ่าน route
+
+    const date = new Date(); //สำหรับแสดงวันที่
+
+    //เก็บค่าลงใน state
+    useEffect(() => {
+
+        { route.params.activeUser ? setActiveUser(route.params.activeUser) : ""}
+        console.log("--- Home")
+        console.log(activeUser)
+
+        if (route.params) {
+            //ค่าที่ส่งมาจาก component ใช้ route.params ในการเอาค่ามาแสดง
+            const { dataColorModel, dataVolumeModel, dataNotesModel } = route.params;
             if (dataColorModel) {
-                this.setState({ colorM: dataColorModel });
+                setColorM(dataColorModel);
             }
             if (dataVolumeModel) {
-                this.setState({ volumM: dataVolumeModel });
+                setVolumM(dataVolumeModel);
             }
             if (dataNotesModel) {
-                this.setState({ notesM: dataNotesModel });
+                setNoteM(dataNotesModel);
             }
         }
-    }
+    }, [route.params]);
 
-    BloodIcon = () => {
-        this.setState({ modalVisibleBlood: !this.state.modalVisibleBlood });
+    //สำหรับ open, close => MenstrualLevelModel
+    const BloodIcon = () => {
+        setModalVisibleBlood(!modalVisibleBlood);
     };
 
-    SanitaryPadIcon = () => {
-        this.setState({ modalVisibleSanitaryPad: !this.state.modalVisibleSanitaryPad });
+    //สำหรับ open, close => MenstrualVolumeLevelModel
+    const SanitaryPadIcon = () => {
+        setModalVisibleSanitaryPad(!modalVisibleSanitaryPad);
     };
 
-    NotesIcon = () => {
-        this.setState({ modalVisibleNotes: !this.state.modalVisibleNotes });
+    //สำหรับ open, close => NotesModel
+    const NotesIcon = () => {
+        setModalVisibleNotes(!modalVisibleNotes)
     }
 
-    formatDate = (date) => {
+    //จัด format วันที่
+    const formatDate = (date) => {
         const options = { day: '2-digit', month: 'long', year: 'numeric' };
         const formattedDate = new Date(date).toLocaleDateString('en-US', options);
         const [month, day, year] = formattedDate.split(' ');
@@ -62,15 +75,33 @@ class HomeScreen extends Component {
         return `${month} ${year}`;
     }
 
-    AddMonthlySummary = () => {
+    //เรียกใช้ฟ้อนต์
+    const [loaded] = useFonts({
+        MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
+        MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
+    });
+
+    if (!loaded) {
+        return null;
+    }
+
+    const AddMonthlySummary = () => {
+        // สร้างวันที่
         const desiredDate = new Date();
         const formattedDate = moment(desiredDate).format("DD/MM/YYYY");
+
+        // สร้าง reference ไปยัง collection "monthly_summary"
         const databaseRef = firebase.firestore().collection("monthly_summary");
+
+        //เรียกข้อมูลที่ตรงกับ formattedDate
         const query = databaseRef.where("date", "==", formattedDate);
 
+        // ดึงข้อมูลที่ตรงกับเงื่อนไข
         query.get().then((querySnapshot) => {
             if (querySnapshot.empty) {
-                if (this.state.colorM == 'เลือกสีประจำเดือน' || this.state.volumM == 'เลือกปริมาณประจำเดือน' || this.state.notesM == 'ข้อมูลเพิ่มเติม') {
+                console.log("ไม่พบข้อมูลที่ตรงกับวันที่ " + formattedDate);
+                // ข้อมูลที่ต้องการเพิ่ม
+                if(colorM == 'เลือกสีประจำเดือน' || volumM == 'เลือกปริมาณประจำเดือน' || notesM == 'ข้อมูลเพิ่มเติม'){
                     Dialog.show({
                         type: ALERT_TYPE.WARNING,
                         title: (
@@ -78,43 +109,50 @@ class HomeScreen extends Component {
                         ),
                         button: 'OK',
                     });
-                } else {
-                    const dataToAdd = {
-                        date: moment(desiredDate).format("DD/MM/YYYY"),
-                        menstrual_color: this.state.colorM,
-                        menstrual_volume: this.state.volumM,
-                        menstrual_notes: this.state.notesM,
-                    };
+                }
+                else{
+                const dataToAdd = {
+                    date: moment(desiredDate).format("DD/MM/YYYY"),
+                    menstrual_color: colorM,
+                    menstrual_volume: volumM,
+                    menstrual_notes: notesM,
+                };
 
-                    const databaseRef = firebase.firestore().collection("monthly_summary");
+                //สร้าง collection
+                const databaseRef = firebase.firestore().collection("monthly_summary");
 
-                    databaseRef.add(dataToAdd)
-                        .then((docRef) => {
-                            Dialog.show({
-                                type: ALERT_TYPE.SUCCESS,
-                                title: (
-                                    <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>เพิ่มข้อมูลรอบเดือนประจำวันสำเร็จ</Text>
-                                ),
-                                button: 'OK',
-                            });
-                            console.log("เพิ่มข้อมูลสำเร็จ: ", docRef.id);
-                        })
-                        .catch((error) => {
-                            console.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ", error);
+                // เพิ่มข้อมูลลง firebase
+                databaseRef.add(dataToAdd)
+                    .then((docRef) => {
+                        // เรียก Dialog.show ที่นี่เพื่อแสดง Dialog หลังจากที่พบข้อมูลที่ตรงกัน
+                        Dialog.show({
+                            type: ALERT_TYPE.SUCCESS,
+                            title: (
+                                <Text style={{fontFamily: 'MitrRegular', fontSize: 18}}>เพิ่มข้อมูลรอบเดือนประจำวันสำเร็จ</Text>
+                            ),
+                            button: 'OK',
                         });
+                        console.log("เพิ่มข้อมูลสำเร็จ: ", docRef.id);
+                    })
+                    .catch((error) => {
+                        console.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ", error);
+                    });
                 }
             } else {
                 querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    // เรียก Dialog.show ที่นี่เพื่อแสดง Dialog หลังจากที่พบข้อมูลที่ตรงกัน
                     Dialog.show({
                         type: ALERT_TYPE.WARNING,
                         title: (
-                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>คุณได้เพิ่มรอบเดือนประจำวันแล้ว</Text>
+                            <Text style={{fontFamily: 'MitrRegular', fontSize: 18}}>คุณได้เพิ่มรอบเดือนประจำวันแล้ว</Text>
                         ),
                         textBody: (
-                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 14 }}>หากคุณต้องการแก้ไขข้อมูล {'\n'} สามารถแก้ไขได้ที่หน้า Calendar ค่ะ</Text>
+                            <Text style={{fontFamily: 'MitrRegular', fontSize: 14}}>หากคุณต้องการแก้ไขข้อมูล {'\n'} สามารถแก้ไขได้ที่หน้า Calendar ค่ะ</Text>
                         ),
                         button: 'OK',
                     });
+                    // console.log("มีข้อมูลที่ตรงกับวันที่นี้แล้ว", data);
                 });
             }
         }).catch((error) => {
@@ -122,112 +160,100 @@ class HomeScreen extends Component {
         });
     }
 
-    render() {
+    return (
+        <View style={styles.screen}>
 
-        const { navigation, route } = this.props;
-        
-        if (route.params && route.params.activeUser) {
-            this.state.activeUser = route.params.activeUser;
-            console.log('--- ActiveUser at Home : ', this.state.activeUser);
-        }
+            <CalendarStripC />
 
-        return (
-            <View style={styles.screen}>
-    
-                <CalendarStripC />
-    
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -110 }}>
-                    <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.todayborder}>
-                        <Text style={styles.textHeader}>Today</Text>
-                    </LinearGradient>
-                    <Text style={[styles.textHeader, { paddingHorizontal: 22, color: 'black' }]}>{this.formatDate(new Date())}</Text>
-                </View>
-    
-                <View style={{ marginLeft: -180, marginBottom: 20, marginTop: 80 }}>
-                    <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>Welcome {this.state.activeUser.username}</Text>
-                    <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', }}>
-                        {this.state.username}
-                    </Text>
-                </View>
-    
-                <View style={{ marginLeft: -250 }}>
-                    <Pressable onPress={() => {
-                        navigation.navigate("History", {});
-                        return console.log("History")
-                    }}>
-                        <Image
-                            source={require('../assets/Home/clock-icon.png')}
-                            style={[styles.image, { width: 50, height: 50 }]}
-                        /></Pressable>
-                </View>
-    
-                <View style={{ marginTop: -40, marginBottom: 10 }}>
-                    <Image
-                        source={require('../assets/Home/Profile-icon.png')}
-                        style={{ width: 240, height: 240 }}
-                    />
-                </View>
-    
-                <Text style={styles.textNormal}>เพิ่มข้อมูลและบันทึกรอบเดือน</Text>
-                <View style={{ marginTop: -40, marginBottom: 5, marginLeft: 250 }}>
-                    <TouchableOpacity onPress={this.AddMonthlySummary}>
-                        <Image
-                            source={require('../assets/Home/save04-icon.png')}
-                            style={{ width: 50, height: 50 }}
-                        />
-                    </TouchableOpacity></View>
-    
-                <View>
-                    <TouchableOpacity onPress={this.BloodIcon}>
-                        <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#FFB4BF' }]}>
-                            <View style={{ paddingTop: 2, paddingLeft: 10 }}>
-                                <Image
-    
-                                    source={require('../assets/Home/blood01-icon.png')}
-                                    style={{ width: 30, height: 35 }}
-                                /></View>
-                            <View style={{ paddingTop: 4, paddingLeft: 10 }}>
-                                <Text style={styles.textNormal}>{this.state.colorM}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                    <MenstrualLevelModel visible={this.state.modalVisibleBlood} onClose={this.BloodIcon} navigation={navigation} />
-                    <TouchableOpacity onPress={this.SanitaryPadIcon}>
-                        <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#89DCFF' }]}>
-                            <View style={{ marginTop: -6 }}>
-                                <Image
-                                    source={require('../assets/Home/sanitarypad01-icon.png')}
-                                    style={{ width: 45, height: 45 }}
-                                />
-                            </View>
-                            <View style={{ paddingTop: 4, paddingLeft: 5 }}>
-                                <Text style={styles.textNormal}>{this.state.volumM}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                    <MenstrualVolumeLevelModel visible={this.state.modalVisibleSanitaryPad} onClose={this.SanitaryPadIcon} navigation={navigation} />
-                    <TouchableOpacity onPress={this.NotesIcon}>
-                        <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#B579CF' }]}>
-                            <View style={{ paddingTop: 2, paddingLeft: 10 }}>
-                                <Image
-                                    source={require('../assets/Home/notes02-icon.png')}
-                                    style={{ width: 30, height: 30 }}
-                                />
-                            </View>
-                            <View style={{ paddingTop: 4, paddingLeft: 10 }}>
-                                <Text style={styles.textNormal}>{this.state.notesM}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                    <NotesModel visible={this.state.modalVisibleNotes} onClose={this.NotesIcon} navigation={navigation}></NotesModel>
-                </View>
-                {/* เรียกใช้ alert */}
-                <AlertNotificationRoot>
-                </AlertNotificationRoot>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -110 }}>
+                <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.todayborder}>
+                    <Text style={styles.textHeader}>Today</Text>
+                </LinearGradient>
+                <Text style={[styles.textHeader, { paddingHorizontal: 22, color: 'black' }]}>{formatDate(date)}</Text>
             </View>
-        );
-    }
-}
+
+            <View style={{ marginBottom: 20, marginTop: 80, width:'80%'}}>
+                <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>สวัสดี !</Text>
+                <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', left: 0}}>{activeUser.username}</Text>
+            </View>
+
+            <View style={{ marginLeft: -250 }}>
+                <Pressable onPress={() => {
+                    navigation.navigate("History", {});
+                    return console.log("History")
+                }}>
+                    <Image
+                        source={require('../assets/Home/clock-icon.png')}
+                        style={[styles.image, { width: 50, height: 50 }]}
+                    /></Pressable>
+            </View>
+
+            <View style={{ marginTop: -40, marginBottom: 10 }}>
+                <Image
+                    source={require('../assets/Home/Profile-icon.png')}
+                    style={{ width: 240, height: 240 }}
+                />
+            </View>
+
+            <Text style={styles.textNormal}>เพิ่มข้อมูลและบันทึกรอบเดือน</Text>
+            <View style={{ marginTop: -40, marginBottom: 5, marginLeft: 250 }}>
+                <TouchableOpacity onPress={AddMonthlySummary}>
+                    <Image
+                        source={require('../assets/Home/save04-icon.png')}
+                        style={{ width: 50, height: 50 }}
+                    />
+                </TouchableOpacity></View>
+
+            <View>
+                <TouchableOpacity onPress={BloodIcon}>
+                    <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#FFB4BF' }]}>
+                        <View style={{ paddingTop: 2, paddingLeft: 10 }}>
+                            <Image
+
+                                source={require('../assets/Home/blood01-icon.png')}
+                                style={{ width: 30, height: 35 }}
+                            /></View>
+                        <View style={{ paddingTop: 4, paddingLeft: 10 }}>
+                            <Text style={styles.textNormal}>{colorM}</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+                <MenstrualLevelModel visible={modalVisibleBlood} onClose={BloodIcon} navigation={navigation} />
+                <TouchableOpacity onPress={SanitaryPadIcon}>
+                    <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#89DCFF' }]}>
+                        <View style={{ marginTop: -6 }}>
+                            <Image
+                                source={require('../assets/Home/sanitarypad01-icon.png')}
+                                style={{ width: 45, height: 45 }}
+                            />
+                        </View>
+                        <View style={{ paddingTop: 4, paddingLeft: 5 }}>
+                            <Text style={styles.textNormal}>{volumM}</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+                <MenstrualVolumeLevelModel visible={modalVisibleSanitaryPad} onClose={SanitaryPadIcon} navigation={navigation} />
+                <TouchableOpacity onPress={NotesIcon}>
+                    <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#B579CF' }]}>
+                        <View style={{ paddingTop: 2, paddingLeft: 10 }}>
+                            <Image
+                                source={require('../assets/Home/notes02-icon.png')}
+                                style={{ width: 30, height: 30 }}
+                            />
+                        </View>
+                        <View style={{ paddingTop: 4, paddingLeft: 10 }}>
+                            <Text style={styles.textNormal}>{notesM}</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+                <NotesModel visible={modalVisibleNotes} onClose={NotesIcon} navigation={navigation}></NotesModel>
+            </View>
+            {/* เรียกใช้ alert */}
+            <AlertNotificationRoot>
+            </AlertNotificationRoot>
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     screen: {
