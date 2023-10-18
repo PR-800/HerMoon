@@ -147,7 +147,6 @@ class LoginScreen extends Component {
                                         screen: "Profile",
                                         params: {
                                             activeUser: item,
-                                            screen: "Calendar"
                                         },
                                     });
                                     console.log('-- ActiveUser from Login : ', item);

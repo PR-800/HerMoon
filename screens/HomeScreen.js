@@ -174,7 +174,9 @@ const HomeScreen = (props) => {
 
             <View style={{ marginBottom: 20, marginTop: 80, width:'80%'}}>
                 <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>สวัสดี !</Text>
-                <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', left: 0}}>{activeUser.username}</Text>
+                <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', left: 0}}>
+                    {activeUser.username}
+                </Text>
             </View>
 
             <View style={{ marginLeft: -250 }}>

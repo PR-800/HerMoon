@@ -328,7 +328,6 @@ const CalendarScreen = (props) => {
   const [dateTime, setdateTime] = useState('วันที่และเวลา')
   const [filteredId, setFilteredId] = useState([])
   const now = moment().valueOf();
-
   //
   useEffect(() => {
 
@@ -337,7 +336,7 @@ const CalendarScreen = (props) => {
     console.log(activeUser)
     
     navigation.navigate("Home", {
-      activeUser: activeUser,
+      activeUser: route.params.activeUser,
     });
 
     const unsubscribe = databaseRef.onSnapshot((querySnapshot) => {

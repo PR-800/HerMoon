@@ -18,11 +18,9 @@ class ProfileScreen extends Component {
 
     componentDidMount() {
 
-        if (this.props.route.params && this.props.route.params.screen === "Calendar") {
-            this.props.navigation.navigate("Calendar", {
-                activeUser: this.props.route.params.activeUser,
-            });
-        }
+        this.props.navigation.navigate("Calendar", {
+            activeUser: this.props.route.params.activeUser,
+        });
 
         const accountDoc = firebase.firestore().collection("accounts")
 
