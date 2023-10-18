@@ -16,6 +16,7 @@ class ArticleDetailScreen extends Component {
             description: "",
             date: "",
             coverImg: "",
+            formattedDate: '',
         };
     }
 
@@ -38,7 +39,15 @@ class ArticleDetailScreen extends Component {
                     date: article.date,
                     coverImg: article.coverImg,
                 });
-                // console.log('coverImg : ', this.state.coverImg)
+
+                // console.log('date :>> ', article.date);
+                const rawDate = article.date.toDate();
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const formattedDate = rawDate.toLocaleDateString('en-GB', options);
+                // console.log('formattedDate :>> ', formattedDate);
+
+                this.setState({ formattedDate });
+
             } else {
                 console.log("Document does not exist!!");
             }
@@ -95,7 +104,7 @@ class ArticleDetailScreen extends Component {
                                 {this.state.description}  
                             </Text>
                             <Text style={{fontFamily: 'MitrRegular', textAlign: 'right', }} >
-                                {'\n'}{this.state.date}
+                                {'\n'}{this.state.formattedDate}
                                 {'\n'}Written by {this.state.name}
                             </Text>
                             

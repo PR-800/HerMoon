@@ -31,7 +31,7 @@ const PrivacyScreen = ({ route, navigation }) => {
                         source={require('../assets/article/arrow-left-white.png')}
                         />
                     </Pressable>
-                    <Text style={styles.header}>Privacy Policy</Text>
+                    <Text style={styles.header}>นโยบายความเป็นส่วนตัว</Text>
                     <Text></Text>
                 </View>
                 {/* <Text style={styles.header}>รายชื่อสมาชิกกลุ่ม</Text> */}
@@ -39,42 +39,43 @@ const PrivacyScreen = ({ route, navigation }) => {
             <Text style={styles.content}>
                 วิชานี้เป็นส่วนหนึ่งของวิชา {'\n'}
                 Mobile Device Programming (1/2023)
+                {/* {'\n'}{'\n'}ใช้เพื่อการศึกษาเท่านั้น ! */}
             </Text>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-screen: {
-    flex: 1,
-    backgroundColor: "white",
-    alignItems: "center",
-},
-gradientBackground: {
-    width: '100%',
-    height: '15%',
-    justifyContent: 'center',
-},
-navbar: {
-    padding: 30,
-    paddingTop: 60,
-    flexDirection: "row",
-    justifyContent: "space-between",
-},
-header: {
-    display: "flex",
-    fontSize: 25,
-    color: "white",
-    fontFamily: 'MitrMedium',
-    marginTop: -8,
-},
-content: {
-    textAlign: 'center',
-    margin: 50,
-    fontFamily: 'MitrRegular',
-    fontSize: 17,
-    lineHeight: 30,
-},
+    screen: {
+        flex: 1,
+        backgroundColor: "white",
+        alignItems: "center",
+    },
+    gradientBackground: {
+        width: '100%',
+        height: '15%',
+        justifyContent: 'center',
+    },
+    navbar: {
+        padding: 30,
+        paddingTop: 60,
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    header: {
+        display: "flex",
+        fontSize: 25,
+        color: "white",
+        fontFamily: 'MitrMedium',
+        marginTop: -8,
+    },
+    content: {
+        textAlign: 'center',
+        margin: 50,
+        fontFamily: 'MitrRegular',
+        fontSize: 17,
+        lineHeight: 30,
+    },
 });
 
 export default PrivacyScreen

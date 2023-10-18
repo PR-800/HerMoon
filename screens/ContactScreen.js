@@ -31,7 +31,7 @@ const ContactScreen = ({ route, navigation }) => {
                         source={require('../assets/article/arrow-left-white.png')}
                     />
                 </Pressable>
-                <Text style={styles.header}>Group members</Text>
+                <Text style={styles.header}>รายชื่อสมาชิกกลุ่ม</Text>
                 <Text></Text>
             </View>
             {/* <Text style={styles.header}>รายชื่อสมาชิกกลุ่ม</Text> */}

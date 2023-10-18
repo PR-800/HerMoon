@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 
 import firebase from '../data/firebaseDB';
+import { enableExpoCliLogging } from 'expo/build/logs/Logs';
 
 class ArticleScreen extends Component {
     constructor() {
@@ -86,6 +87,14 @@ class ArticleScreen extends Component {
 
                 <ScrollView>
                     {this.state.article_list.map((item, i) => {
+                        
+                        const rawDate = item.date.toDate();
+                        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                        const formattedDate = rawDate.toLocaleDateString('en-GB', options);
+
+                        // console.log('item.date :>> ', item.date);
+                        // console.log('formattedDate :>> ', formattedDate);
+
                         return (
                             <TouchableOpacity style={styles.boxList} key={i}
                                 onPress={() => {
@@ -95,7 +104,7 @@ class ArticleScreen extends Component {
                                         nameImg: item.nameImg,
                                         title: item.title,
                                         description: item.description,
-                                        date: item.date,
+                                        date: formattedDate,
                                         coverImg: item.coverImg,
                                     });
                                     // console.log('item', item)
@@ -126,7 +135,7 @@ class ArticleScreen extends Component {
                                         <Text style={{display:'none'}} >{ item.coverImg }</Text>
                                     </View>
                                     <Text style={styles.timestamp}>
-                                        {item.date}
+                                        {formattedDate}
                                     </Text>
                                     <Text style={styles.detail} numberOfLines={2}>
                                         {item.description}
@@ -205,7 +214,8 @@ const styles = StyleSheet.create({
     timestamp: {
         marginBottom: 10,
         color: "gray",
-        fontFamily: 'MitrRegular'
+        fontFamily: 'MitrRegular',
+        
     },
     detail: {
         fontFamily: 'MitrRegular'
