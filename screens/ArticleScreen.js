@@ -71,7 +71,7 @@ class ArticleScreen extends Component {
                             source={require('../assets/article/arrow-left-white.png')}
                             />
                         </Pressable>
-                        <Text style={styles.subheading}>Search</Text>
+                        <Text style={styles.subheading}>ค้นหา</Text>
                         <Pressable onPress={() => {
                                     // navigation.navigate("Home", {});
                                     return console.log("searching")
@@ -82,7 +82,7 @@ class ArticleScreen extends Component {
                             />
                         </Pressable>
                     </View>
-                    <Text style={styles.header}>Article</Text>
+                    <Text style={styles.header}>บทความ</Text>
                 </LinearGradient>
 
                 <ScrollView>

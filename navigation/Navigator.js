@@ -116,39 +116,43 @@ function MyPageNavigator() {
 // Tab ตัวเลือกหน้า Home
 function MyBottomNavigator() {
     return (
-        <BottomNavigator.Navigator>
+        <BottomNavigator.Navigator
+            screenOptions={{
+                headerShown: false,
+                tabBarShowLabel: false,
+                tabBarActiveBackgroundColor: '#eeebf5',
+                // tabBarInactiveBackgroundColor: '',
+                // tabBarStyle: { height: 52 },
+            }}
+        >
             <BottomNavigator.Screen name="Home" component={HomeScreen}
                 options={{
-                    headerShown: false,
                     tabBarIcon: ({ color, size }) => {
-                        return <Feather name="home" size={30} color="#8461D5" />;
+                        return <Feather name="home" size={31} color={"#8461D5"} />;
                     },
                     }
                 }
             />
             <BottomNavigator.Screen name="Calendar" component={CalendarScreen}
                 options={{
-                    headerShown: false,
                     tabBarIcon: ({ color, size }) => {
-                        return <Fontisto name="calendar" size={24} color="#8461D5" />;
+                        return <Fontisto name="calendar" size={26} color="#8461D5" />;
                     },
                 }
                 }
             />
             <BottomNavigator.Screen name="Article" component={ArticleScreen}
                 options={{
-                    headerShown: false,
                     tabBarIcon: ({ color, size }) => {
-                        return <MaterialIcons name="article" size={30} color="#8461D5" />;
+                        return <MaterialIcons name="article" size={33} color="#8461D5" />;
                     },
                 }
                 }
             />
             <BottomNavigator.Screen name="Profile" component={ProfileScreen}
                 options={{
-                    headerShown: false,
                     tabBarIcon: ({ color, size }) => {
-                        return <FontAwesome5 name="user" size={30} color="#8461D5" />;
+                        return <FontAwesome5 name="user" size={28} color="#8461D5" />;
                     },
                 }
                 }

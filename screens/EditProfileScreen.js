@@ -229,6 +229,7 @@ const EditProfileScreen = ({ route, navigation }) => {
         style={styles.linearGradient}
         >
           <Pressable onPress={() => {
+            navigation.navigate("Profile", {});
                 return console.log("SUBMITED")
           }}>
             <Text style={{color: "white", fontSize: 20, fontFamily: "MitrMedium",}}>

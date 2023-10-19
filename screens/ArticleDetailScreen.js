@@ -104,9 +104,11 @@ class ArticleDetailScreen extends Component {
                                 {this.state.description}  
                             </Text>
                             <Text style={{fontFamily: 'MitrRegular', textAlign: 'right', }} >
-                                {'\n'}{this.state.formattedDate}
+                                {'\n'}{'\n'}{this.state.formattedDate}
                                 {'\n'}Written by {this.state.name}
                             </Text>
+
+                            {/* <Text style={{fontSize: 20}}>Written by {this.state.name}</Text> */}
                             
                         </View>
                     </ScrollView>
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
     },
     detail: {
         fontFamily: 'MitrRegular',
-        textAlign: "center",
+        textAlign: 'justify',
         fontSize: 15,
     },
 
