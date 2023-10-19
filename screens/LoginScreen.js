@@ -82,7 +82,7 @@ class LoginScreen extends Component {
                     </View>
                     
                     <TextInput 
-                        style={[styles.input, {}]} 
+                        style={[styles.input, {fontFamily: 'MitrRegular',}]} 
                         theme={{ 
                             roundness: 50, 
                             colors: { onSurfaceVariant: 'grey'} ,
@@ -91,7 +91,7 @@ class LoginScreen extends Component {
                         activeUnderlineColor="grey"
                         textColor="black"
     
-                        label="Username"
+                        label="ชื่อผู้ใช้"
                         onChangeText={(val) => this.inputValueUpdate(val, "username")}
                         value={this.state.username}
                     />
@@ -108,7 +108,7 @@ class LoginScreen extends Component {
                             textColor="black"
                             secureTextEntry={this.state.showPassword} 
         
-                            label="Password"
+                            label="รหัสผ่าน"
                             onChangeText={(val) => this.inputValueUpdate(val, "password")}
                             value={this.state.password}
                         />
@@ -122,9 +122,10 @@ class LoginScreen extends Component {
                     </View>
     
                     <TouchableOpacity 
-                        // onPress={() => {
-                        //     navigation.navigate("tutorial", {});
-                        // }}
+                        onPress={() => {
+                            // navigation.navigate("tutorial", {});
+                            alert("นึกให้ออกสิ สู้ ๆ นะ")
+                        }}
                     >
                         <Text style={[styles.text, { 
                                 left: 80, 
@@ -133,7 +134,7 @@ class LoginScreen extends Component {
                                 textShadowOffset: {width: -1, height: 2},
                                 textShadowRadius: 15,
                             }]}>
-                            Forgot password
+                            ลืมรหัสผ่าน
                         </Text>
                     </TouchableOpacity>
     
@@ -143,12 +144,11 @@ class LoginScreen extends Component {
                             this.state.all_data.map((item, i) => {
                                 if (this.state.username === item.username && this.state.password === item.password) {
                                     match = true
-                                    this.props.navigation.navigate("homePage", {
-                                        screen: "Profile",
-                                        params: {
-                                            activeUser: item,
-                                        },
+                                    this.props.navigation.navigate("tutorial", {
+                                        activeUser: item,
                                     });
+                                    this.state.username = ""
+                                    this.state.password = ""
                                     console.log('-- ActiveUser from Login : ', item);
                                 } 
                             })  
@@ -157,7 +157,7 @@ class LoginScreen extends Component {
                             }                      
                         }}
                     >
-                        <Text style={styles.textButton}>Log in</Text>
+                        <Text style={styles.textButton}>เข้าสู่ระบบ</Text>
                     </TouchableOpacity>
 
                     {/* <HomeScreen user={this.state.activeUser} /> */}
@@ -173,9 +173,9 @@ class LoginScreen extends Component {
                             textShadowOffset: {width: -1, height: 2},
                             textShadowRadius: 15,
                         }]}>
-                            Doesn't have an account? {" "}
+                            ไม่มีบัญชีผู้ใช้ ?{" "}
                             <Text style={{ textDecorationLine: "underline"}}>
-                                Register
+                                สมัครสมาชิก
                             </Text>
                         </Text>
                     </TouchableOpacity>

@@ -13,7 +13,7 @@ class ProfileScreen extends Component {
     constructor() {
         super();
         this.accountCollection = firebase.firestore().collection("accounts");
-        this.state = {activeUser: null,};
+        this.state = {activeUser: null, name: ""};
     }
 
     componentDidMount() {
@@ -23,6 +23,20 @@ class ProfileScreen extends Component {
         });
 
         const accountDoc = firebase.firestore().collection("accounts")
+        .doc(this.props.route.params.activeUser.key);
+
+        accountDoc.get().then((res) => {
+            if (res.exists) {
+                const doc = res.data();
+                this.setState({
+                    key: res.id, 
+                    name: doc.name, 
+                });
+            }
+            else {
+                console.log("Document does not exist");
+            }
+        });
 
     }
 
@@ -31,7 +45,8 @@ class ProfileScreen extends Component {
 
         if (this.props.route.params && this.props.route.params.activeUser) {
             this.state.activeUser = this.props.route.params.activeUser;
-            console.log('--- ActiveUser at ProfileScreen:', this.state.activeUser);
+            console.log('--- Profile ');
+            console.log(this.state.activeUser)
         }
 
         return ( 
@@ -53,7 +68,8 @@ class ProfileScreen extends Component {
                         />
                     </Pressable>
                     <Text style={styles.headers}>
-                        {this.state.activeUser.username}
+                        {/* {this.state.activeUser.username} */}
+                        {this.state.name}
                     </Text>
                     <Text style={styles.subheader}>
                         รายละเอียด 1 | รายละเอียด 2
@@ -102,7 +118,7 @@ class ProfileScreen extends Component {
                     </View>
         
                     <View style={styles.box} >
-                        <Pressable onPress={() => {
+                        {/* <Pressable onPress={() => {
                             navigation.navigate("tutorial", {});
                             return console.log("tutorial")
                         }}>
@@ -114,7 +130,7 @@ class ProfileScreen extends Component {
                                 <Text style={styles.content}>คู่มือการใช้งาน</Text>
                             </View>
                         
-                        </Pressable> 
+                        </Pressable>  */}
                         
                         <Pressable onPress={() => {
                             navigation.navigate("contact", {});
@@ -146,7 +162,7 @@ class ProfileScreen extends Component {
 
                     <View style={{...styles.logoutButton, justifyContent: 'flex-end'}}>
                         <Pressable onPress={() => {
-                            // navigation.navigate("privacy", {});
+                            this.props.navigation.navigate("login", {});
                         }}>
                             <View style={styles.group}>
                                 <Image

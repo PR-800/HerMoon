@@ -33,6 +33,11 @@ class SignUpScreen extends Component {
         this.accountCollection.add({
             username: this.state.username,
             password: this.state.password,
+            name: "",
+            height: 0,
+            weight: 0,
+            dob: null,
+            periodCycle: 0,
         })
         .then((res) => {
             this.setState({username: "", password: ""});
@@ -49,8 +54,8 @@ class SignUpScreen extends Component {
                 >
                     <View style={styles.header}>
                         <View>
-                            <Text style={styles.headerText}>Create</Text>
-                            <Text style={styles.headerText}>an account</Text>
+                            <Text style={styles.headerText}>สมัคร</Text>
+                            <Text style={styles.headerText}>สมาชิกใหม่</Text>
                         </View>
                     </View>
 
@@ -64,7 +69,7 @@ class SignUpScreen extends Component {
                         activeUnderlineColor="grey"
                         textColor="black"
 
-                        label="Username"
+                        label="ชื่อผู้ใช้"
                         onChangeText={(val) => this.inputValueUpdate(val, "username")}
                         value={this.state.username}
                     />
@@ -81,7 +86,7 @@ class SignUpScreen extends Component {
                                 textColor="black"
                                 secureTextEntry={this.state.showPassword} 
 
-                                label="Password"
+                                label="รหัสผ่าน"
                                 onChangeText={(val) => this.inputValueUpdate(val, "password")}
                                 value={this.state.password}
                             />
@@ -106,7 +111,7 @@ class SignUpScreen extends Component {
                             textColor="black"
                             secureTextEntry={this.state.showConfirmPassword}
 
-                            label="Confirm Password"
+                            label="ยืนยันรหัสผ่าน"
                             onChangeText={(val) => this.inputValueUpdate(val, "confirmPassword")}
                             value={this.state.confirmPassword}
                         />
@@ -125,15 +130,18 @@ class SignUpScreen extends Component {
                         onPress={() => {
                             if ((this.state.password === this.state.confirmPassword) && this.state.username != "" && this.state.password != "" && this.state.confirmPassword != "") {
                                 this.storeAccount()
-                                alert('Sign Up Successfully')
+                                this.state.username = ""
+                                this.state.password = ""
+                                this.state.confirmPassword = ""
+                                alert('สมัครสมาชิกสำเร็จ')
                                 this.props.navigation.navigate("login", {});
                             }
                             else {
-                                alert('Invalid username or password')
+                                alert('โปรดตรวจสอบข้อมูลให้ถูกต้อง')
                             }
                         }}
                     >
-                        <Text style={styles.textButton}>Register</Text>
+                        <Text style={styles.textButton}>สมัครสมาชิก</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity 
@@ -147,9 +155,9 @@ class SignUpScreen extends Component {
                             textShadowOffset: {width: -1, height: 2},
                             textShadowRadius: 15,
                         }]}>
-                            Have an account already? {" "}
+                            มีบัญชีผู้ใช้อยู่แล้ว ?{" "}
                             <Text style={{ textDecorationLine: "underline"}}>
-                                Login
+                                เข้าสู่ระบบ
                             </Text>
                         </Text>
                     </TouchableOpacity>
@@ -167,8 +175,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     header: {
-        flexDirection: "row",
-        alignItems: "center",
+        // flexDirection: "row",
+        alignItems: "flex-start",
+        width: "65%",
         marginBottom: 40,
     },
     headerText: {

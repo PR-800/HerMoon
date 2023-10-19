@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { TextInput } from 'react-native-paper';
 
 import * as Font from 'expo-font';
 
@@ -10,19 +11,43 @@ class TutorialScreen extends Component {
 
     constructor() {
         super();
-        this.accountCollection = firebase.firestore().collection("accounts");
+        this.state = {name: "", dob: new Date(), activeUser: null};
+        
     }
+
+    inputValueUpdate = (val, prop) => {
+        const state = this.state;
+        state[prop] = val;
+        this.setState(state);
+    };
 
     async componentDidMount() {
         await Font.loadAsync({
             MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
             MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
         });
+
+        const accountDoc = firebase.firestore().collection("accounts")
+        .doc(this.props.route.params.activeUser.key);
+
+        accountDoc.get().then((res) => {
+            if (res.exists) {
+                const doc = res.data();
+                this.setState({
+                    key: res.id, 
+                    name: doc.name, 
+                });
+            }
+            else {
+                console.log("Document does not exist");
+            }
+        });
     }
 
     render() {
-        const keyId = this.props.route.params.key
-        console.log("Tutorial: " + keyId)
+        this.state.activeUser = this.props.route.params.activeUser;
+        console.log("-- Tutorial ")
+        console.log(this.state.activeUser)
         return (
             <View style={styles.screen}>
                 <LinearGradient
@@ -34,7 +59,36 @@ class TutorialScreen extends Component {
                     </View>
     
                     <View style={styles.content}>
-                        <Text>tutorial details</Text>
+                        <Text style={styles.text}>{this.state.activeUser.key}</Text>
+                        <TextInput 
+                            style={styles.input} 
+                            theme={{ 
+                                roundness: 50, 
+                                colors: { onSurfaceVariant: 'grey'} 
+                            }} 
+                            underlineColor="transparent"
+                            activeUnderlineColor="grey"
+                            textColor="black"
+
+                            label="ชื่อ (สำหรับใช้แสดง)"
+                            onChangeText={(val) => this.inputValueUpdate(val, "name")}
+                            value={this.state.name}
+                        />
+                        
+                        <TextInput 
+                            style={styles.input} 
+                            theme={{ 
+                                roundness: 50, 
+                                colors: { onSurfaceVariant: 'grey'} 
+                            }} 
+                            underlineColor="transparent"
+                            activeUnderlineColor="grey"
+                            textColor="black"
+
+                            label="วันเกิด"
+                            onChangeText={(val) => this.inputValueUpdate(val, "name")}
+                            value={this.state.username}
+                        />
                     </View>
     
                     <View style={styles.bottom}>
@@ -46,18 +100,22 @@ class TutorialScreen extends Component {
                                 });
                             }}
                         >
-                            <Text style={styles.textButton}>Start tutorial</Text>
+                            <Text style={styles.textButton}>เริ่มต้นใช้งาน</Text>
                         </TouchableOpacity>
     
                         <TouchableOpacity 
                             onPress={() => {
                                 this.props.navigation.navigate("homePage", {
-                                    key: keyId
+                                    screen: "Profile",
+                                    params: {
+                                        activeUser: this.state.activeUser,
+                                    },
                                 });
                             }}
                         >
                             <Text style={[styles.text, { 
                                 top: 15,
+                                fontSize: 15,
                                 textShadowColor: 'rgba(0, 0, 0, 0.5)',
                                 textShadowOffset: {width: -1, height: 2},
                                 textShadowRadius: 15,
@@ -111,7 +169,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: "white",
-        fontSize: 15,
+        fontSize: 23,
         fontFamily: 'MitrRegular',
     },
     button: {
@@ -141,6 +199,24 @@ const styles = StyleSheet.create({
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
+    },
+    input: {
+        width: 300,
+        height: 55,
+        margin: 15,
+        backgroundColor: "white",
+        borderRadius: 50,
+        overflow: 'hidden',
+        paddingLeft: 5,
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 1,
+        elevation: 5,
     },
 });
   

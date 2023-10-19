@@ -18,6 +18,7 @@ const HomeScreen = (props) => {
     const route = useRoute();
 
     const [activeUser, setActiveUser] = useState({});
+    const [name, setName] = useState();
 
     const [modalVisibleBlood, setModalVisibleBlood] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualLevelModel
     const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualVolumeLevelModel
@@ -49,6 +50,22 @@ const HomeScreen = (props) => {
                 setNoteM(dataNotesModel);
             }
         }
+
+        if(route.params.activeUser) {
+            const accountDoc = firebase.firestore().collection("accounts")
+            .doc(route.params.activeUser.key);
+
+            accountDoc.get().then((res) => {
+                if (res.exists) {
+                    const doc = res.data();
+                    setName(doc.name);
+                }
+                else {
+                    console.log("Document does not exist");
+                }
+            });
+        }
+        
     }, [route.params]);
 
     //สำหรับ open, close => MenstrualLevelModel
@@ -94,7 +111,9 @@ const HomeScreen = (props) => {
         const databaseRef = firebase.firestore().collection("monthly_summary");
 
         //เรียกข้อมูลที่ตรงกับ formattedDate
-        const query = databaseRef.where("date", "==", formattedDate);
+        const query = databaseRef
+            .where("date", "==", formattedDate)
+            .where("user_id", "==", activeUser.key);
 
         // ดึงข้อมูลที่ตรงกับเงื่อนไข
         query.get().then((querySnapshot) => {
@@ -116,7 +135,10 @@ const HomeScreen = (props) => {
                     menstrual_color: colorM,
                     menstrual_volume: volumM,
                     menstrual_notes: notesM,
+                    user_id: activeUser.key
                 };
+                console.log("User Id")
+                console.log(activeUser.key)
 
                 //สร้าง collection
                 const databaseRef = firebase.firestore().collection("monthly_summary");
@@ -175,7 +197,8 @@ const HomeScreen = (props) => {
             <View style={{ marginBottom: 20, marginTop: 80, width:'80%'}}>
                 <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>สวัสดี !</Text>
                 <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', left: 0}}>
-                    {activeUser.username}
+                    {/* {activeUser.username} */}
+                    {name}
                 </Text>
             </View>
 
