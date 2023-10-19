@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { TextInput } from 'react-native-paper';
+import DropDown from "react-native-paper-dropdown";
+import DropDownPicker from 'react-native-dropdown-picker';
+import { Provider } from 'react-native-paper'; 
 
 import * as Font from 'expo-font';
 
@@ -11,8 +14,27 @@ class TutorialScreen extends Component {
 
     constructor() {
         super();
-        this.state = {name: "", dob: new Date(), activeUser: null};
-        
+        this.state = {
+            name: "", 
+            cycle: null, 
+            cycleList: [
+                {
+                    label: "Male",
+                    value: "male",
+                },
+                {
+                    label: "Female",
+                    value: "female",
+                },
+                {
+                    label: "Others",
+                    value: "others",
+                },
+            ],
+            showDropDown: false,
+            dob: new Date(), 
+            activeUser: null
+        };
     }
 
     inputValueUpdate = (val, prop) => {
@@ -48,6 +70,7 @@ class TutorialScreen extends Component {
         this.state.activeUser = this.props.route.params.activeUser;
         console.log("-- Tutorial ")
         console.log(this.state.activeUser)
+
         return (
             <View style={styles.screen}>
                 <LinearGradient
@@ -59,7 +82,8 @@ class TutorialScreen extends Component {
                     </View>
     
                     <View style={styles.content}>
-                        <Text style={styles.text}>{this.state.activeUser.key}</Text>
+                    <Text style={styles.text}>ยังไม่ได้ทำ update</Text>
+                        {/* <Text style={styles.text}>{this.state.activeUser.key}</Text> */}
                         <TextInput 
                             style={styles.input} 
                             theme={{ 
@@ -74,6 +98,36 @@ class TutorialScreen extends Component {
                             onChangeText={(val) => this.inputValueUpdate(val, "name")}
                             value={this.state.name}
                         />
+
+                        <View style={styles.smallDropdown}>
+                            <DropDownPicker
+                                style={styles.dropdownBox}
+                                placeholder='Cycle'
+                                placeholderTextColor="grey"
+                                open={this.state.showDropDown}
+                                value={this.state.cycle}
+                                items={this.state.cycleList}
+                                setOpen={(showDropDown) => this.setState({ showDropDown })}
+                                setValue={(valueCallback) => {
+                                    const selectedValue = valueCallback();
+                                    this.setState({ cycle: selectedValue });
+                                    console.log("Selected value: " + selectedValue);
+                                }}
+                                placeholderStyle={{
+                                    marginLeft: 10,
+                                    fontSize: 16,
+                                }}
+                                labelStyle={{
+                                    marginLeft: 10,
+                                    fontSize: 16,
+                                }}
+                                itemStyle={{
+                                    marginLeft: 10,
+                                    fontSize: 16,
+                                }}
+                            />
+                        </View>
+                        
                         
                         <TextInput 
                             style={styles.input} 
@@ -95,8 +149,11 @@ class TutorialScreen extends Component {
                         <TouchableOpacity 
                             style={styles.button}
                             onPress={() => {
-                                this.props.navigation.navigate("stepOne", {
-                                    
+                                this.props.navigation.navigate("homePage", {
+                                    screen: "Profile",
+                                    params: {
+                                        activeUser: this.state.activeUser,
+                                    },
                                 });
                             }}
                         >
@@ -208,6 +265,27 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         overflow: 'hidden',
         paddingLeft: 5,
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 1,
+        elevation: 5,
+    },
+    smallDropdown: {
+        width: 300,
+        margin: 15,
+        alignItems: 'center', justifyContent: 'center'
+    },
+    dropdownBox: {
+        height: 55,
+        backgroundColor:"white",
+        borderColor: "white",
+        borderRadius: 50,
+        paddingLeft: 10,
 
         shadowColor: "#000",
         shadowOffset: {
