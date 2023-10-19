@@ -1,8 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, View, ScrollView, Image, Pressable, Text } from "react-native";
+import { StyleSheet, View, ScrollView, Image, Pressable, Text, ImageBackground } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 
 import firebase from '../data/firebaseDB';
+
+import ImageView from 'react-native-image-view';
+
+import { format } from 'date-fns';
+import { th } from 'date-fns/locale';
 
 class ArticleDetailScreen extends Component {
     constructor() {
@@ -46,9 +51,19 @@ class ArticleDetailScreen extends Component {
                     }
                   );
 
+                  // Custom Thai month names
+                const thaiMonthNames = [
+                    'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน',
+                    'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม',
+                    'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม',
+                ];
+
                 const rawDate = article.date.toDate();
                 const options = { day: 'numeric', month: 'long', year: 'numeric' };
-                const formattedDate = rawDate.toLocaleDateString('en-GB', options);
+                // const formattedDate = rawDate.toLocaleDateString('en-GB', options);      // 17 July 2023
+                // const formattedDate = format(rawDate, 'dd LLL yyyy', { locale: th });    // 17 ก.ค. 2566
+                const formattedDate = format(rawDate, 'dd LLLL yyyy', { locale: { ...th, months: thaiMonthNames } });   //17 กรกฏาคม 2566
+
                 // console.log('formattedDate :>> ', formattedDate);
 
                 this.setState({ formattedDate });
@@ -67,6 +82,9 @@ class ArticleDetailScreen extends Component {
 
     render() {
         const { navigation } = this.props
+
+        const coverImg = this.state
+        let viewImage = false;
 
         try {
             return (
@@ -101,12 +119,31 @@ class ArticleDetailScreen extends Component {
                                 </Text>
     
                                 {this.state.coverImg && (
-                                    <Image
-                                    style={{ alignSelf: 'center', margin: 20, width: '90%', aspectRatio: 3 / 3 }}
-                                    source={{ uri: this.state.coverImg }}
-                                  />
-                                  
+                                    <Pressable onPress={() => {
+                                        viewImage = !viewImage
+                                        console.log('viewImage :>> ', viewImage);
+                                    }}>
+                                        <Image
+                                            style={{ alignSelf: 'center', margin: 20, width: '90%', aspectRatio: 3 / 3 }}
+                                            source={{ uri: this.state.coverImg }}
+                                        />
+                                    </Pressable>
                                 )}
+
+                                {/* <ImageView
+                                        images={[{
+                                            source: {
+                                                uri: 'https://cdn.pixabay.com/photo/2017/08/17/10/47/paris-2650808_960_720.jpg',
+                                            },
+                                                    title: 'Paris',
+                                                    width: 806,
+                                                    height: 720,
+                                                },
+                                            ]}
+                                        imageIndex={0}
+                                        isVisible={viewImage? true : false}
+                                        // renderFooter={(currentImage) => (<View><Text>My footer</Text></View>)}
+                                    /> */}
     
     
                                 <Text style={styles.detail}>
