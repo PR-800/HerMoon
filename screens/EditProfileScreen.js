@@ -1,12 +1,18 @@
 import React, {useState} from 'react'
-import { StyleSheet, Text, View, Image, Button, Pressable, TouchableWithoutFeedback, Modal, TouchableOpacity, ScrollView, } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, Pressable, TouchableWithoutFeedback, Modal, TouchableOpacity, ScrollView, DatePickerIOS, } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useFonts } from 'expo-font';
 
+import { Chip } from 'react-native-paper';
+
 const EditProfileScreen = ({ route, navigation }) => {
+
+  // วันเกิด
+  const [date, setDate] = useState(new Date())
+  const [open, setOpen] = useState(false)
 
   const dropDownRef = React.useRef();
   
@@ -19,15 +25,6 @@ const EditProfileScreen = ({ route, navigation }) => {
     { label: '41 - 50 years', value: 'Adult' },
     { label: 'Above 50 years', value: 'Old' },
   ]);
-  
-  const [valueOpenHour, setValueOpenHour] = useState(false);
-  const [valueHour, setValueHour] = useState(null);
-  const [itemsHour, setItemsHour] = useState([
-    { label: 'Less than 5 hours', value: 'banana' },
-    { label: '5 - 6 hours', value: 'bat' },
-    { label: '7 - 9 hours', value: 'apple' },
-    { label: 'Above 9 hours', value: 'cat' },
-  ]);
 
   const [valueOpenCycle, setValueOpenCycle] = useState(false);
   const [valueCycle, setValueCycle] = useState(null);
@@ -35,15 +32,6 @@ const EditProfileScreen = ({ route, navigation }) => {
     { label: 'Less than 5 hours', value: 'banana' },
     { label: '5 - 6 hours', value: 'bat' },
     { label: '7 - 9 hours', value: 'apple' },
-    { label: 'Above 9 hours', value: 'cat' },
-  ]);
-
-  const [valueOpenWorkout, setValueOpenWorkout] = useState(false);
-  const [valueWorkout, setValueWorkout] = useState(null);
-  const [itemsWorkout, setItemsWorkout] = useState([
-    { label: 'Less than 5 hours', value: 'banana' },
-    { label: '5-6 hours', value: 'bat' },
-    { label: '7-9 hours', value: 'apple' },
     { label: 'Above 9 hours', value: 'cat' },
   ]);
 
@@ -99,7 +87,7 @@ const EditProfileScreen = ({ route, navigation }) => {
           <Text style={styles.header}>แก้ไขข้อมูล</Text>
         </View>
 
-        <ScrollView>
+        <ScrollView vertical contentContainerStyle={{alignItems: 'center', marginTop: 50}} >
         <TextInput
             style={styles.input}
             label={'Name'}
@@ -122,13 +110,6 @@ const EditProfileScreen = ({ route, navigation }) => {
             autoCompleteType="password"
             theme={{ roundness: 15 }} 
         />
-        {/* <TextInput
-            style={styles.input}
-            label={'Description'}
-            underlineColor="transparent"
-            theme={{ roundness: 15 }} 
-        /> */}
-
 
 
         <View style={styles.group}>
@@ -150,41 +131,23 @@ const EditProfileScreen = ({ route, navigation }) => {
 
         <View style={[styles.group]}>
         <TouchableWithoutFeedback onPress={() => dropDownRef.current.close()}>
-          <View style={styles.smallDropdown}>
-            <DropDownPicker
-            style={styles.dropdownBox}
-              placeholder='Age'
-              open={OpenAge}
-              value={age}
-              items={itemsAge}
-              setOpen={setOpenAge}
-              setValue={setAge}
-              setItems={setItemsAge}
-              dropDownDirection='TOP'
-              controller={(instance) => dropDownRef.current = instance}
-            />
-          </View>
+          {/* <View style={styles.smallDropdown}> */}
+          <TextInput
+              style={styles.smallinput}
+              label={'Height (cm.)'}
+              keyboardType="number-pad"
+              underlineColor="transparent"
+              theme={{ roundness: 15 }} 
+          />
+          {/* </View> */}
+
+
           </TouchableWithoutFeedback>
           <View style={styles.smallDropdown}>
-            <DropDownPicker 
-            style={styles.dropdownBox}
-            placeholder='Sleep Hours'
-              open={valueOpenHour}
-              value={valueHour}
-              items={itemsHour}
-              setOpen={setValueOpenHour}
-              setValue={setValueHour}
-              setItems={setItemsHour}
-              dropDownDirection='TOP'
-            />
-          </View>
-        </View>
-
-        <View style={[styles.group]}>
-          <View style={styles.smallDropdown}>
             <DropDownPicker
-            style={styles.dropdownBox}
-              placeholder='Cycle'
+              style={styles.dropdownBox}
+              placeholder='รอบในแต่ละเดือน'
+              placeholderStyle={{fontSize: 15, fontFamily: "MitrRegular", textAlign: 'center'}}
               open={valueOpenCycle}
               value={valueCycle}
               items={itemsCycle}
@@ -194,23 +157,6 @@ const EditProfileScreen = ({ route, navigation }) => {
               dropDownDirection='TOP'
             />
           </View>
-          <View style={styles.smallDropdown}>
-            <DropDownPicker
-            style={styles.dropdownBox}
-            placeholder='Workout Freq'
-              open={valueOpenWorkout}
-              value={valueWorkout}
-              // items={itemsWorkout}
-              setOpen={setValueOpenWorkout}
-              setValue={setValueWorkout}
-              // setItems={setItemsWorkout}
-              items={[
-                {label: 'UK', value: 'uk'},
-                {label: 'France', value: 'france'}
-              ]}
-              dropDownDirection='TOP'
-            />
-          </View> 
         </View>
 
         <Pressable
@@ -267,20 +213,20 @@ const EditProfileScreen = ({ route, navigation }) => {
                     </TouchableOpacity>
                   ))}
                 </ScrollView>
-                <View style={styles.selectedTagsContainer}>
-                  <Text style={styles.selectedTagsText}>รายการที่เลือกแล้ว : {selectedTags.join(', ')}</Text>
+                <View style={{marginVertical: 10,}}>
+                  <Text style={{...styles.selectedTagsText}}>{selectedTags.length >= 1 ? 'รายการที่เลือกแล้ว : '+  selectedTags.join(', ') : ''}</Text>
                 </View>
 
               <Pressable
                 // style={[styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}>
                 <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
-                colors={['#9F79EB', '#FC7D7B',]}
-                style={styles.linearGradientModal}
-                >
-                    <Text style={styles.buttonClose}>ยืนยัน</Text>
-                </LinearGradient>
-                  </Pressable>
+                  colors={['#9F79EB', '#FC7D7B',]}
+                  style={styles.linearGradientModal}
+                  >
+                      <Text style={styles.buttonClose}>ยืนยัน</Text>
+                  </LinearGradient>
+                </Pressable>
 
               </View>
             </View>
@@ -440,11 +386,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "MitrMedium",
   },
-  selectedTagsContainer: {
-    marginVertical: 10,
-  },
   selectedTagsText: {
-    marginBottom: 5,
+    marginBottom: 10,
     fontSize: 16,
     fontFamily: "MitrMedium",
     color: '#A43BA6',
