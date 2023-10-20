@@ -1,15 +1,19 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { StyleSheet, Text, View, Image, Button, Pressable, TouchableWithoutFeedback, Modal, TouchableOpacity, ScrollView, DatePickerIOS, } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { useFonts } from 'expo-font';
 
 import { Chip } from 'react-native-paper';
 
-const EditProfileScreen = ({ route, navigation }) => {
+import firebase from '../data/firebaseDB';
+import { setDayOfYear } from 'date-fns';
 
+const EditProfileScreen = ({ route, navigation }) => {
   // วันเกิด
   const [date, setDate] = useState(new Date())
   const [open, setOpen] = useState(false)
@@ -55,6 +59,114 @@ const EditProfileScreen = ({ route, navigation }) => {
     'โรคอ้วน'
   ];
 
+  const [activeUser, setActiveUser] = useState({});
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+  const [name, setName] = useState();
+  const [height, setHeight] = useState();
+  const [weight, setWeight] = useState();
+  const [cycle, setCycle] = useState();
+  const [freq, setFreq] = useState();
+  const [dob, setDob] = useState();
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+  const [cycleDropDown, setCycleDropDown] = useState(false);
+  const [freqDropDown, setFreqDropDown] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const cycleList = [
+    {
+        label: "20 - 23 วัน",
+        value: 20,
+    },
+    {
+        label: "24 - 27 วัน",
+        value: 24,
+    },
+    {
+        label: "28 - 31 วัน",
+        value: 28,
+    },
+    {
+        label: "32 - 35 วัน",
+        value: 32,
+    },
+  ]
+  const freqList = [
+    {
+        label: "2 - 4 วัน",
+        value: 2,
+    },
+    {
+        label: "3 - 5 วัน",
+        value: 3,
+    },
+    {
+        label: "4 - 6 วัน",
+        value: 4,
+    },
+    {
+        label: "5 - 7 วัน",
+        value: 5,
+    },
+  ]
+
+  useEffect(() => {
+    { route.params.activeUser ? setActiveUser(route.params.activeUser) : ""}
+    console.log("--- EditProfile")
+    console.log(activeUser)
+    // console.log(route.params)
+
+    if(route.params.activeUser) {
+      const accountDoc = firebase.firestore().collection("accounts")
+      .doc(route.params.activeUser.key);
+
+      accountDoc.get().then((res) => {
+          if (res.exists) {
+              const doc = res.data();
+              setName(doc.name);
+              setHeight(doc.height);
+              setWeight(doc.weight);
+              setCycle(doc.periodCycle);
+              setFreq(doc.freq);
+              setDob(doc.dob);
+          }
+          else {
+              console.log("Document does not exist");
+          }
+      });
+    }
+  }, [route.params]);
+
+  const updateAccount = () => {
+    const accountDoc = firebase.firestore().collection("accounts")
+      .doc(route.params.activeUser.key);
+
+    accountDoc
+    .set({
+        username: activeUser.username,
+        password: activeUser.password,
+        name: name, 
+        height: height,
+        weight: weight,
+        dob: dob,
+        periodCycle: cycle,
+        freq: freq,
+        new_user: false,
+    })
+  }
+
+  const formatDate = (date) => {
+    if (date instanceof Date) {
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+
+      const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+      return formattedDate;
+    } else {
+      return '';
+    }
+  };
+
   const toggleTag = (tag) => {
     if (selectedTags.includes(tag)) {
       setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
@@ -87,77 +199,165 @@ const EditProfileScreen = ({ route, navigation }) => {
           <Text style={styles.header}>แก้ไขข้อมูล</Text>
         </View>
 
-        <ScrollView vertical contentContainerStyle={{alignItems: 'center', marginTop: 50}} >
-        <TextInput
-            style={styles.input}
-            label={'Name'}
-            underlineColor="transparent"
-            theme={{ roundness: 15 }} 
-            // keyboardType="number-pad"
-            // maxLength={2}
-            autoCorrect={false}
-            
-            // blurOnSubmit
-            // editable
-            //...เพิ่ม property value และ onChangeText...
-            // value = {enteredValue}
-            // onChangeText = {numberInputHandler}
-        />
-        <TextInput
-            style={styles.input}
-            label={'Password'}
-            underlineColor="transparent"
-            autoCompleteType="password"
-            theme={{ roundness: 15 }} 
+        <ScrollView vertical contentContainerStyle={{alignItems: 'center', marginTop: 10}} >
+
+        <TextInput 
+          style={styles.input} 
+          theme={{ 
+            roundness: 50, 
+            colors: { onSurfaceVariant: 'grey'} 
+          }} 
+          underlineColor="transparent"
+          activeUnderlineColor="grey"
+          textColor="grey"
+          editable={false}
+
+          label="ชื่อผู้ใช้"
+          value={activeUser.username}
         />
 
+        <TextInput 
+            style={styles.input} 
+            theme={{ 
+                roundness: 50, 
+                colors: { onSurfaceVariant: 'grey'} 
+            }} 
+            underlineColor="transparent"
+            activeUnderlineColor="grey"
+            textColor="black"
 
-        <View style={styles.group}>
-          <TextInput
-              style={styles.smallinput}
-              label={'Weight (kg.)'}
-              keyboardType="number-pad"
+            label="ชื่อที่แสดง"
+            onChangeText = {(val) => setName(val)}
+            value = {name != null ? name + "" : ""}
+        />
+
+        <View style={{flexDirection: 'row', marginBottom: 15}}>
+          <TextInput 
+              style={[styles.input, {width: 140, marginHorizontal: 10}]} 
+              theme={{ 
+                  roundness: 50, 
+                  colors: { onSurfaceVariant: 'grey'} 
+              }} 
               underlineColor="transparent"
-              theme={{ roundness: 15 }} 
+              activeUnderlineColor="grey"
+              textColor="black"
+
+              label="ส่วนสูง (ซม.)"
+              onChangeText={(val) => setHeight(val)}
+              value={height != null ? height + "" : ""}
           />
-          <TextInput
-              style={styles.smallinput}
-              label={'Height (cm.)'}
-              keyboardType="number-pad"
+          <TextInput 
+              style={[styles.input, {width: 140, marginHorizontal: 10}]}
+              theme={{ 
+                  roundness: 50, 
+                  colors: { onSurfaceVariant: 'grey'} 
+              }} 
               underlineColor="transparent"
-              theme={{ roundness: 15 }} 
+              activeUnderlineColor="grey"
+              textColor="black"
+              keyboardType = 'numeric'
+
+              label="นํ้าหนัก (กก.)"
+              onChangeText={(val) => setWeight(val)}
+              value={weight != null ? weight + "" : ""}
           />
         </View>
 
-        <View style={[styles.group]}>
-        <TouchableWithoutFeedback onPress={() => dropDownRef.current.close()}>
-          {/* <View style={styles.smallDropdown}> */}
-          <TextInput
-              style={styles.smallinput}
-              label={'Height (cm.)'}
-              keyboardType="number-pad"
+        <View style={{flexDirection: 'row'}}>
+          <TextInput 
+              style={[styles.input, {marginTop: -5, width: 240}]} 
+              theme={{ 
+                  roundness: 50, 
+                  colors: { onSurfaceVariant: 'grey'} 
+              }} 
               underlineColor="transparent"
-              theme={{ roundness: 15 }} 
+              activeUnderlineColor="grey"
+              textColor="black"
+              editable={false}
+
+              label="วันเกิด"
+              onChangeText={(val) => setDob(val)}
+              value={dob != null ? dob + "" : ""} 
           />
-          {/* </View> */}
+          <MaterialCommunityIcons 
+              name={'calendar'} 
+              size={24} 
+              color="black"
+              onPress={() => setIsDatePickerVisible(true)}
+              style={{fontSize: 40, marginRight: 20,}}
+          />
+        </View>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={(date) => {
+            setDob(date); 
+            const formattedDate = formatDate(date);
+            setDob(formattedDate);
+            setIsDatePickerVisible(false);
+          }}
+          onCancel={() => {
+            setIsDatePickerVisible(false);
+          }}
+        />
 
-
-          </TouchableWithoutFeedback>
-          <View style={styles.smallDropdown}>
+        <View style={styles.smallDropdown}>
             <DropDownPicker
-              style={styles.dropdownBox}
-              placeholder='รอบในแต่ละเดือน'
-              placeholderStyle={{fontSize: 15, fontFamily: "MitrRegular", textAlign: 'center'}}
-              open={valueOpenCycle}
-              value={valueCycle}
-              items={itemsCycle}
-              setOpen={setValueOpenCycle}
-              setValue={setValueCycle}
-              setItems={setItemsCycle}
-              dropDownDirection='TOP'
+                style={styles.dropdownBox}
+                zIndex={20} 
+                placeholder='รอบเดือน'
+                open={cycleDropDown}
+                value={cycle}
+                items={cycleList}
+                setOpen={(cycleDropDown) => setCycleDropDown(cycleDropDown)}
+                setValue={(valueCallback) => {
+                    const selectedValue = valueCallback();
+                    setCycle(selectedValue)
+                }}
+                placeholderStyle={{
+                    marginLeft: 10,
+                    fontSize: 16,
+                    color: 'grey',
+                }}
+                labelStyle={{
+                    marginLeft: 10,
+                    fontSize: 16,
+                }}
+                itemStyle={{
+                    marginLeft: 10,
+                    fontSize: 16,
+                }}
             />
-          </View>
         </View>
+        <View style={styles.smallDropdown}>
+          <DropDownPicker
+            style={styles.dropdownBox}
+            zIndex={10} 
+            placeholder='จำนวนวัน'
+            placeholderTextColor="grey"
+            open={freqDropDown}
+            value={freq}
+            items={freqList}
+            setOpen={(freqDropDown) => setFreqDropDown(freqDropDown)}
+            setValue={(valueCallback) => {
+                const selectedValue = valueCallback();
+                setFreq(selectedValue)
+            }}
+            placeholderStyle={{
+                marginLeft: 10,
+                fontSize: 16,
+                color: 'grey',
+            }}
+            labelStyle={{
+                marginLeft: 10,
+                fontSize: 16,
+            }}
+            itemStyle={{
+                marginLeft: 10,
+                fontSize: 16,
+            }}
+          />
+        </View> 
 
         <Pressable
           style={[styles.button, styles.buttonOpen]}
@@ -175,6 +375,7 @@ const EditProfileScreen = ({ route, navigation }) => {
         style={styles.linearGradient}
         >
           <Pressable onPress={() => {
+            updateAccount()
             navigation.navigate("Profile", {});
                 return console.log("SUBMITED")
           }}>
@@ -253,11 +454,12 @@ const styles = StyleSheet.create({
     lineHeight: 50,
 },
   input: {
-    borderRadius: 15, 
-    width: 350,
+    width: 300,
     height: 55,
     margin: 15,
-    overflow : "hidden",
+    borderRadius: 50,
+    overflow: 'hidden',
+    paddingLeft: 5,
   },
   smallinput: {
     display: "flex",
@@ -272,14 +474,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   smallDropdown: {
-    width: 165,
-    margin: 10,
+    width: 300,
     marginVertical: 15,
+    marginHorizontal: 10,
   },
   dropdownBox: {
     backgroundColor:"#e7e0ec",
+    height: 55,
     borderColor: "white",
-    borderRadius: 15,
+    borderRadius: 50,
+    paddingLeft: 10,
   },
   linearGradient: {
     width: 350,

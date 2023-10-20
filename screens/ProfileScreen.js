@@ -22,6 +22,12 @@ class ProfileScreen extends Component {
             activeUser: this.props.route.params.activeUser,
         });
 
+        if (this.props.route.params && this.props.route.params.activeUser) {
+            this.state.activeUser = this.props.route.params.activeUser;
+            console.log('--- Profile ');
+            console.log(this.state.activeUser)
+        }
+
         const accountDoc = firebase.firestore().collection("accounts")
         .doc(this.props.route.params.activeUser.key);
 
@@ -42,12 +48,6 @@ class ProfileScreen extends Component {
 
     render() {
         const {navigation} = this.props
-
-        if (this.props.route.params && this.props.route.params.activeUser) {
-            this.state.activeUser = this.props.route.params.activeUser;
-            console.log('--- Profile ');
-            console.log(this.state.activeUser)
-        }
 
         return ( 
             <View style={styles.screen}>
@@ -76,8 +76,11 @@ class ProfileScreen extends Component {
                     </Text>
                     <View style={styles.box} >
                         <Pressable onPress={() => {
-                            navigation.navigate("editProfile", {});
-                            return console.log("Edit profile")
+                            console.log("Active user from Profile")
+                            console.log(this.state.activeUser)
+                            navigation.navigate("editProfile", {
+                                activeUser: this.state.activeUser
+                            });
                         }}>
                             <View style={styles.group}>
                                 <Image

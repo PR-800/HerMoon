@@ -20,8 +20,8 @@ class TutorialScreen extends Component {
             weight: null,
             cycle: null, 
             freq: null,
-            new_user: true,
             dob: null, 
+            new_user: true,
             cycleList: [
                 {
                     label: "20 - 23 วัน",
@@ -197,7 +197,7 @@ class TutorialScreen extends Component {
                                 activeUnderlineColor="grey"
                                 textColor="black"
 
-                                label="ส่วนสูง"
+                                label="ส่วนสูง (ซม.)"
                                 onChangeText={(val) => this.inputValueUpdate(val, "height")}
                                 value={this.state.height != null ? this.state.height + "" : ""}
                             />
@@ -212,7 +212,7 @@ class TutorialScreen extends Component {
                                 textColor="black"
                                 keyboardType = 'numeric'
 
-                                label="นํ้าหนัก"
+                                label="นํ้าหนัก (กก.)"
                                 onChangeText={(val) => this.inputValueUpdate(val, "weight")}
                                 value={this.state.weight != null ? this.state.weight + "" : ""}
                             />
