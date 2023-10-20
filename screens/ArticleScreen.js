@@ -7,6 +7,9 @@ import { useFonts } from 'expo-font';
 import firebase from '../data/firebaseDB';
 import { enableExpoCliLogging } from 'expo/build/logs/Logs';
 
+import { format } from 'date-fns';
+import { th } from 'date-fns/locale';
+
 class ArticleScreen extends Component {
     constructor() {
         super();
@@ -90,7 +93,9 @@ class ArticleScreen extends Component {
                         
                         const rawDate = item.date.toDate();
                         const options = { day: 'numeric', month: 'long', year: 'numeric' };
-                        const formattedDate = rawDate.toLocaleDateString('en-GB', options);
+                        // const formattedDate = rawDate.toLocaleDateString('en-GB', options);
+                        const formattedDate = format(rawDate, 'dd LLL yyyy', { locale: th });
+
 
                         // console.log('item.date :>> ', item.date);
                         // console.log('formattedDate :>> ', formattedDate);
