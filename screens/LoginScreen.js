@@ -13,13 +13,14 @@ class LoginScreen extends Component {
     constructor() {
         super();
         this.accountCollection = firebase.firestore().collection("accounts");
-        this.state = {username: "", password: "", showPassword: true, all_data: [], appIsReady: false, activeUser: null,};
+        this.state = {
+            username: "", 
+            password: "",
+            all_data: [], 
+            showPassword: true, 
+            appIsReady: false, 
+            activeUser: null,};
     }
-
-    prepareResources = async () => {
-        await cacheAssets();
-        this.setState({ appIsReady: true });
-    };
        
     inputValueUpdate = (val, prop) => {
         const state = this.state;
@@ -29,8 +30,8 @@ class LoginScreen extends Component {
 
     getCollection = (querySnapshot) => {
         querySnapshot.forEach((res) => {
-            const { username, password } = res.data();
-            this.state.all_data.push({ key: res.id, username, password });
+            const { username, password, new_user } = res.data();
+            this.state.all_data.push({ key: res.id, username, password, new_user });
         });
     };
 
@@ -144,9 +145,20 @@ class LoginScreen extends Component {
                             this.state.all_data.map((item, i) => {
                                 if (this.state.username === item.username && this.state.password === item.password) {
                                     match = true
-                                    this.props.navigation.navigate("tutorial", {
-                                        activeUser: item,
-                                    });
+                                    if(item.new_user === false) {
+                                        this.props.navigation.navigate("homePage", {
+                                            screen: "Profile",
+                                            params: {
+                                                activeUser: item,
+                                            },
+                                        });
+                                    }
+                                    else {
+                                        this.props.navigation.navigate("tutorial", {
+                                            activeUser: item,
+                                        });
+                                    }
+                                    
                                     this.state.username = ""
                                     this.state.password = ""
                                     console.log('-- ActiveUser from Login : ', item);

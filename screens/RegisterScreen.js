@@ -13,15 +13,34 @@ class SignUpScreen extends Component {
     constructor() {
         super();
         this.accountCollection = firebase.firestore().collection("accounts");
-        this.state = {username: "", password: "", confirmPassword: "", showPassword: true, showConfirmPassword: true};
+        this.state = {
+            username: "", 
+            password: "", 
+            confirmPassword: "", 
+            all_data: [], 
+            showPassword: true, 
+            showConfirmPassword: true};
     }
+
+    getCollection = (querySnapshot) => {
+        querySnapshot.forEach((res) => {
+            const { username } = res.data();
+            this.state.all_data.push({ username });
+        });
+    };
        
     async componentDidMount() {
         await Font.loadAsync({
             MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
             MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
         });
+
+        this.unsubscribe = this.accountCollection.onSnapshot(this.getCollection);
     }
+
+    componentWillUnmount() {
+        this.unsubscribe();    
+    }   
 
     inputValueUpdate = (val, prop) => {
         const state = this.state;
@@ -38,6 +57,7 @@ class SignUpScreen extends Component {
             weight: 0,
             dob: null,
             periodCycle: 0,
+            new_user: true,
         })
         .then((res) => {
             this.setState({username: "", password: ""});
@@ -45,6 +65,8 @@ class SignUpScreen extends Component {
     }
 
     render() {
+
+        let match = false
 
         return (
             <View style={styles.screen}>
@@ -128,16 +150,31 @@ class SignUpScreen extends Component {
                     <TouchableOpacity 
                         style={styles.button}
                         onPress={() => {
-                            if ((this.state.password === this.state.confirmPassword) && this.state.username != "" && this.state.password != "" && this.state.confirmPassword != "") {
-                                this.storeAccount()
-                                this.state.username = ""
-                                this.state.password = ""
-                                this.state.confirmPassword = ""
-                                alert('สมัครสมาชิกสำเร็จ')
-                                this.props.navigation.navigate("login", {});
+                            this.state.all_data.map((item, i) => {
+                                // console.log(this.state.username + " " + item.username)
+                                if (this.state.username === item.username) {
+                                    match = true
+                                    
+                                }
+                            })  
+                            if (this.state.username != "" && this.state.password != "" && this.state.confirmPassword != "") {
+                                if (match === true) {
+                                    alert("ขออภัย ชื่อผู้ใช้นี้ถูกใช้แล้ว")
+                                }
+                                else if ((this.state.password != this.state.confirmPassword)) {
+                                    alert("โปรดตรวจสอบความถูกต้องของข้อมูล")
+                                }
+                                else {
+                                    this.storeAccount()
+                                    this.state.username = ""
+                                    this.state.password = ""
+                                    this.state.confirmPassword = ""
+                                    alert('สมัครสมาชิกสำเร็จ')
+                                    this.props.navigation.navigate("login", {});
+                                }
                             }
                             else {
-                                alert('โปรดตรวจสอบข้อมูลให้ถูกต้อง')
+                                alert('โปรดกรอกข้อมูลให้ครบถ้วน')
                             }
                         }}
                     >

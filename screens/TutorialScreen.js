@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { TextInput } from 'react-native-paper';
-import DropDown from "react-native-paper-dropdown";
+import { TextInput, HelperText } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { Provider } from 'react-native-paper'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import * as Font from 'expo-font';
 
@@ -16,24 +16,55 @@ class TutorialScreen extends Component {
         super();
         this.state = {
             name: "", 
+            height: null,
+            weight: null,
             cycle: null, 
+            freq: null,
+            new_user: true,
+            dob: null, 
             cycleList: [
                 {
-                    label: "Male",
-                    value: "male",
+                    label: "20 - 23 วัน",
+                    value: 20,
                 },
                 {
-                    label: "Female",
-                    value: "female",
+                    label: "24 - 27 วัน",
+                    value: 24,
                 },
                 {
-                    label: "Others",
-                    value: "others",
+                    label: "28 - 31 วัน",
+                    value: 28,
+                },
+                {
+                    label: "32 - 35 วัน",
+                    value: 32,
                 },
             ],
-            showDropDown: false,
-            dob: new Date(), 
-            activeUser: null
+            freqList: [
+                {
+                    label: "2 - 4 วัน",
+                    value: 2,
+                },
+                {
+                    label: "3 - 5 วัน",
+                    value: 3,
+                },
+                {
+                    label: "4 - 6 วัน",
+                    value: 4,
+                },
+                {
+                    label: "5 - 7 วัน",
+                    value: 5,
+                },
+            ],
+            cycleDropDown: false,
+            freqDropDown: false,
+            nameHelper: false,
+            cycleHelper: false,
+            freqHelper: false,
+            activeUser: null,
+            isDatePickerVisible: false,
         };
     }
 
@@ -49,8 +80,12 @@ class TutorialScreen extends Component {
             MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
         });
 
+        { this.props.route.params.activeUser ? this.setState({ activeUser: this.props.route.params.activeUser }) : ""}
+        console.log("-- Tutorial ")
+        console.log(this.state.activeUser)
+
         const accountDoc = firebase.firestore().collection("accounts")
-        .doc(this.props.route.params.activeUser.key);
+        .doc(this.props.route.params.activeUser ? this.props.route.params.activeUser.key : this.state.activeUser.key);
 
         accountDoc.get().then((res) => {
             if (res.exists) {
@@ -58,6 +93,12 @@ class TutorialScreen extends Component {
                 this.setState({
                     key: res.id, 
                     name: doc.name, 
+                    height: doc.height,
+                    weight: doc.weight,
+                    dob: doc.dob,
+                    periodCycle: doc.periodCycle,
+                    freq: doc.freq,
+                    new_user: doc.new_user,
                 });
             }
             else {
@@ -66,48 +107,164 @@ class TutorialScreen extends Component {
         });
     }
 
-    render() {
-        this.state.activeUser = this.props.route.params.activeUser;
-        console.log("-- Tutorial ")
-        console.log(this.state.activeUser)
+    getDate = () => {
+        if (this.state.dob instanceof Date) {
+            const day = this.state.dob.getDate();
+            const month = this.state.dob.getMonth() + 1;
+            const year = this.state.dob.getFullYear();
+        
+            const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+            return formattedDate;
+        } 
+        else {
+            return '';
+        }
+    };
 
+    updateAccount() {
+        const accountDoc = firebase.firestore().collection("accounts")
+        .doc(this.props.route.params.activeUser ? this.props.route.params.activeUser.key : this.state.activeUser.key);
+
+        console.log("accDoc" + accountDoc)
+
+        accountDoc
+        .set({
+            username: this.state.activeUser.username,
+            password: this.state.activeUser.password,
+            name: this.state.name, 
+            height: this.state.height,
+            weight: this.state.weight,
+            dob: this.state.dob,
+            periodCycle: this.state.cycle,
+            freq: this.state.freq,
+            new_user: false,
+        })
+    }
+
+    render() {
         return (
             <View style={styles.screen}>
                 <LinearGradient
                     colors={['#FC7D7B', '#9F79EB']}
                     style={styles.gradientBackground}
                 >
-                    <View style={styles.top}>
-                        <Text>progress bar</Text>
-                    </View>
-    
                     <View style={styles.content}>
-                    <Text style={styles.text}>ยังไม่ได้ทำ update</Text>
+                        <View style={styles.header}>
+                            <View>
+                                <Text style={styles.headerText}>ลงทะเบียน</Text>
+                                <Text style={styles.headerText}>ข้อมูลผู้ใช้</Text>
+                            </View>
+                        </View>
                         {/* <Text style={styles.text}>{this.state.activeUser.key}</Text> */}
-                        <TextInput 
-                            style={styles.input} 
-                            theme={{ 
-                                roundness: 50, 
-                                colors: { onSurfaceVariant: 'grey'} 
-                            }} 
-                            underlineColor="transparent"
-                            activeUnderlineColor="grey"
-                            textColor="black"
+                        <View >
+                            <TextInput 
+                                style={styles.input} 
+                                theme={{ 
+                                    roundness: 50, 
+                                    colors: { onSurfaceVariant: 'grey'} 
+                                }} 
+                                underlineColor="transparent"
+                                activeUnderlineColor="grey"
+                                textColor="black"
 
-                            label="ชื่อ (สำหรับใช้แสดง)"
-                            onChangeText={(val) => this.inputValueUpdate(val, "name")}
-                            value={this.state.name}
+                                label="ชื่อที่แสดง"
+                                onChangeText={(val) => this.inputValueUpdate(val, "name")}
+                                value={this.state.name != null ? this.state.name : ""} 
+                            />
+                            <View style={{ flexDirection: 'row' }}>
+                                <MaterialCommunityIcons 
+                                    name={'information'} 
+                                    size={24} 
+                                    color="white"
+                                    onPress={() => this.setState({ nameHelper: !this.state.nameHelper })}
+                                    style={{ left: 24, marginTop: -5 }}
+                                />
+                                <HelperText type="info" visible={this.state.nameHelper}
+                                    style={{ width: 250, fontFamily: "MitrRegular", color:"white", fontSize: 14, marginTop: -10, marginLeft: 18}}>
+                                    ใช้สำหรับแสดงผลบนแอปพลิเคชัน สามารถเปลี่ยนแปลงได้ภายหลัง
+                                </HelperText>
+                            </View>
+                        </View>
+
+                        <View style={{flexDirection: 'row', marginBottom: 15, marginTop: -10}}>
+                            <TextInput 
+                                style={[styles.input, {width: 140, marginHorizontal: 10}]} 
+                                theme={{ 
+                                    roundness: 50, 
+                                    colors: { onSurfaceVariant: 'grey'} 
+                                }} 
+                                underlineColor="transparent"
+                                activeUnderlineColor="grey"
+                                textColor="black"
+
+                                label="ส่วนสูง"
+                                onChangeText={(val) => this.inputValueUpdate(val, "height")}
+                                value={this.state.height != null ? this.state.height + "" : ""}
+                            />
+                            <TextInput 
+                                style={[styles.input, {width: 140, marginHorizontal: 10}]}
+                                theme={{ 
+                                    roundness: 50, 
+                                    colors: { onSurfaceVariant: 'grey'} 
+                                }} 
+                                underlineColor="transparent"
+                                activeUnderlineColor="grey"
+                                textColor="black"
+                                keyboardType = 'numeric'
+
+                                label="นํ้าหนัก"
+                                onChangeText={(val) => this.inputValueUpdate(val, "weight")}
+                                value={this.state.weight != null ? this.state.weight + "" : ""}
+                            />
+                        </View>
+
+                        <View style={{flexDirection: 'row'}}>
+                            <TextInput 
+                                style={[styles.input, {marginTop: -5, width: 240}]} 
+                                theme={{ 
+                                    roundness: 50, 
+                                    colors: { onSurfaceVariant: 'grey'} 
+                                }} 
+                                underlineColor="transparent"
+                                activeUnderlineColor="grey"
+                                textColor="black"
+                                editable={false}
+
+                                label="วันเกิด"
+                                onChangeText={(val) => this.inputValueUpdate(val, "dob")}
+                                value={this.state.dob != null ? this.state.dob + "" : ""} 
+                            />
+                            <MaterialCommunityIcons 
+                                name={'calendar'} 
+                                size={24} 
+                                color="white"
+                                onPress={() => this.setState({ isDatePickerVisible: true })}
+                                style={{fontSize: 40, marginRight: 20,}}
+                            />
+                        </View>
+                        <DateTimePickerModal
+                            isVisible={this.state.isDatePickerVisible}
+                            mode="date"
+                            onConfirm={(date) => {
+                                this.setState({ dob: date });
+                                const format = this.getDate()
+                                this.setState({ dob: format });
+                                this.setState({ isDatePickerVisible: false });
+                            }}
+                            onCancel={() => {
+                                this.setState({ isDatePickerVisible: false });
+                            }}
                         />
-
+                    
                         <View style={styles.smallDropdown}>
                             <DropDownPicker
                                 style={styles.dropdownBox}
-                                placeholder='Cycle'
-                                placeholderTextColor="grey"
-                                open={this.state.showDropDown}
+                                zIndex={20} 
+                                placeholder='รอบเดือน'
+                                open={this.state.cycleDropDown}
                                 value={this.state.cycle}
                                 items={this.state.cycleList}
-                                setOpen={(showDropDown) => this.setState({ showDropDown })}
+                                setOpen={(cycleDropDown) => this.setState({ cycleDropDown })}
                                 setValue={(valueCallback) => {
                                     const selectedValue = valueCallback();
                                     this.setState({ cycle: selectedValue });
@@ -116,6 +273,7 @@ class TutorialScreen extends Component {
                                 placeholderStyle={{
                                     marginLeft: 10,
                                     fontSize: 16,
+                                    color: 'grey',
                                 }}
                                 labelStyle={{
                                     marginLeft: 10,
@@ -126,40 +284,88 @@ class TutorialScreen extends Component {
                                     fontSize: 16,
                                 }}
                             />
+                            <View style={{ flexDirection: 'row'}}>
+                                <MaterialCommunityIcons 
+                                    name={'information'} 
+                                    size={24} 
+                                    color="white"
+                                    onPress={() => this.setState({ cycleHelper: !this.state.cycleHelper })}
+                                    style={{ left: 10, marginTop: 10}}
+                                />
+                                <HelperText type="info" visible={this.state.cycleHelper}
+                                    style={{ fontFamily: "MitrRegular", color:"white", fontSize: 14, marginTop: 10, marginLeft: 5}}>
+                                    ระยะห่างรอบเดือนแต่ละครั้ง
+                                </HelperText>
+                            </View>
+                            
                         </View>
-                        
-                        
-                        <TextInput 
-                            style={styles.input} 
-                            theme={{ 
-                                roundness: 50, 
-                                colors: { onSurfaceVariant: 'grey'} 
-                            }} 
-                            underlineColor="transparent"
-                            activeUnderlineColor="grey"
-                            textColor="black"
-
-                            label="วันเกิด"
-                            onChangeText={(val) => this.inputValueUpdate(val, "name")}
-                            value={this.state.username}
-                        />
+                        <View style={styles.smallDropdown}>
+                            <DropDownPicker
+                                style={styles.dropdownBox}
+                                zIndex={10} 
+                                placeholder='จำนวนวัน'
+                                placeholderTextColor="grey"
+                                open={this.state.freqDropDown}
+                                value={this.state.freq}
+                                items={this.state.freqList}
+                                setOpen={(freqDropDown) => this.setState({ freqDropDown })}
+                                setValue={(valueCallback) => {
+                                    const selectedValue = valueCallback();
+                                    this.setState({ freq: selectedValue });
+                                    console.log("Selected value: " + selectedValue);
+                                }}
+                                placeholderStyle={{
+                                    marginLeft: 10,
+                                    fontSize: 16,
+                                    color: 'grey',
+                                }}
+                                labelStyle={{
+                                    marginLeft: 10,
+                                    fontSize: 16,
+                                }}
+                                itemStyle={{
+                                    marginLeft: 10,
+                                    fontSize: 16,
+                                }}
+                            />
+                            <View style={{ flexDirection: 'row'}}>
+                                <MaterialCommunityIcons 
+                                    name={'information'} 
+                                    size={24} 
+                                    color="white"
+                                    onPress={() => this.setState({ freqHelper: !this.state.freqHelper })}
+                                    style={{ left: 10, marginTop: 10}}
+                                />
+                                <HelperText type="info" visible={this.state.freqHelper}
+                                    style={{ fontFamily: "MitrRegular", color:"white", fontSize: 14, marginTop: 10, marginLeft: 5}}>
+                                    ระยะเวลาที่มีประจำเดือน
+                                </HelperText>
+                            </View>
+                        </View> 
                     </View>
-    
-                    <View style={styles.bottom}>
+
+                    <View style={[styles.bottom, {zIndex: 20}]}>
                         <TouchableOpacity 
                             style={styles.button}
                             onPress={() => {
-                                this.props.navigation.navigate("homePage", {
-                                    screen: "Profile",
-                                    params: {
-                                        activeUser: this.state.activeUser,
-                                    },
-                                });
+                                if(this.state.name != "" && this.state.height != null && this.state.weight != null &&
+                                    this.state.cycle != null && this.state.freq!= null && this.state.dob != null) {
+                                    this.updateAccount()
+                                    this.props.navigation.navigate("homePage", {
+                                        screen: "Profile",
+                                        params: {
+                                            activeUser: this.state.activeUser,
+                                        },
+                                    });
+                                }
+                                else {
+                                    alert("โปรดกรอกข้อมูลให้ครบถ้วน")
+                                }
                             }}
                         >
                             <Text style={styles.textButton}>เริ่มต้นใช้งาน</Text>
                         </TouchableOpacity>
-    
+
                         <TouchableOpacity 
                             onPress={() => {
                                 this.props.navigation.navigate("homePage", {
@@ -170,15 +376,6 @@ class TutorialScreen extends Component {
                                 });
                             }}
                         >
-                            <Text style={[styles.text, { 
-                                top: 15,
-                                fontSize: 15,
-                                textShadowColor: 'rgba(0, 0, 0, 0.5)',
-                                textShadowOffset: {width: -1, height: 2},
-                                textShadowRadius: 15,
-                            }]}>
-                                Skip for now
-                            </Text>
                         </TouchableOpacity>
                     </View>
                     
@@ -188,32 +385,14 @@ class TutorialScreen extends Component {
     }
 }
 
-// const TutorialScreen = ({navigation, images}) => {
-
-    // const [loaded] = useFonts({
-    //     MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
-    //     MitrRegular: require('../assets/fonts/Mitr-Regular.ttf'),
-    // });
-
-    // if (!loaded) {
-    //     return null;
-    // }
-// };
-
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
     },
-    top: {
-        height: "10%",
-        width: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-    },
     content: {
-        height: "70%",
+        // height: "80%",
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
@@ -224,9 +403,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    header: {
+        alignItems: "flex-start",
+        width: "65%",
+        marginBottom: 20,
+    },
+    headerText: {
+        color: "white",
+        fontSize: 50,
+        fontFamily: 'MitrMedium',
+        lineHeight: 60,
+    },
     text: {
         color: "white",
-        fontSize: 23,
+        fontSize: 16,
         fontFamily: 'MitrRegular',
     },
     button: {
@@ -252,10 +442,10 @@ const styles = StyleSheet.create({
         fontFamily: 'MitrMedium',
     },
     bottom: {
-        height: "20%",
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
+        top: 30,
     },
     input: {
         width: 300,
@@ -277,8 +467,8 @@ const styles = StyleSheet.create({
     },
     smallDropdown: {
         width: 300,
-        margin: 15,
-        alignItems: 'center', justifyContent: 'center'
+        marginVertical: 10,
+        marginHorizontal: 10,
     },
     dropdownBox: {
         height: 55,
