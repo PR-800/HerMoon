@@ -26,8 +26,8 @@ const HomeScreen = (props) => {
 
     const [colorM, setColorM] = useState('เลือกสีประจำเดือน'); //เก็บค่าสีของประจำเดือนที่ส่งผ่าน route
     const [volumM, setVolumM] = useState('เลือกปริมาณประจำเดือน'); //เก็บค่าปริมาณประจำเดือนที่ส่งผ่าน route
-    const [notesM, setNoteM] = useState('ข้อมูลเพิ่มเติม'); //เก็บข้อมูลเพิ่มเติมของประจำเดือนที่ส่งผ่าน route
-    console.log('notesM :>> ', notesM);
+    const [notesM, setNoteM] = useState('บันทึกข้อมูลเพิ่มเติม'); //เก็บบันทึกข้อมูลเพิ่มเติมของประจำเดือนที่ส่งผ่าน route
+    console.log('colorM :>> ', colorM);
 
     const date = new Date(); //สำหรับแสดงวันที่
 
@@ -121,7 +121,7 @@ const HomeScreen = (props) => {
             if (querySnapshot.empty) {
                 console.log("ไม่พบข้อมูลที่ตรงกับวันที่ " + formattedDate);
                 // ข้อมูลที่ต้องการเพิ่ม
-                if(colorM == 'เลือกสีประจำเดือน' || volumM == 'เลือกปริมาณประจำเดือน' || notesM == 'ข้อมูลเพิ่มเติม'){
+                if(colorM == 'เลือกสีประจำเดือน' || volumM == 'เลือกปริมาณประจำเดือน'){
                     Dialog.show({
                         type: ALERT_TYPE.WARNING,
                         title: (
@@ -274,7 +274,7 @@ const HomeScreen = (props) => {
                         </View>
                         <View style={{ justifyContent:'center', paddingLeft: 10 , paddingRight: 5, flex: 1}}>
                             <Text style={styles.textNormal}>
-                                {notesM === 'ข้อมูลเพิ่มเติม' ? 'ข้อมูลเพิ่มเติม' : notesM.map(note => `\u2022 ${note}`).join('\n')}
+                                {notesM === 'บันทึกข้อมูลเพิ่มเติม' || '' ? 'บันทึกข้อมูลเพิ่มเติม' : notesM.map(note => `\u2022 ${note}`).join('\n')}
                             </Text>
                         </View>
                     </View>

@@ -6,6 +6,17 @@ import { LinearGradient } from 'expo-linear-gradient';
 // component สำหรับเลือกสีประจำเดือนที่ต้องการ
 const MenstrualLevelModal = ({ visible, onClose, navigation }) => {
     const [dataColorModal, setDataColorModal] = useState(''); //เก็บข้อมูลสีประจำเดือนเพื่อนำไปแสดงหน้า Home
+
+    const colors = [
+        { value: 'สีแดงสด', hex: '#FF0000' },
+        { value: 'สีแดงส้ม', hex: '#FD4400' },
+        { value: 'สีแดงเข้ม', hex: '#BE0A01' },
+        { value: 'สีชมพู', hex: '#FF97C5' },
+        { value: 'สีน้ำตาล', hex: '#7A601C' },
+        { value: 'สีแดงอมเทาปนเขียว', hex: '#576458' },
+        { value: 'สีดำ', hex: 'black' },
+    ];
+
     return (
         <Modal
             transparent={true}
@@ -20,81 +31,30 @@ const MenstrualLevelModal = ({ visible, onClose, navigation }) => {
                         />
                         <Text style={styles.textHeader}>ระดับความเข้มของสี</Text>
                     </View>
-                    <View style={{ backgroundColor: 'white', borderRadius: 40, padding: 20 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value='สีแดงสด'
-                                status={dataColorModal === 'สีแดงสด' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModal('สีแดงสด')}
-                                color='#FF0000'
-                            />
-                            <Text style={styles.textNormal}>สีแดงสด</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value='สีแดงส้ม'
-                                status={dataColorModal === 'สีแดงส้ม' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModal('สีแดงส้ม')}
-                                color='#FD4400'
-                            />
-                            <Text style={styles.textNormal}>สีแดงส้ม</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value='สีแดงเข้ม'
-                                status={dataColorModal === 'สีแดงเข้ม' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModal('สีแดงเข้ม')}
-                                color='#BE0A01'
-                            />
-                            <Text style={styles.textNormal}>สีแดงเข้ม</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value='สีชมพู'
-                                status={dataColorModal === 'สีชมพู' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModal('สีชมพู')}
-                                color='#FF97C5'
-                            />
-                            <Text style={styles.textNormal}>สีชมพู</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value='สีน้ำตาล'
-                                status={dataColorModal === 'สีน้ำตาล' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModal('สีน้ำตาล')}
-                                color='#7A601C'
-                            />
-                            <Text style={styles.textNormal}>สีน้ำตาล</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value='สีแดงอมเทาปนและสีเขียว'
-                                status={dataColorModal === 'สีแดงอมเทาปนและสีเขียว' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModal('สีแดงอมเทาปนและสีเขียว')}
-                                color='#576458'
-                            />
-                            <Text style={styles.textNormal}>สีแดงอมเทาปนและสีเขียว</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value='สีดำ'
-                                status={dataColorModal === 'สีดำ' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModal('สีดำ')}
-                                color='black'
-                            />
-                            <Text style={styles.textNormal}>สีดำ</Text>
-                        </View>
-                        {/* <Text style={styles.modalText02}> {dataColorModal} </Text> */}
+                    <View style={{ backgroundColor: 'white', borderRadius: 20, width: 250, height: 300, paddingHorizontal: 10, paddingVertical: 20, alignSelf: 'center' }}>
+
+                        {colors.map((color) => (
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }} key={color.value}>
+                                <RadioButton
+                                    value={color.value}
+                                    status={dataColorModal === color.value ? 'checked' : 'unchecked'}
+                                    onPress={() => setDataColorModal(color.value)}
+                                    color={color.hex}
+                                />
+                                <Text style={styles.textNormal}>{color.value}</Text>
+                            </View>
+                        ))}
                     </View>
+
                     <View style={{position:'absolute', bottom: 10, right: 10}}>
                         <TouchableOpacity onPress={() => {
+                            setDataColorModal(dataColorModal)
                             navigation.navigate("Home", { dataColorModal });
-                            return console.log("dataColorModal to home =>", dataColorModal)
+                            console.log("dataColorModal to home =>", dataColorModal)
                         }}>
                             <Image
 
                                 source={require('../assets/Home/save01-icon.png')}
-                                style={styles.image}
                             />
                         </TouchableOpacity>
                     </View>
@@ -103,7 +63,6 @@ const MenstrualLevelModal = ({ visible, onClose, navigation }) => {
                             <Image
 
                                 source={require('../assets/Home/arrow-left-icon.png')}
-                                style={styles.image}
                             />
                         </TouchableOpacity>
                     </View>

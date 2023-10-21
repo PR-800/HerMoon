@@ -31,8 +31,7 @@ const NotesModal = ({ visible, onClose, navigation }) => {
 
 
     const [dataNotesModal, setDataNotesModal] = useState(''); //เก็บข้อมูลเพิ่มเติมของประจำเดือนเพื่อนำไปแสดงหน้า Home
-    console.log('dataNotesModal :>> ', dataNotesModal);
-    // onPress={() => setDataNotesModal('อาการปวดท้องรุนแรง', 'ประจำเดือนมาหลายวันเกินไป')}
+    // console.log('dataNotesModal :>> ', dataNotesModal);
     return (
         <Modal
             transparent={true}
