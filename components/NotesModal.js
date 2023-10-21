@@ -28,10 +28,6 @@ const NotesModal = ({ visible, onClose, navigation }) => {
     ]
     // console.log('selectedTags :>> ', selectedTags);
 
-
-
-    const [dataNotesModal, setDataNotesModal] = useState(''); //เก็บข้อมูลเพิ่มเติมของประจำเดือนเพื่อนำไปแสดงหน้า Home
-    // console.log('dataNotesModal :>> ', dataNotesModal);
     return (
         <Modal
             transparent={true}
@@ -73,8 +69,7 @@ const NotesModal = ({ visible, onClose, navigation }) => {
                     <View style={{position:'absolute', bottom: 10, right: 10}}>
                         <TouchableOpacity
                             onPress={() => {
-                                setDataNotesModal(selectedTags);
-                                navigation.navigate("Home", { dataNotesModal });
+                                navigation.navigate("Home", { selectedTags });
                                 console.log('selectedTags2 :>> ', selectedTags);
                             }}>
                             <Image

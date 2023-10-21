@@ -8,26 +8,26 @@ import moment from 'moment';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 //import component
-import MenstrualLevelModel from '../components/MenstrualLevelModal';
+import MenstrualLevelModal from '../components/MenstrualLevelModal';
 import MenstrualVolumeLevelModel from '../components/MenstrualVolumeLevelModal';
 import NotesModal from '../components/NotesModal';
 import CalendarStripC from '../components/CalendarStrip';
 
-const HomeScreen = (props) => {
+const HomeScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
 
     const [activeUser, setActiveUser] = useState({});
     const [name, setName] = useState();
 
-    const [modalVisibleBlood, setModalVisibleBlood] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualLevelModel
+    const [modalVisibleBlood, setModalVisibleBlood] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualLevelModal
     const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualVolumeLevelModel
     const [modalVisibleNotes, setModalVisibleNotes] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component NotesModal
 
     const [colorM, setColorM] = useState('เลือกสีประจำเดือน'); //เก็บค่าสีของประจำเดือนที่ส่งผ่าน route
     const [volumM, setVolumM] = useState('เลือกปริมาณประจำเดือน'); //เก็บค่าปริมาณประจำเดือนที่ส่งผ่าน route
     const [notesM, setNoteM] = useState('บันทึกข้อมูลเพิ่มเติม'); //เก็บบันทึกข้อมูลเพิ่มเติมของประจำเดือนที่ส่งผ่าน route
-    console.log('colorM :>> ', colorM);
+    // console.log('notesM :>> ', notesM);
 
     const date = new Date(); //สำหรับแสดงวันที่
 
@@ -40,15 +40,15 @@ const HomeScreen = (props) => {
 
         if (route.params) {
             //ค่าที่ส่งมาจาก component ใช้ route.params ในการเอาค่ามาแสดง
-            const { dataColorModel, dataVolumeModel, dataNotesModal } = route.params;
-            if (dataColorModel) {
-                setColorM(dataColorModel);
+            const { dataColorModal, dataVolumeModel, selectedTags } = route.params;
+            if (dataColorModal) {
+                setColorM(dataColorModal);
             }
             if (dataVolumeModel) {
                 setVolumM(dataVolumeModel);
             }
-            if (dataNotesModal) {
-                setNoteM(dataNotesModal);
+            if (selectedTags) {
+                setNoteM(selectedTags);
             }
         }
 
@@ -69,7 +69,7 @@ const HomeScreen = (props) => {
         
     }, [route.params]);
 
-    //สำหรับ open, close => MenstrualLevelModel
+    //สำหรับ open, close => MenstrualLevelModal
     const BloodIcon = () => {
         setModalVisibleBlood(!modalVisibleBlood);
     };
@@ -210,7 +210,6 @@ const HomeScreen = (props) => {
             <View style={{ marginLeft: -250 }}>
                 <Pressable onPress={() => {
                     navigation.navigate("History", {});
-                    return console.log("History")
                 }}>
                     <Image
                         source={require('../assets/Home/clock-icon.png')}
@@ -249,7 +248,7 @@ const HomeScreen = (props) => {
                         </View>
                     </View>
                 </TouchableOpacity>
-                <MenstrualLevelModel visible={modalVisibleBlood} onClose={BloodIcon} navigation={navigation} />
+                <MenstrualLevelModal visible={modalVisibleBlood} onClose={BloodIcon} navigation={navigation} />
                 <TouchableOpacity onPress={SanitaryPadIcon}>
                     <View style={[styles.textBox, {height: 45, borderColor: '#89DCFF'}]}>
                         <View style={{ justifyContent: 'center'}}>

@@ -54,7 +54,7 @@ class HistoryScreen extends Component {
         >
           <View style={styles.navbar}>
             <Pressable onPress={() => {
-              navigation.navigate("Profile", {});
+              navigation.navigate("Home", {});
             }}>
               <Image
                 style={styles.icon}

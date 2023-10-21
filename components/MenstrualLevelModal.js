@@ -49,7 +49,7 @@ const MenstrualLevelModal = ({ visible, onClose, navigation }) => {
                     <View style={{position:'absolute', bottom: 10, right: 10}}>
                         <TouchableOpacity onPress={() => {
                             setDataColorModal(dataColorModal)
-                            navigation.navigate("Home", { dataColorModal });
+                            navigation.navigate("Home", { dataColorModal:dataColorModal });
                             console.log("dataColorModal to home =>", dataColorModal)
                         }}>
                             <Image

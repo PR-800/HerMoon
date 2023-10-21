@@ -103,7 +103,7 @@ function MyBottomNavigator() {
                 tabBarShowLabel: false,
                 tabBarActiveBackgroundColor: '#eeebf5',
                 // tabBarInactiveBackgroundColor: '',
-                // tabBarStyle: { height: 52 },
+                tabBarStyle: { height: 52 },
             }}
         >
             <BottomNavigator.Screen name="Home" component={HomeScreen}
