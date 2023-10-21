@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { StyleSheet, Text, View, Image, Button, Pressable, TouchableWithoutFeedback, Modal, TouchableOpacity, ScrollView, DatePickerIOS, } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, Pressable, Modal, TouchableOpacity, ScrollView, } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -335,7 +335,8 @@ const EditProfileScreen = ({ route, navigation }) => {
 
         <Pressable
           style={[styles.button, styles.buttonOpen]}
-          onPress={() => setModalVisible(true)}>
+          onPress={() => setModalVisible(true)}
+        >
           <Text style={styles.textStyle}>ระบุรายละเอียดเพิ่มเติม</Text>
           <Text style={{...styles.selectedTagsText, margin: 3}}>{selectedTags.length >= 1 ? 'รายการที่เลือก : '+  selectedTags.join(', ') : ''}</Text>
         </Pressable>
