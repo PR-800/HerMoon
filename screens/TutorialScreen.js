@@ -22,6 +22,7 @@ class TutorialScreen extends Component {
             freq: null,
             dob: null, 
             new_user: true,
+            img: "",
             cycleList: [
                 {
                     label: "20 - 23 วัน",
@@ -99,6 +100,7 @@ class TutorialScreen extends Component {
                     periodCycle: doc.periodCycle,
                     freq: doc.freq,
                     new_user: doc.new_user,
+                    img: doc.img,
                 });
             }
             else {
@@ -138,6 +140,7 @@ class TutorialScreen extends Component {
             periodCycle: this.state.cycle,
             freq: this.state.freq,
             new_user: false,
+            img: this.state.img,
         })
     }
 

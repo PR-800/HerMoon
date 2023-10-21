@@ -44,6 +44,11 @@ const EditProfileScreen = ({ route, navigation }) => {
   const [cycle, setCycle] = useState();
   const [freq, setFreq] = useState();
   const [dob, setDob] = useState();
+  const [img, setImg] = useState();
+  const [detail, setDetail] = useState();
+  
+
+
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [cycleDropDown, setCycleDropDown] = useState(false);
   const [freqDropDown, setFreqDropDown] = useState(false);
@@ -104,6 +109,8 @@ const EditProfileScreen = ({ route, navigation }) => {
               setCycle(doc.periodCycle);
               setFreq(doc.freq);
               setDob(doc.dob);
+              setImg(doc.img);
+              setDetail(doc.detail);
           }
           else {
               console.log("Document does not exist");
@@ -127,6 +134,8 @@ const EditProfileScreen = ({ route, navigation }) => {
         periodCycle: cycle,
         freq: freq,
         new_user: false,
+        img: img,
+        // detail: detail,
     })
   }
 
@@ -357,7 +366,7 @@ const EditProfileScreen = ({ route, navigation }) => {
                 return console.log("SUBMITED")
           }}>
             <Text style={{color: "white", fontSize: 20, fontFamily: "MitrMedium",}}>
-            SUBMIT
+            ยืนยัน
             </Text>
           </Pressable>
         </LinearGradient>
@@ -406,7 +415,9 @@ const EditProfileScreen = ({ route, navigation }) => {
 
                 <Pressable
                   // style={[styles.buttonClose]}
-                  onPress={() => setModalVisible(!modalVisible)}>
+                  onPress={() => {setModalVisible(!modalVisible)
+                    // setDetail(selectedTags)
+                  }}>
                   <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
                     colors={['#9F79EB', '#FC7D7B',]}
                     style={styles.linearGradientModal}

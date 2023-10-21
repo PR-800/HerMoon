@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity, Modal  } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity, Modal, Alert  } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useFonts } from 'expo-font';
@@ -7,6 +7,7 @@ import { useFonts } from 'expo-font';
 import firebase from "../data/firebaseDB";
 import { Icon } from '@iconify/react';
 import { tr } from 'date-fns/locale';
+import { ScrollView } from 'react-native-web-hover';
 
 class ProfileScreen extends Component {
 
@@ -20,11 +21,18 @@ class ProfileScreen extends Component {
         this.state = {
             activeUser: null, 
             name: "",
+            periodCycle: '',
+            freq: '',
+            img: '',
             selectedPicture: null,
             modalVisible: false,
             profile_List: [],
         };
     }
+
+    // setActiveuser = () => {
+    //     this.setState({ activeUser });
+    // }
 
     getCollection = (querySnapshot) => {
         const all_data = [];
@@ -44,42 +52,85 @@ class ProfileScreen extends Component {
         });
     };
 
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
-
+    
     componentDidMount() {
-
+        
         this.unsubscribe = this.profilesCollection.onSnapshot(this.getCollection);
-
+        
         this.props.navigation.navigate("Calendar", {
             activeUser: this.props.route.params.activeUser,
         });
-
+        
         if (this.props.route.params && this.props.route.params.activeUser) {
             this.state.activeUser = this.props.route.params.activeUser;
             console.log('--- Profile ');
             console.log(this.state.activeUser)
         }
-
+        
         const accountDoc = firebase.firestore().collection("accounts")
         .doc(this.props.route.params.activeUser.key);
-
+        
         accountDoc.get().then((res) => {
             if (res.exists) {
                 const doc = res.data();
                 this.setState({
                     key: res.id, 
                     name: doc.name, 
+                    height: doc.height,
+                    weight: doc.weight,
+                    dob: doc.dob,
+                    periodCycle: doc.periodCycle,
+                    freq: doc.freq,
+                    new_user: doc.new_user,
+                    img: doc.img,
                 });
+                console.log('img :>> ', doc.img);
             }
             else {
                 console.log("Document does not exist");
             }
         });
-
+        
+    }
+    
+    componentWillUnmount() {
+        this.unsubscribe();
     }
 
+    //update
+    inputValueUpdate = (val, prop) => {
+        const state = this.state;
+        state[prop] = val;
+        this.setState(state);
+    };
+
+    updateImage() {
+
+        const updateImgDoc = firebase
+            .firestore()
+            .collection("accounts")
+            .doc(this.state.key);
+        updateImgDoc
+            .set({
+                username: this.state.activeUser.username,
+                password: this.state.activeUser.password,
+                name: this.state.name,
+                height: this.state.height,
+                weight: this.state.weight,
+                dob: this.state.dob,
+                periodCycle: this.state.cycle,
+                freq: this.state.freq,
+                new_user: false,
+                img: this.state.img,
+            })
+            .then(() => {
+                Alert.alert(
+                    "Updating Alert",
+                    "The Image was updated!! Pls check your DB!!"
+                );
+            });
+            console.log('this.state.img :>> ', this.state.img);
+    }
     
     //Modal
     setModalVisible = (visible) => {
@@ -111,9 +162,8 @@ class ProfileScreen extends Component {
                         <Image
                             // source={require('../assets/profile/blank-profile.jpg')}
                             source={{
-                                uri: this.state.selectedPicture == null
-                                ? 'https://cdn.discordapp.com/attachments/944667694517616720/1165257024787992687/blank-profile.jpg?ex=6546312c&is=6533bc2c&hm=02a4cba975984730be15792b7b8fd329c696d392f468d822f659bb4f9b725091&'
-                                : this.state.selectedPicture
+                                uri: this.state.img ? this.state.img
+                                : 'https://cdn.discordapp.com/attachments/944667694517616720/1165257024787992687/blank-profile.jpg?ex=6546312c&is=6533bc2c&hm=02a4cba975984730be15792b7b8fd329c696d392f468d822f659bb4f9b725091&'
                               }}            
                               
                             style={styles.image}
@@ -122,11 +172,10 @@ class ProfileScreen extends Component {
                     {/* })} */}
                     <Pressable onPress={() => {
                             this.setModalVisible(true)
-                            // console.log('setModalVisible :>> ', this.state.modalVisible);
                         }}>
                         <Image
-                            source={require('../assets/profile/edit-profile.png')}
-                            style={{width:50, height:50,bottom:50, left:55,}}
+                            source={require('../assets/profile/edit-profile2.png')}
+                            style={{width:50, height:50,bottom:50, left:55, backgroundColor: 'white', borderRadius: 25}}
                         />
                     </Pressable>
                     <Text style={styles.headers}>
@@ -134,14 +183,16 @@ class ProfileScreen extends Component {
                         {this.state.name}
                     </Text>
                     <Text style={styles.subheader}>
-                        รายละเอียด 1 | รายละเอียด 2
+                        ระยะห่าง : {this.state.periodCycle} วัน {'\n'}
+                        จำนวนวันที่เป็น : {this.state.freq} วัน
                     </Text>
                     <View style={styles.box} >
                         <Pressable onPress={() => {
                             console.log("Active user from Profile")
                             console.log(this.state.activeUser)
                             navigation.navigate("editProfile", {
-                                activeUser: this.state.activeUser
+                                activeUser: this.state.activeUser,
+                                img: this.state.img,
                             });
                         }}>
                             <View style={styles.group}>
@@ -156,7 +207,6 @@ class ProfileScreen extends Component {
                         
                         <Pressable onPress={() => {
                             navigation.navigate("notification", {});
-                            return console.log("Notifications")
                         }}>
                             <View style={styles.group}>
                                 <Image
@@ -214,7 +264,17 @@ class ProfileScreen extends Component {
 
                     <View style={{...styles.logoutButton, justifyContent: 'flex-end'}}>
                         <Pressable onPress={() => {
-                            this.props.navigation.navigate("login", {});
+                            Alert.alert(
+                                "ยืนยันการออกจากระบบ",
+                                "ต้องการออกจากระบบใช่หรือไม่ ?",
+                                [{
+                                    text: "ใช่",
+                                    onPress: () => {
+                                    //   setShowBox(false);
+                                      this.props.navigation.navigate("login", {});
+                                    }},
+                                  { text: "ไม่" },
+                                ]);
                         }}>
                             <View style={styles.group}>
                                 <Image
@@ -243,26 +303,57 @@ class ProfileScreen extends Component {
                     <TouchableOpacity
                         style={styles.modalBackdrop}
                         activeOpacity={1}
-                        onPress={this.closeModal}
+                        // onPress={this.closeModal}
                     >
                         <View style={styles.modalContent}>
                             <View>
                                 <Text style={styles.modalText}>เลือกรูปโปรไฟล์ : </Text>
+                                <Pressable
+                                    style={{position: 'absolute', right: -10, top: -15, }}
+                                    onPress={this.closeModal}
+                                >
+                                    <Image
+                                        source={require('../assets/profile/close.png')}
+                                        style={styles.icon}
+                                    />
+                                </Pressable>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
                                     {this.state.profile_List.map((picture, index) => (
                                         <TouchableOpacity key={index} onPress={() => this.handlePictureSelection(picture.uri)}>
-                                            <Image source={{ uri: picture.uri }} style={{ width: 100, height: 100, margin: 5, borderRadius: 50 }} />
+                                            <Image source={{ uri: picture.uri || 'https://media.discordapp.net/attachments/1100793171551715408/1162053686785232936/image.png?ex=6543c454&is=65314f54&hm=9cde83da09610bae67e60ee9c78b3980abacc7faf9673422f67e48512bef2677&=&width=1202&height=676' }}
+                                                style={{ width: 100, height: 100, margin: 5, borderRadius: 50 }} />
                                         </TouchableOpacity>
                                     ))}
                                 </View>
                                 {this.state.selectedPicture && (
-                                    <View style={{alignItems: 'center'}}>
+                                    <View style={{ alignItems: 'center' }}>
                                         <Text style={styles.modalText}>รูปที่เลือก : </Text>
-                                        <Image source={{ uri: this.state.selectedPicture }} style={{ width: 150, height: 150, borderRadius: 75}} />
+                                        <Image source={{ uri: this.state.selectedPicture }} style={{ width: 150, height: 150, borderRadius: 75, }} />
+
+                                        <Pressable
+                                            onPress={() => {
+                                                this.inputValueUpdate(this.state.selectedPicture, 'img'),
+
+                                                // มีปัญหาาา
+                                                // this.updateImage()
+                                                // console.log('this.state.selectedPicture :>> ', this.state.selectedPicture);
+                                                this.closeModal()
+
+                                            }}
+                                        >
+                                            <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                                                colors={['#9F79EB', '#FC7D7B',]}
+                                                style={styles.linearGradientModal}
+                                            >
+                                                <Text style={styles.buttonClose}>ใช้งาน</Text>
+                                            </LinearGradient>
+                                        </Pressable>
                                     </View>
                                 )}
+
                             </View>
                         </View>
+
                     </TouchableOpacity>
                 </Modal>
 
@@ -302,6 +393,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         color: "white",
         fontFamily: "MitrRegular",
+        textAlign: 'center',
 
         textShadowColor: 'rgba(0, 0, 0, 0.5)',
         textShadowOffset: {width: -1, height: 2},
@@ -407,8 +499,21 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: 'center', fontFamily: "MitrMedium",
         fontSize: 18,
-        marginVertical: 5,
-    }
+        marginVertical: 10,
+    },
+    linearGradientModal: {
+        width: 150,
+        height: 50,
+        marginTop: 15,
+        borderRadius: 25,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    buttonClose: {
+        color: 'white',
+        fontFamily: "MitrMedium",
+        fontSize: 20,
+    },
 });
 
 export default ProfileScreen

@@ -17,6 +17,7 @@ class SignUpScreen extends Component {
             username: "", 
             password: "", 
             confirmPassword: "", 
+            img: '',
             all_data: [], 
             showPassword: true, 
             showConfirmPassword: true};
@@ -53,6 +54,7 @@ class SignUpScreen extends Component {
             username: this.state.username,
             password: this.state.password,
             name: "",
+            img: '',
             height: null,
             weight: null,
             dob: null,

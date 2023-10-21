@@ -21,21 +21,20 @@ const NotificationScreen = ({ route, navigation }) => {
             <View style={styles.headerGroup}>
                 <Pressable onPress={() => {
                             navigation.navigate("Profile", {});
-                            return console.log("go Profile")
                         }}>
                     <Image
                     source={require('../assets/profile/arrow-left.png')}
                     style={styles.arrowleft}
                     />
                 </Pressable>
-                <Text style={styles.header}>Notifications</Text>
+                <Text style={styles.header}>การแจ้งเตือน</Text>
             </View>
             
             <Text style={styles.subHead}>
-                General
+                ทั่วไป
             </Text>
             <View style={styles.filterContainer}>
-                <Text style={styles.text}>General Notification</Text>
+                <Text style={styles.text}>การแจ้งเตือนทั้งหมด</Text>
                 <Switch
                 trackColor={{ true: "#9F79EB", false: "lightgray" }}
                 thumbColor={"blue"}
@@ -43,7 +42,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 />
             </View>
             <View style={styles.filterContainer}>
-                <Text style={styles.text}>Sound</Text>
+                <Text style={styles.text}>รอบประจำเดือน</Text>
                 <Switch
                 trackColor={{ true: "#ff6f00", false: "lightgray" }}
                 thumbColor={"#ff6f00"}
@@ -51,17 +50,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 />
             </View>
             <View style={styles.filterContainer}>
-                <Text style={styles.text}>Vibrate</Text>
-                <Switch
-                trackColor={{ true: "#ff6f00", false: "lightgray" }}
-                thumbColor={"#ff6f00"}
-                value={false}
-                />
-            </View>
-            <Text style={styles.subHead}>
-                System & Service updates</Text>
-            <View style={styles.filterContainer}>
-                <Text style={styles.text}>App updates</Text>
+                <Text style={styles.text}>เสียง</Text>
                 <Switch
                 trackColor={{ true: "#ff6f00", false: "lightgray" }}
                 thumbColor={"#ff6f00"}
@@ -69,7 +58,16 @@ const NotificationScreen = ({ route, navigation }) => {
                 />
             </View>
             <View style={styles.filterContainer}>
-                <Text style={styles.text}>Reminder</Text>
+                <Text style={styles.text}>การสั่น</Text>
+                <Switch
+                trackColor={{ true: "#ff6f00", false: "lightgray" }}
+                thumbColor={"#ff6f00"}
+                value={false}
+                />
+            </View>
+            <Text style={styles.subHead}>อัพเดตระบบและบริการ</Text>
+            <View style={styles.filterContainer}>
+                <Text style={styles.text}>อัพเดตแอปพลิเคชัน</Text>
                 <Switch
                 trackColor={{ true: "#ff6f00", false: "lightgray" }}
                 thumbColor={"#ff6f00"}
@@ -77,7 +75,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 />
             </View>
             <View style={styles.filterContainer}>
-                <Text style={styles.text}>Promotion</Text>
+                <Text style={styles.text}>บทความใหม่</Text>
                 <Switch
                 trackColor={{ true: "#ff6f00", false: "lightgray" }}
                 thumbColor={"#ff6f00"}
@@ -85,9 +83,10 @@ const NotificationScreen = ({ route, navigation }) => {
             />
             </View>
 
-        <Text style={styles.subHead}>
+        {/* <Text style={styles.subHead}>
             Others
-        </Text>
+        </Text> */}
+        
         {/* <ToggleSwitch
             isOn={false}
             onColor="#FC7D7B"
