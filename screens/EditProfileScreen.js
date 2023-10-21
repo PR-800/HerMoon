@@ -372,49 +372,52 @@ const EditProfileScreen = ({ route, navigation }) => {
               Alert.alert('Modal has been closed.');
               setModalVisible(!modalVisible);
             }}>
-              {/* <TouchableOpacity
-                        style={styles.modalBackdrop}
-                        activeOpacity={1}
-                        onPress={this.closeModal}
-                    > */}
-                <View style={styles.centeredView}>
-                  <View style={styles.modalView}>
-                    <Text style={styles.modalText}>โรคประจำตัว และอื่น ๆ</Text>
+            <TouchableOpacity
+              style={styles.modalBackdrop}
+              activeOpacity={1}
+            >
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>โรคประจำตัว และอื่น ๆ</Text>
 
-                    {/* TAG */}
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tagContainer}>
-                      {tags.map((tag) => (
-                        <TouchableOpacity
-                          key={tag}
-                          style={[
-                            styles.tag,
-                            { backgroundColor: selectedTags.includes(tag) ? '#9F79EB' : '#D9D9D9' },
-                          ]}
-                          onPress={() => toggleTag(tag)}
-                        >
-                          <Text style={[styles.tagText, { color: selectedTags.includes(tag) ? 'white' : 'black' }]}>{tag}</Text>
-                        </TouchableOpacity>
-                      ))}
-                    </ScrollView>
-                    <View style={{marginVertical: 10,}}>
-                      <Text style={{...styles.selectedTagsText}}>{selectedTags.length >= 1 ? 'รายการที่เลือก : '+  selectedTags.join(', ') : ''}</Text>
-                    </View>
 
-                  <Pressable
-                    // style={[styles.buttonClose]}
-                    onPress={() => setModalVisible(!modalVisible)}>
-                    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
-                      colors={['#9F79EB', '#FC7D7B',]}
-                      style={styles.linearGradientModal}
+                <View style={{ backgroundColor: 'white', borderRadius: 20, width: 250, height: 275, paddingHorizontal: 10, paddingVertical: 20, alignSelf: 'center', }}>
+                  <ScrollView vertical showsVerticalScrollIndicator={false}>
+                    {tags.map((tag) => (
+                      <TouchableOpacity
+                        key={tag}
+                        style={[
+                          styles.tag,
+                          { backgroundColor: selectedTags.includes(tag) ? '#9F79EB' : '#e8e8e8' },
+                        ]}
+                        onPress={() => toggleTag(tag)}
                       >
-                          <Text style={styles.buttonClose}>ยืนยัน</Text>
-                      </LinearGradient>
-                    </Pressable>
+                        <Text style={[styles.tagText, { color: selectedTags.includes(tag) ? 'white' : 'black' }]}>{tag}</Text>
+                      </TouchableOpacity>
+                    ))}
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center',}}>
 
-                  </View>
+                    </View>
+                  </ScrollView>
+
+                </View>
+                <View>
+                  <Text style={{ ...styles.selectedTagsText }}>{selectedTags.length >= 1 ? 'รายการที่เลือก : ' + selectedTags.join(', ') : ''}</Text>
                 </View>
 
-              {/* </TouchableOpacity> */}
+                <Pressable
+                  // style={[styles.buttonClose]}
+                  onPress={() => setModalVisible(!modalVisible)}>
+                  <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                    colors={['#9F79EB', '#FC7D7B',]}
+                    style={styles.linearGradientModal}
+                  >
+                    <Text style={styles.buttonClose}>ยืนยัน</Text>
+                  </LinearGradient>
+                </Pressable>
+
+              </View>
+
+            </TouchableOpacity>
           </Modal>
 
       </View>
@@ -491,18 +494,21 @@ const styles = StyleSheet.create({
   },
 
   // modal zone
+  modalBackdrop: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0,0,0,0.5)'
+    },
   centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-    backgroundColor: 'rgba(0,0,0,0.5)'
+    // flex: 1,
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
   modalView: {
-    margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
+    padding: 30,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -517,9 +523,7 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 20,
     padding: 10,
-    
     elevation: 2,
-    
     borderRadius: 15, 
     width: 350,
     // height: 55,
@@ -553,16 +557,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   modalText: {
-    marginBottom: 15,
     fontSize: 19,
-    textAlign: 'center',
     fontFamily: "MitrMedium",
   },
 
   // tag
-  tagContainer: {
-    alignItems: 'center',
-  },
   tag: {
     paddingHorizontal: 15,
     paddingVertical: 8,
@@ -572,12 +571,13 @@ const styles = StyleSheet.create({
   },
   tagText: {
     fontSize: 15,
-    fontFamily: "MitrMedium",
+    fontFamily: "MitrRegular",
+    textAlign: 'center'
   },
   selectedTagsText: {
-    marginBottom: 10,
+    marginBottom: 15,
     fontSize: 16,
-    fontFamily: "MitrMedium",
+    fontFamily: "MitrRegular",
     color: '#A43BA6',
   },
 

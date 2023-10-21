@@ -46,13 +46,13 @@ class ArticleScreen extends Component {
         });
       };
     
-      componentDidMount() {
+    componentDidMount() {
         this.unsubscribe = this.articlesCollection.onSnapshot(this.getCollection);
-      }
-    
-      componentWillUnmount() {
+    }
+
+    componentWillUnmount() {
         this.unsubscribe();
-      }
+    }
 
       render() {
         const {navigation} = this.props
