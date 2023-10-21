@@ -4,8 +4,8 @@ import { RadioButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 
 // component สำหรับเลือกสีประจำเดือนที่ต้องการ
-const MenstrualLevelModel = ({ visible, onClose, navigation }) => {
-    const [dataColorModel, setDataColorModel] = useState(''); //เก็บข้อมูลสีประจำเดือนเพื่อนำไปแสดงหน้า Home
+const MenstrualLevelModal = ({ visible, onClose, navigation }) => {
+    const [dataColorModal, setDataColorModal] = useState(''); //เก็บข้อมูลสีประจำเดือนเพื่อนำไปแสดงหน้า Home
     return (
         <Modal
             transparent={true}
@@ -24,8 +24,8 @@ const MenstrualLevelModel = ({ visible, onClose, navigation }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value='สีแดงสด'
-                                status={dataColorModel === 'สีแดงสด' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModel('สีแดงสด')}
+                                status={dataColorModal === 'สีแดงสด' ? 'checked' : 'unchecked'}
+                                onPress={() => setDataColorModal('สีแดงสด')}
                                 color='#FF0000'
                             />
                             <Text style={styles.textNormal}>สีแดงสด</Text>
@@ -33,8 +33,8 @@ const MenstrualLevelModel = ({ visible, onClose, navigation }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value='สีแดงส้ม'
-                                status={dataColorModel === 'สีแดงส้ม' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModel('สีแดงส้ม')}
+                                status={dataColorModal === 'สีแดงส้ม' ? 'checked' : 'unchecked'}
+                                onPress={() => setDataColorModal('สีแดงส้ม')}
                                 color='#FD4400'
                             />
                             <Text style={styles.textNormal}>สีแดงส้ม</Text>
@@ -42,8 +42,8 @@ const MenstrualLevelModel = ({ visible, onClose, navigation }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value='สีแดงเข้ม'
-                                status={dataColorModel === 'สีแดงเข้ม' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModel('สีแดงเข้ม')}
+                                status={dataColorModal === 'สีแดงเข้ม' ? 'checked' : 'unchecked'}
+                                onPress={() => setDataColorModal('สีแดงเข้ม')}
                                 color='#BE0A01'
                             />
                             <Text style={styles.textNormal}>สีแดงเข้ม</Text>
@@ -51,8 +51,8 @@ const MenstrualLevelModel = ({ visible, onClose, navigation }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value='สีชมพู'
-                                status={dataColorModel === 'สีชมพู' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModel('สีชมพู')}
+                                status={dataColorModal === 'สีชมพู' ? 'checked' : 'unchecked'}
+                                onPress={() => setDataColorModal('สีชมพู')}
                                 color='#FF97C5'
                             />
                             <Text style={styles.textNormal}>สีชมพู</Text>
@@ -60,8 +60,8 @@ const MenstrualLevelModel = ({ visible, onClose, navigation }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value='สีน้ำตาล'
-                                status={dataColorModel === 'สีน้ำตาล' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModel('สีน้ำตาล')}
+                                status={dataColorModal === 'สีน้ำตาล' ? 'checked' : 'unchecked'}
+                                onPress={() => setDataColorModal('สีน้ำตาล')}
                                 color='#7A601C'
                             />
                             <Text style={styles.textNormal}>สีน้ำตาล</Text>
@@ -69,8 +69,8 @@ const MenstrualLevelModel = ({ visible, onClose, navigation }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value='สีแดงอมเทาปนและสีเขียว'
-                                status={dataColorModel === 'สีแดงอมเทาปนและสีเขียว' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModel('สีแดงอมเทาปนและสีเขียว')}
+                                status={dataColorModal === 'สีแดงอมเทาปนและสีเขียว' ? 'checked' : 'unchecked'}
+                                onPress={() => setDataColorModal('สีแดงอมเทาปนและสีเขียว')}
                                 color='#576458'
                             />
                             <Text style={styles.textNormal}>สีแดงอมเทาปนและสีเขียว</Text>
@@ -78,18 +78,18 @@ const MenstrualLevelModel = ({ visible, onClose, navigation }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
                                 value='สีดำ'
-                                status={dataColorModel === 'สีดำ' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColorModel('สีดำ')}
+                                status={dataColorModal === 'สีดำ' ? 'checked' : 'unchecked'}
+                                onPress={() => setDataColorModal('สีดำ')}
                                 color='black'
                             />
                             <Text style={styles.textNormal}>สีดำ</Text>
                         </View>
-                        {/* <Text style={styles.modalText02}> {dataColorModel} </Text> */}
+                        {/* <Text style={styles.modalText02}> {dataColorModal} </Text> */}
                     </View>
-                    <View style={{ marginLeft: 130, marginTop: -60 }}>
+                    <View style={{position:'absolute', bottom: 10, right: 10}}>
                         <TouchableOpacity onPress={() => {
-                            navigation.navigate("Home", { dataColorModel });
-                            return console.log("dataColorModel to home =>", dataColorModel)
+                            navigation.navigate("Home", { dataColorModal });
+                            return console.log("dataColorModal to home =>", dataColorModal)
                         }}>
                             <Image
 
@@ -98,20 +98,11 @@ const MenstrualLevelModel = ({ visible, onClose, navigation }) => {
                             />
                         </TouchableOpacity>
                     </View>
-                    <View style={{ marginLeft: 190, marginTop: -300 }}>
+                    <View style={{position:'absolute', top: -30, right: 10 }}>
                         <TouchableOpacity onPress={onClose}>
                             <Image
 
                                 source={require('../assets/Home/arrow-left-icon.png')}
-                                style={styles.image}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ marginLeft: 110, marginTop: -30 }}>
-                        <TouchableOpacity>
-                            <Image
-
-                                source={require('../assets/Home/question-icon.png')}
                                 style={styles.image}
                             />
                         </TouchableOpacity>
@@ -154,4 +145,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default MenstrualLevelModel;
+export default MenstrualLevelModal;

@@ -7,7 +7,7 @@ import firebase from '../data/firebaseDB';
 import ImageView from 'react-native-image-view';
 
 import { format } from 'date-fns';
-import { th } from 'date-fns/locale';
+import { th, tr } from 'date-fns/locale';
 
 class ArticleDetailScreen extends Component {
     constructor() {
@@ -22,6 +22,7 @@ class ArticleDetailScreen extends Component {
             date: "",
             coverImg: "",
             formattedDate: '',
+            viewImage: false,
         };
     }
 
@@ -130,6 +131,7 @@ class ArticleDetailScreen extends Component {
                                     </Pressable>
                                 )}
 
+{/* Animated: `useNativeDriver` was not specified. This is a required option and must be explicitly set to `true` or `false` */}
                                 {/* <ImageView
                                         images={[{
                                             source: {
@@ -141,10 +143,11 @@ class ArticleDetailScreen extends Component {
                                                 },
                                             ]}
                                         imageIndex={0}
-                                        isVisible={viewImage? true : false}
+                                        isVisible={true}
+                                        // isVisible={this.state.viewImage}
                                         // renderFooter={(currentImage) => (<View><Text>My footer</Text></View>)}
-                                    /> */}
-    
+                                    />
+     */}
     
                                 <Text style={styles.detail}>
                                 {'\t'}{this.state.description}

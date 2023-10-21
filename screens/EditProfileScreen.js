@@ -14,49 +14,23 @@ import firebase from '../data/firebaseDB';
 import { setDayOfYear } from 'date-fns';
 
 const EditProfileScreen = ({ route, navigation }) => {
-  // วันเกิด
-  const [date, setDate] = useState(new Date())
-  const [open, setOpen] = useState(false)
-
-  const dropDownRef = React.useRef();
-  
-  const [OpenAge, setOpenAge] = useState(false);
-  const [age, setAge] = useState(null);
-  const [itemsAge, setItemsAge] = useState([
-    { label: '8 - 14 years', value: 'Child' },
-    { label: '15 - 19 years', value: 'Teenager' },
-    { label: '20 - 40 years', value: 'YoungAdult' },
-    { label: '41 - 50 years', value: 'Adult' },
-    { label: 'Above 50 years', value: 'Old' },
-  ]);
-
-  const [valueOpenCycle, setValueOpenCycle] = useState(false);
-  const [valueCycle, setValueCycle] = useState(null);
-  const [itemsCycle, setItemsCycle] = useState([
-    { label: 'Less than 5 hours', value: 'banana' },
-    { label: '5 - 6 hours', value: 'bat' },
-    { label: '7 - 9 hours', value: 'apple' },
-    { label: 'Above 9 hours', value: 'cat' },
-  ]);
 
   const [modalVisible, setModalVisible] = useState(false);
 
   const [selectedTags, setSelectedTags] = useState([]);
 
   const tags = [
-    'ประจำเดือนไม่มาตามรอบ', 
+    'โรคอ้วน',
+    'โรคโลหิตจาง',
+    'โรคกระดูกพรุน',
+    'โรคเกี่ยวกับต่อมไทรอยด์',
+    'โรคช็อกโกแลตซีสต์',
+    'โรคเยื่อบุในมดลูกเจริญผิดที่',
+    'ประจำเดือนไม่ค่อยมาตามรอบ',
     'มีเลือดออกกะปริบกะปรอย',
-    'ประจำเดือนมานาน (มากกว่า 7 วัน)', 
-    'มาถี่ (น้อยกว่า 24 วัน)',
     'มาห่างเกิน 38 วัน',
-    'Tag4', 
-    'Tag5', 
-    'Tag6', 
-    'Tag7', 
     'มีการใช้ยาฮอร์โมน',
     'มีฮอร์โมนเอสโตเจนต่ำ', 
-    'Tag10', 
-    'โรคอ้วน'
   ];
 
   const [activeUser, setActiveUser] = useState({});
@@ -363,7 +337,7 @@ const EditProfileScreen = ({ route, navigation }) => {
           style={[styles.button, styles.buttonOpen]}
           onPress={() => setModalVisible(true)}>
           <Text style={styles.textStyle}>ระบุรายละเอียดเพิ่มเติม</Text>
-          <Text style={{...styles.selectedTagsText, margin: 3}}>{selectedTags.length >= 1 ? 'รายการที่เลือกแล้ว : '+  selectedTags.join(', ') : ''}</Text>
+          <Text style={{...styles.selectedTagsText, margin: 3}}>{selectedTags.length >= 1 ? 'รายการที่เลือก : '+  selectedTags.join(', ') : ''}</Text>
         </Pressable>
         
         </ScrollView>
@@ -397,7 +371,7 @@ const EditProfileScreen = ({ route, navigation }) => {
             }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text style={styles.modalText}>ระบุรายละเอียดเพิ่มเติม</Text>
+                <Text style={styles.modalText}>โรคประจำตัว และอื่น ๆ</Text>
 
                 {/* TAG */}
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tagContainer}>
@@ -415,7 +389,7 @@ const EditProfileScreen = ({ route, navigation }) => {
                   ))}
                 </ScrollView>
                 <View style={{marginVertical: 10,}}>
-                  <Text style={{...styles.selectedTagsText}}>{selectedTags.length >= 1 ? 'รายการที่เลือกแล้ว : '+  selectedTags.join(', ') : ''}</Text>
+                  <Text style={{...styles.selectedTagsText}}>{selectedTags.length >= 1 ? 'รายการที่เลือก : '+  selectedTags.join(', ') : ''}</Text>
                 </View>
 
               <Pressable

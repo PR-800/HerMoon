@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable, Button, ScrollView } from 'react-native';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
@@ -8,9 +8,9 @@ import moment from 'moment';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 //import component
-import MenstrualLevelModel from '../components/MenstrualLevelModel';
-import MenstrualVolumeLevelModel from '../components/MenstrualVolumeLevelModel';
-import NotesModel from '../components/NotesModel';
+import MenstrualLevelModel from '../components/MenstrualLevelModal';
+import MenstrualVolumeLevelModel from '../components/MenstrualVolumeLevelModal';
+import NotesModal from '../components/NotesModal';
 import CalendarStripC from '../components/CalendarStrip';
 
 const HomeScreen = (props) => {
@@ -22,11 +22,12 @@ const HomeScreen = (props) => {
 
     const [modalVisibleBlood, setModalVisibleBlood] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualLevelModel
     const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualVolumeLevelModel
-    const [modalVisibleNotes, setModalVisibleNotes] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component NotesModel
+    const [modalVisibleNotes, setModalVisibleNotes] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component NotesModal
 
     const [colorM, setColorM] = useState('เลือกสีประจำเดือน'); //เก็บค่าสีของประจำเดือนที่ส่งผ่าน route
     const [volumM, setVolumM] = useState('เลือกปริมาณประจำเดือน'); //เก็บค่าปริมาณประจำเดือนที่ส่งผ่าน route
     const [notesM, setNoteM] = useState('ข้อมูลเพิ่มเติม'); //เก็บข้อมูลเพิ่มเติมของประจำเดือนที่ส่งผ่าน route
+    console.log('notesM :>> ', notesM);
 
     const date = new Date(); //สำหรับแสดงวันที่
 
@@ -39,15 +40,15 @@ const HomeScreen = (props) => {
 
         if (route.params) {
             //ค่าที่ส่งมาจาก component ใช้ route.params ในการเอาค่ามาแสดง
-            const { dataColorModel, dataVolumeModel, dataNotesModel } = route.params;
+            const { dataColorModel, dataVolumeModel, dataNotesModal } = route.params;
             if (dataColorModel) {
                 setColorM(dataColorModel);
             }
             if (dataVolumeModel) {
                 setVolumM(dataVolumeModel);
             }
-            if (dataNotesModel) {
-                setNoteM(dataNotesModel);
+            if (dataNotesModal) {
+                setNoteM(dataNotesModal);
             }
         }
 
@@ -78,7 +79,7 @@ const HomeScreen = (props) => {
         setModalVisibleSanitaryPad(!modalVisibleSanitaryPad);
     };
 
-    //สำหรับ open, close => NotesModel
+    //สำหรับ open, close => NotesModal
     const NotesIcon = () => {
         setModalVisibleNotes(!modalVisibleNotes)
     }
@@ -137,6 +138,10 @@ const HomeScreen = (props) => {
                     menstrual_notes: notesM,
                     user_id: activeUser.key
                 };
+                // () => {
+                //     // Call forceUpdate to trigger a re-render
+                //     this.forceUpdate();
+                // }
                 console.log("User Id")
                 console.log(activeUser.key)
 
@@ -225,28 +230,29 @@ const HomeScreen = (props) => {
                 <TouchableOpacity onPress={AddMonthlySummary}>
                     <Image
                         source={require('../assets/Home/save04-icon.png')}
-                        style={{ width: 50, height: 50 }}
+                        style={{ width: 50, height: 50, marginLeft: 10, }}
                     />
                 </TouchableOpacity></View>
 
-            <View>
+            <ScrollView showsVerticalScrollIndicator={false} >
+            <View style={{marginBottom:20}}>
                 <TouchableOpacity onPress={BloodIcon}>
-                    <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#FFB4BF' }]}>
-                        <View style={{ paddingTop: 2, paddingLeft: 10 }}>
+                    <View style={[styles.textBox, {height: 45, borderColor: '#FFB4BF' }]}>
+                        <View style={{justifyContent: 'center', marginLeft: 10 }}>
                             <Image
 
                                 source={require('../assets/Home/blood01-icon.png')}
                                 style={{ width: 30, height: 35 }}
                             /></View>
-                        <View style={{ paddingTop: 4, paddingLeft: 10 }}>
+                        <View style={{justifyContent: 'center', marginLeft: 10 }}>
                             <Text style={styles.textNormal}>{colorM}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
                 <MenstrualLevelModel visible={modalVisibleBlood} onClose={BloodIcon} navigation={navigation} />
                 <TouchableOpacity onPress={SanitaryPadIcon}>
-                    <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#89DCFF' }]}>
-                        <View style={{ marginTop: -6 }}>
+                    <View style={[styles.textBox, {height: 45, borderColor: '#89DCFF'}]}>
+                        <View style={{ justifyContent: 'center'}}>
                             <Image
                                 source={require('../assets/Home/sanitarypad01-icon.png')}
                                 style={{ width: 45, height: 45 }}
@@ -259,20 +265,23 @@ const HomeScreen = (props) => {
                 </TouchableOpacity>
                 <MenstrualVolumeLevelModel visible={modalVisibleSanitaryPad} onClose={SanitaryPadIcon} navigation={navigation} />
                 <TouchableOpacity onPress={NotesIcon}>
-                    <View style={[styles.textBox, { flex: 0, flexDirection: 'row', borderColor: '#B579CF' }]}>
-                        <View style={{ paddingTop: 2, paddingLeft: 10 }}>
+                    <View style={[styles.textBox, {  borderColor: '#B579CF' }]}>
+                        <View style={{ justifyContent: 'center', marginLeft: 10 }}>
                             <Image
                                 source={require('../assets/Home/notes02-icon.png')}
                                 style={{ width: 30, height: 30 }}
                             />
                         </View>
-                        <View style={{ paddingTop: 4, paddingLeft: 10 }}>
-                            <Text style={styles.textNormal}>{notesM}</Text>
+                        <View style={{ justifyContent:'center', paddingLeft: 10 , paddingRight: 5, flex: 1}}>
+                            <Text style={styles.textNormal}>
+                                {notesM === 'ข้อมูลเพิ่มเติม' ? 'ข้อมูลเพิ่มเติม' : notesM.map(note => `\u2022 ${note}`).join('\n')}
+                            </Text>
                         </View>
                     </View>
                 </TouchableOpacity>
-                <NotesModel visible={modalVisibleNotes} onClose={NotesIcon} navigation={navigation}></NotesModel>
+                <NotesModal visible={modalVisibleNotes} onClose={NotesIcon} navigation={navigation}></NotesModal>
             </View>
+            </ScrollView>
             {/* เรียกใช้ alert */}
             <AlertNotificationRoot>
             </AlertNotificationRoot>
@@ -299,14 +308,16 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     textBox: {
-        margin: 4,
+        flex: 0, flexDirection: 'row',
+        marginVertical: 4,
         backgroundColor: 'white',
         width: 300,
-        height: 45,
+        // height: 45,
         borderRadius: 30,
         paddingHorizontal: 5,
         paddingVertical: 5,
-        borderWidth: 1,
+        borderWidth: 1.5,
+        textAlign: 'center'
     },
     textNormal: {
         fontFamily: 'MitrRegular',

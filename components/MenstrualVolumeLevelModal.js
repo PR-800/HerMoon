@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity } fro
 import { RadioButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 
-// component สำหรับเลือกปรอมาณประจำเดือนที่ต้องการ
+// component สำหรับเลือกปริมาณประจำเดือนที่ต้องการ
 const MenstrualVolumeLevelModel = ({ visible, onClose, navigation }) => {
     const [dataVolumeModel, setDataVolumeModel] = useState(''); //เก็บข้อมูลปริมาณประจำเดือนเพื่อนำไปแสดงหน้า Home
     return (
@@ -12,7 +12,7 @@ const MenstrualVolumeLevelModel = ({ visible, onClose, navigation }) => {
             visible={visible}>
             <View style={styles.screen}>
                 <LinearGradient colors={['#7ED8FF', '#CCF2FE']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.modalView}>
-                    <View style={{ margin: 20, flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ marginVertical: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                         <Image
 
                             source={require('../assets/Home/sanitarypad01-icon.png')}
@@ -50,7 +50,7 @@ const MenstrualVolumeLevelModel = ({ visible, onClose, navigation }) => {
                         </View>
                         {/* <Text> {dataVolume} </Text> */}
                     </View>
-                    <View style={{ marginLeft: 130, marginTop: -60 }}>
+                    <View style={{position:'absolute', bottom: 10, right: 10}}>
                         <TouchableOpacity onPress={() => {
                             navigation.navigate("Home", {dataVolumeModel});
                             return console.log("dataVolumeModel to home =>", dataVolumeModel)
@@ -61,20 +61,11 @@ const MenstrualVolumeLevelModel = ({ visible, onClose, navigation }) => {
                             />
                         </TouchableOpacity>
                     </View>
-                    <View style={{ marginLeft: 190, marginTop: -290}}>
+                    <View style={{position:'absolute', top: -30, right: 10 }}>
                         <TouchableOpacity onPress={onClose}>
                             <Image
 
                                 source={require('../assets/Home/arrow-left-icon.png')}
-                                style={styles.image}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ marginLeft: 110, marginTop: -30}}>
-                        <TouchableOpacity>
-                            <Image
-
-                                source={require('../assets/Home/question-icon.png')}
                                 style={styles.image}
                             />
                         </TouchableOpacity>
