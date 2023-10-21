@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { StyleSheet, Text, View, Image, Pressable, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useFonts } from 'expo-font';
@@ -8,7 +8,11 @@ import firebase from '../data/firebaseDB';
 import { enableExpoCliLogging } from 'expo/build/logs/Logs';
 
 import { format } from 'date-fns';
-import { th } from 'date-fns/locale';
+import { th, tr } from 'date-fns/locale';
+
+import SearchFilter from 'react-native-search-filter';
+
+
 
 class ArticleScreen extends Component {
     constructor() {
@@ -19,6 +23,8 @@ class ArticleScreen extends Component {
         this.state = {
             // Initialize your state variables here
             article_list: [],
+            searchTerm: '',
+            displaySearch: false,
         }
     }
 
@@ -56,6 +62,15 @@ class ArticleScreen extends Component {
 
       render() {
         const {navigation} = this.props
+
+        const { article_list, searchTerm, displaySearch } = this.state;
+
+        // Filter articles based on the search term
+        const filteredArticles = article_list.filter((item) =>
+            item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+
         return ( 
             // navbar
             <View style={styles.screen}>
@@ -74,22 +89,29 @@ class ArticleScreen extends Component {
                             source={require('../assets/article/arrow-left-white.png')}
                             />
                         </Pressable>
-                        <Text style={styles.subheading}>ค้นหา</Text>
+                        <Text style={{...styles.subheading, display: displaySearch ? 'none' : 'flex'}}>ค้นหา</Text>
+                        <TextInput
+                            style={{...styles.searchInput, display: displaySearch ? 'flex' : 'none'}}
+                            placeholder="ค้นหา..."
+                            onChangeText={(text) => this.setState({ searchTerm: text })}
+                        />      
                         <Pressable onPress={() => {
-                                    // navigation.navigate("Home", {});
-                                    return console.log("searching")
-                                }}>
+                                this.setState(() => ({
+                                    displaySearch: !displaySearch,
+                                }));
+                            }}>
                             <Image
                             style={styles.icon}
                             source={require('../assets/article/search.png')}
                             />
                         </Pressable>
                     </View>
+                    
                     <Text style={styles.header}>บทความ</Text>
                 </LinearGradient>
 
                 <ScrollView>
-                    {this.state.article_list.map((item, i) => {
+                    {filteredArticles.map((item, i) => {
                         
                         const rawDate = item.date.toDate();
                         const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -122,7 +144,7 @@ class ArticleScreen extends Component {
                                             source={{ uri: item.nameImg }}
                                         />
                                         <Text style={styles.name}>
-                                            {item.name}
+                                            {item.name.length > 35 ? item.name.substring(0, 30)+'...' : item.name}
                                         </Text>
                                     </View>
                                     <View style={styles.groupBox}>
@@ -257,6 +279,13 @@ const styles = StyleSheet.create({
         height: 110,
         margin: -15
 
+    },
+    searchInput: {
+        width: 230,
+        height: 30,
+        paddingHorizontal: 5,
+        borderRadius: 10,
+        backgroundColor: 'white'
     }
 });
 
