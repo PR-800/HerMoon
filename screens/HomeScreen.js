@@ -113,7 +113,7 @@ const HomeScreen = () => {
     const AddMonthlySummary = () => {
         // สร้างวันที่
         const desiredDate = new Date();
-        const formattedDate = moment(desiredDate).format("DD/MM/YYYY");
+        const formattedDate = moment(desiredDate).format("YYYY-MM-DD");
 
         // สร้าง reference ไปยัง collection "monthly_summary"
         const databaseRef = firebase.firestore().collection("monthly_summary");
@@ -139,7 +139,7 @@ const HomeScreen = () => {
                 }
                 else {
                     const dataToAdd = {
-                        date: moment(desiredDate).format("DD/MM/YYYY"),
+                        date: moment(desiredDate).format("YYYY-MM-DD"),
                         menstrual_color: colorM,
                         menstrual_volume: volumM,
                         menstrual_notes: notesM,
@@ -216,7 +216,9 @@ const HomeScreen = () => {
 
             <View style={{ marginLeft: -250 }}>
                 <Pressable onPress={() => {
-                    navigation.navigate("History", {});
+                    navigation.navigate("History", {
+                        activeUser: activeUser
+                    });
                 }}>
                     <Image
                         source={require('../assets/Home/clock-icon.png')}
