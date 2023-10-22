@@ -18,7 +18,9 @@ const HomeScreen = () => {
     const route = useRoute();
 
     const [activeUser, setActiveUser] = useState({});
-    const [name, setName] = useState();
+    const [name, setName] = useState(); //เก็บชื่อที่ให้แสดง
+    const [image, setImage] = useState(); //เก็บรูปปัจจุบัน
+    const [dataImage, setDataImage] = useState(); //เก็บรุปที่อัพเดต
 
     const [modalVisibleBlood, setModalVisibleBlood] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualLevelModal
     const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualVolumeLevelModel
@@ -27,16 +29,16 @@ const HomeScreen = () => {
     const [colorM, setColorM] = useState('เลือกสีประจำเดือน'); //เก็บค่าสีของประจำเดือนที่ส่งผ่าน route
     const [volumM, setVolumM] = useState('เลือกปริมาณประจำเดือน'); //เก็บค่าปริมาณประจำเดือนที่ส่งผ่าน route
     const [notesM, setNoteM] = useState('บันทึกข้อมูลเพิ่มเติม'); //เก็บบันทึกข้อมูลเพิ่มเติมของประจำเดือนที่ส่งผ่าน route
-    // console.log('notesM :>> ', notesM);
+
 
     const date = new Date(); //สำหรับแสดงวันที่
 
     //เก็บค่าลงใน state
     useEffect(() => {
 
-        { route.params.activeUser ? setActiveUser(route.params.activeUser) : ""}
-        console.log("--- Home")
-        console.log(activeUser)
+        { route.params.activeUser ? setActiveUser(route.params.activeUser) : "" }
+        // console.log("--- Home")
+        // console.log(activeUser)
 
         if (route.params) {
             //ค่าที่ส่งมาจาก component ใช้ route.params ในการเอาค่ามาแสดง
@@ -52,21 +54,26 @@ const HomeScreen = () => {
             }
         }
 
-        if(route.params.activeUser) {
+        if (route.params.activeUser) {
             const accountDoc = firebase.firestore().collection("accounts")
-            .doc(route.params.activeUser.key);
+                .doc(route.params.activeUser.key);
 
             accountDoc.get().then((res) => {
                 if (res.exists) {
                     const doc = res.data();
                     setName(doc.name);
+                    setImage(doc.img)
                 }
                 else {
                     console.log("Document does not exist");
                 }
             });
         }
-        
+
+        if (route.params.dataImage) {
+            setDataImage(route.params.dataImage);
+        }
+
     }, [route.params]);
 
     //สำหรับ open, close => MenstrualLevelModal
@@ -121,7 +128,7 @@ const HomeScreen = () => {
             if (querySnapshot.empty) {
                 console.log("ไม่พบข้อมูลที่ตรงกับวันที่ " + formattedDate);
                 // ข้อมูลที่ต้องการเพิ่ม
-                if(colorM == 'เลือกสีประจำเดือน' || volumM == 'เลือกปริมาณประจำเดือน'){
+                if (colorM == 'เลือกสีประจำเดือน' || volumM == 'เลือกปริมาณประจำเดือน') {
                     Dialog.show({
                         type: ALERT_TYPE.WARNING,
                         title: (
@@ -130,40 +137,40 @@ const HomeScreen = () => {
                         button: 'OK',
                     });
                 }
-                else{
-                const dataToAdd = {
-                    date: moment(desiredDate).format("DD/MM/YYYY"),
-                    menstrual_color: colorM,
-                    menstrual_volume: volumM,
-                    menstrual_notes: notesM,
-                    user_id: activeUser.key
-                };
-                // () => {
-                //     // Call forceUpdate to trigger a re-render
-                //     this.forceUpdate();
-                // }
-                console.log("User Id")
-                console.log(activeUser.key)
+                else {
+                    const dataToAdd = {
+                        date: moment(desiredDate).format("DD/MM/YYYY"),
+                        menstrual_color: colorM,
+                        menstrual_volume: volumM,
+                        menstrual_notes: notesM,
+                        user_id: activeUser.key
+                    };
+                    // () => {
+                    //     // Call forceUpdate to trigger a re-render
+                    //     this.forceUpdate();
+                    // }
+                    console.log("User Id")
+                    console.log(activeUser.key)
 
-                //สร้าง collection
-                const databaseRef = firebase.firestore().collection("monthly_summary");
+                    //สร้าง collection
+                    const databaseRef = firebase.firestore().collection("monthly_summary");
 
-                // เพิ่มข้อมูลลง firebase
-                databaseRef.add(dataToAdd)
-                    .then((docRef) => {
-                        // เรียก Dialog.show ที่นี่เพื่อแสดง Dialog หลังจากที่พบข้อมูลที่ตรงกัน
-                        Dialog.show({
-                            type: ALERT_TYPE.SUCCESS,
-                            title: (
-                                <Text style={{fontFamily: 'MitrRegular', fontSize: 18}}>เพิ่มข้อมูลรอบเดือนประจำวันสำเร็จ</Text>
-                            ),
-                            button: 'OK',
+                    // เพิ่มข้อมูลลง firebase
+                    databaseRef.add(dataToAdd)
+                        .then((docRef) => {
+                            // เรียก Dialog.show ที่นี่เพื่อแสดง Dialog หลังจากที่พบข้อมูลที่ตรงกัน
+                            Dialog.show({
+                                type: ALERT_TYPE.SUCCESS,
+                                title: (
+                                    <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>เพิ่มข้อมูลรอบเดือนประจำวันสำเร็จ</Text>
+                                ),
+                                button: 'OK',
+                            });
+                            console.log("เพิ่มข้อมูลสำเร็จ: ", docRef.id);
+                        })
+                        .catch((error) => {
+                            console.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ", error);
                         });
-                        console.log("เพิ่มข้อมูลสำเร็จ: ", docRef.id);
-                    })
-                    .catch((error) => {
-                        console.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ", error);
-                    });
                 }
             } else {
                 querySnapshot.forEach((doc) => {
@@ -172,10 +179,10 @@ const HomeScreen = () => {
                     Dialog.show({
                         type: ALERT_TYPE.WARNING,
                         title: (
-                            <Text style={{fontFamily: 'MitrRegular', fontSize: 18}}>คุณได้เพิ่มรอบเดือนประจำวันแล้ว</Text>
+                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>คุณได้เพิ่มรอบเดือนประจำวันแล้ว</Text>
                         ),
                         textBody: (
-                            <Text style={{fontFamily: 'MitrRegular', fontSize: 14}}>หากคุณต้องการแก้ไขข้อมูล {'\n'} สามารถแก้ไขได้ที่หน้า Calendar ค่ะ</Text>
+                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 14 }}>หากคุณต้องการแก้ไขข้อมูล {'\n'} สามารถแก้ไขได้ที่หน้า Calendar ค่ะ</Text>
                         ),
                         button: 'OK',
                     });
@@ -199,9 +206,9 @@ const HomeScreen = () => {
                 <Text style={[styles.textHeader, { paddingHorizontal: 22, color: 'black' }]}>{formatDate(date)}</Text>
             </View>
 
-            <View style={{ marginBottom: 20, marginTop: 80, width:'80%'}}>
+            <View style={{ marginBottom: 20, marginTop: 80, width: '80%' }}>
                 <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>สวัสดี !</Text>
-                <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', left: 0}}>
+                <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', left: 0 }}>
                     {/* {activeUser.username} */}
                     {name}
                 </Text>
@@ -217,12 +224,13 @@ const HomeScreen = () => {
                     /></Pressable>
             </View>
 
-            <View style={{ marginTop: -40, marginBottom: 10 }}>
+            <View style={{ marginTop: -30, marginBottom: 20 }}>
                 <Image
-                    source={require('../assets/Home/Profile-icon.png')}
-                    style={{ width: 240, height: 240 }}
+                    source={{ uri: dataImage ? dataImage : image}}
+                    style={{ width: 230, height: 230 }}
                 />
             </View>
+
 
             <Text style={styles.textNormal}>เพิ่มข้อมูลและบันทึกรอบเดือน</Text>
             <View style={{ marginTop: -40, marginBottom: 5, marginLeft: 250 }}>
@@ -234,52 +242,52 @@ const HomeScreen = () => {
                 </TouchableOpacity></View>
 
             <ScrollView showsVerticalScrollIndicator={false} >
-            <View style={{marginBottom:20}}>
-                <TouchableOpacity onPress={BloodIcon}>
-                    <View style={[styles.textBox, {height: 45, borderColor: '#FFB4BF' }]}>
-                        <View style={{justifyContent: 'center', marginLeft: 10 }}>
-                            <Image
+                <View style={{ marginBottom: 20 }}>
+                    <TouchableOpacity onPress={BloodIcon}>
+                        <View style={[styles.textBox, { height: 45, borderColor: '#FFB4BF' }]}>
+                            <View style={{ justifyContent: 'center', marginLeft: 10 }}>
+                                <Image
 
-                                source={require('../assets/Home/blood01-icon.png')}
-                                style={{ width: 30, height: 35 }}
-                            /></View>
-                        <View style={{justifyContent: 'center', marginLeft: 10 }}>
-                            <Text style={styles.textNormal}>{colorM}</Text>
+                                    source={require('../assets/Home/blood01-icon.png')}
+                                    style={{ width: 30, height: 35 }}
+                                /></View>
+                            <View style={{ justifyContent: 'center', marginLeft: 10 }}>
+                                <Text style={styles.textNormal}>{colorM}</Text>
+                            </View>
                         </View>
-                    </View>
-                </TouchableOpacity>
-                <MenstrualLevelModal visible={modalVisibleBlood} onClose={BloodIcon} navigation={navigation} />
-                <TouchableOpacity onPress={SanitaryPadIcon}>
-                    <View style={[styles.textBox, {height: 45, borderColor: '#89DCFF'}]}>
-                        <View style={{ justifyContent: 'center'}}>
-                            <Image
-                                source={require('../assets/Home/sanitarypad01-icon.png')}
-                                style={{ width: 45, height: 45 }}
-                            />
+                    </TouchableOpacity>
+                    <MenstrualLevelModal visible={modalVisibleBlood} onClose={BloodIcon} navigation={navigation} />
+                    <TouchableOpacity onPress={SanitaryPadIcon}>
+                        <View style={[styles.textBox, { height: 45, borderColor: '#89DCFF' }]}>
+                            <View style={{ justifyContent: 'center' }}>
+                                <Image
+                                    source={require('../assets/Home/sanitarypad01-icon.png')}
+                                    style={{ width: 45, height: 45 }}
+                                />
+                            </View>
+                            <View style={{ paddingTop: 4, paddingLeft: 5 }}>
+                                <Text style={styles.textNormal}>{volumM}</Text>
+                            </View>
                         </View>
-                        <View style={{ paddingTop: 4, paddingLeft: 5 }}>
-                            <Text style={styles.textNormal}>{volumM}</Text>
+                    </TouchableOpacity>
+                    <MenstrualVolumeLevelModel visible={modalVisibleSanitaryPad} onClose={SanitaryPadIcon} navigation={navigation} />
+                    <TouchableOpacity onPress={NotesIcon}>
+                        <View style={[styles.textBox, { borderColor: '#B579CF' }]}>
+                            <View style={{ justifyContent: 'center', marginLeft: 10 }}>
+                                <Image
+                                    source={require('../assets/Home/notes02-icon.png')}
+                                    style={{ width: 30, height: 30 }}
+                                />
+                            </View>
+                            <View style={{ justifyContent: 'center', paddingLeft: 10, paddingRight: 5, flex: 1 }}>
+                                <Text style={styles.textNormal}>
+                                    {notesM === 'บันทึกข้อมูลเพิ่มเติม' || '' ? 'บันทึกข้อมูลเพิ่มเติม' : notesM.map(note => `\u2022 ${note}`).join('\n')}
+                                </Text>
+                            </View>
                         </View>
-                    </View>
-                </TouchableOpacity>
-                <MenstrualVolumeLevelModel visible={modalVisibleSanitaryPad} onClose={SanitaryPadIcon} navigation={navigation} />
-                <TouchableOpacity onPress={NotesIcon}>
-                    <View style={[styles.textBox, {  borderColor: '#B579CF' }]}>
-                        <View style={{ justifyContent: 'center', marginLeft: 10 }}>
-                            <Image
-                                source={require('../assets/Home/notes02-icon.png')}
-                                style={{ width: 30, height: 30 }}
-                            />
-                        </View>
-                        <View style={{ justifyContent:'center', paddingLeft: 10 , paddingRight: 5, flex: 1}}>
-                            <Text style={styles.textNormal}>
-                                {notesM === 'บันทึกข้อมูลเพิ่มเติม' || '' ? 'บันทึกข้อมูลเพิ่มเติม' : notesM.map(note => `\u2022 ${note}`).join('\n')}
-                            </Text>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-                <NotesModal visible={modalVisibleNotes} onClose={NotesIcon} navigation={navigation}></NotesModal>
-            </View>
+                    </TouchableOpacity>
+                    <NotesModal visible={modalVisibleNotes} onClose={NotesIcon} navigation={navigation}></NotesModal>
+                </View>
             </ScrollView>
             {/* เรียกใช้ alert */}
             <AlertNotificationRoot>

@@ -35,11 +35,12 @@ const MainNavigator = createNativeStackNavigator();
 
 const BottomNavigator = createBottomTabNavigator();
 
+
 // หน้าต่าง ๆ ที่มีการเชื่อมกัน
 function MyPageNavigator() {
     return (
         <PageNavigator.Navigator>
-            {/* <PageNavigator.Screen name="login" component={LoginScreen}
+            <PageNavigator.Screen name="login" component={LoginScreen}
                 options={{
                     headerShown: false
                 }}
@@ -68,7 +69,7 @@ function MyPageNavigator() {
                 options={{
                     headerShown: false
                 }}
-            /> */}
+            />
             <PageNavigator.Screen name="History" component={HistoryScreen} 
                 options={{
                     headerShown: false

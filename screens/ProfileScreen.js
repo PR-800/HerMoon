@@ -29,7 +29,7 @@ class ProfileScreen extends Component {
             profile_List: [],
         };
     }
-
+    
     // setActiveuser = () => {
     //     this.setState({ activeUser });
     // }
@@ -63,8 +63,8 @@ class ProfileScreen extends Component {
         
         if (this.props.route.params && this.props.route.params.activeUser) {
             this.state.activeUser = this.props.route.params.activeUser;
-            console.log('--- Profile ');
-            console.log(this.state.activeUser)
+            // console.log('--- Profile ');
+            // console.log(this.state.activeUser)
         }
         
         const accountDoc = firebase.firestore().collection("accounts")
@@ -84,7 +84,7 @@ class ProfileScreen extends Component {
                     new_user: doc.new_user,
                     img: doc.img,
                 });
-                console.log('img :>> ', doc.img);
+                // console.log('img :>> ', doc.img);
             }
             else {
                 console.log("Document does not exist");
@@ -105,32 +105,40 @@ class ProfileScreen extends Component {
     };
 
     updateImage() {
-
         const updateImgDoc = firebase
-            .firestore()
-            .collection("accounts")
-            .doc(this.state.key);
+          .firestore()
+          .collection("accounts")
+          .doc(this.state.key);
+      
+        const updatedData = {
+          username: this.state.activeUser.username,
+          password: this.state.activeUser.password,
+          name: this.state.name,
+          height: this.state.height,
+          weight: this.state.weight,
+          dob: this.state.dob,
+          periodCycle: this.state.periodCycle,
+          freq: this.state.freq,
+          new_user: this.state.new_user,
+          img: this.state.img,
+        };
+      
         updateImgDoc
-            .set({
-                username: this.state.activeUser.username,
-                password: this.state.activeUser.password,
-                name: this.state.name,
-                height: this.state.height,
-                weight: this.state.weight,
-                dob: this.state.dob,
-                periodCycle: this.state.cycle,
-                freq: this.state.freq,
-                new_user: false,
-                img: this.state.img,
-            })
-            .then(() => {
-                Alert.alert(
-                    "Updating Alert",
-                    "The Image was updated!! Pls check your DB!!"
-                );
-            });
-            console.log('this.state.img :>> ', this.state.img);
-    }
+          .update(updatedData)
+          .then(() => {
+            // Alert.alert(
+            //   "การอัปเดตข้อมูล",
+            //   "รูปภาพได้รับการอัปเดตเรียบร้อยแล้ว โปรดตรวจสอบในฐานข้อมูลของคุณ"
+            // );
+            this.closeModal()
+          })
+          .catch((error) => {
+            console.error("เกิดข้อผิดพลาดในการอัปเดตรูปภาพ:", error);
+          });
+      
+        console.log('this.state.img :>> ', this.state.img);
+      }
+      
     
     //Modal
     setModalVisible = (visible) => {
@@ -163,7 +171,7 @@ class ProfileScreen extends Component {
                             // source={require('../assets/profile/blank-profile.jpg')}
                             source={{
                                 uri: this.state.img ? this.state.img
-                                : 'https://cdn.discordapp.com/attachments/944667694517616720/1165257024787992687/blank-profile.jpg?ex=6546312c&is=6533bc2c&hm=02a4cba975984730be15792b7b8fd329c696d392f468d822f659bb4f9b725091&'
+                                : 'https://media.discordapp.net/attachments/1165602535554424882/1165602801280352358/Group_1603.png?ex=65477333&is=6534fe33&hm=f7b04fc43eb7b07634afd3da68ed71ee3a6f5994cfb500148ec77bab7b9caa2f&=&width=277&height=287'
                               }}            
                               
                             style={styles.image}
@@ -333,12 +341,8 @@ class ProfileScreen extends Component {
                                         <Pressable
                                             onPress={() => {
                                                 this.inputValueUpdate(this.state.selectedPicture, 'img'),
-
-                                                // มีปัญหาาา
-                                                // this.updateImage()
-                                                // console.log('this.state.selectedPicture :>> ', this.state.selectedPicture);
-                                                this.closeModal()
-
+                                                this.updateImage()
+                                                navigation.navigate("Home", { dataImage: this.state.img })
                                             }}
                                         >
                                             <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
@@ -371,11 +375,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     image: {
-        width: 150, 
-        height: 150, 
-        resizeMode: "contain", 
+        width: 157, 
+        height: 157, 
+        // resizeMode: "contain", 
         // borderRadius: "50%",
-        borderRadius: 75,
+        // borderRadius: 75,
         marginTop: 20,
     },
     headers: {
