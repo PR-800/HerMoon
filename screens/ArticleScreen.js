@@ -82,7 +82,6 @@ class ArticleScreen extends Component {
                     <View style={styles.navbar}>
                         <Pressable onPress={() => {
                                     navigation.navigate("Home", {});
-                                    return console.log("go Home")
                                 }}>
                             <Image
                             style={styles.icon}
@@ -92,7 +91,7 @@ class ArticleScreen extends Component {
                         <Text style={{...styles.subheading, display: displaySearch ? 'none' : 'flex'}}>ค้นหา</Text>
                         <TextInput
                             style={{...styles.searchInput, display: displaySearch ? 'flex' : 'none'}}
-                            placeholder="ค้นหา..."
+                            // placeholder="ค้นหา..."
                             onChangeText={(text) => this.setState({ searchTerm: text })}
                         />      
                         <Pressable onPress={() => {

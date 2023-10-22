@@ -234,7 +234,7 @@ const HomeScreen = () => {
             </View>
 
 
-            <Text style={styles.textNormal}>เพิ่มข้อมูลและบันทึกรอบเดือน</Text>
+            <Text style={styles.textNormal}>บันทึกข้อมูลรอบเดือน</Text>
             <View style={{ marginTop: -40, marginBottom: 5, marginLeft: 250 }}>
                 <TouchableOpacity onPress={AddMonthlySummary}>
                     <Image
