@@ -115,8 +115,8 @@ const HomeScreen = () => {
         const desiredDate = new Date();
         const formattedDate = moment(desiredDate).format("DD/MM/YYYY");
 
-        // สร้าง reference ไปยัง collection "monthly_summary"
-        const databaseRef = firebase.firestore().collection("monthly_summary");
+        // สร้าง reference ไปยัง collection "dailyRecord"
+        const databaseRef = firebase.firestore().collection("dailyRecord");
 
         //เรียกข้อมูลที่ตรงกับ formattedDate
         const query = databaseRef
@@ -153,7 +153,7 @@ const HomeScreen = () => {
                     console.log(activeUser.key)
 
                     //สร้าง collection
-                    const databaseRef = firebase.firestore().collection("monthly_summary");
+                    const databaseRef = firebase.firestore().collection("dailyRecord");
 
                     // เพิ่มข้อมูลลง firebase
                     databaseRef.add(dataToAdd)
