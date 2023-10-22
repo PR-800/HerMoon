@@ -51,6 +51,7 @@ const MenstrualLevelModal = ({ visible, onClose, navigation }) => {
                             setDataColorModal(dataColorModal)
                             navigation.navigate("Home", { dataColorModal:dataColorModal });
                             console.log("dataColorModal to home =>", dataColorModal)
+                            onClose()
                         }}>
                             <Image
 

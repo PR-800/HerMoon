@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import { RadioButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -9,6 +9,30 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
     const [dataColor, setDataColor] = useState(selectedColor); //เก็บข้อมูลสีประจำเดือนที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
     const [dataVolume, setDataVolume] = useState(selectedVolume); //เก็บข้อมูลปริมาณประจำเดือนที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
     const [dataNotes, setDataNotes] = useState(selectedNotes); //เก็บข้อมูลอาการเพิ่มเติมที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
+
+    const [selectedTags, setSelectedTags] = useState([]);
+        const toggleTag = (tag) => {
+            if (selectedTags.includes(tag)) {
+                setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
+            } else {
+                setSelectedTags([...selectedTags, tag]);
+            }
+        };
+        // console.log('selectedTags : ', selectedTags)
+
+        const tags = [
+            'เปลี่ยนผ้าอนามัยทุกชม.',
+            'พักผ่อนน้อย',
+            'มีกลิ่น อาการคัน',
+            'มีเลือดออกกะปริบกะปรอย',
+            'มีลิ่มเลือดก้อนใหญ่กว่า 1 นิ้ว',
+            'ปวดท้องอย่างรุนแรง',
+            'ปวดหลังส่วนล่างอย่างรุนแรง',
+            'เลือดหยดช่วงที่ไม่มีประจำเดือน',
+            'ประจำเดือนมานานเกิน 8 วัน',
+        ]
+
+
 
     //update data ลง firebase
     const UpdateMonthlySummary = () => {
@@ -42,7 +66,7 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
             visible={visible}>
             <View style={styles.centeredView}>
                 <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.modalView}>
-                    <View style={{ margin: 20, flexDirection: 'row', alignItems: 'center', marginLeft: -90 }}>
+                    <View style={{ margin: 20, flexDirection: 'row', alignItems: 'center',}}>
                         <Image
 
                             source={require('../assets/Home/edit01-icon.png')}
@@ -52,14 +76,12 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                     </View>
 
                     {/* เลือกสีประจำเดือนที่ต้องการอัพเดต */}
-                    <View style={{ backgroundColor: 'white', borderRadius: 40, paddingVertical: 20, paddingHorizontal: 10 }}>
-                        <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
+                    <View style={{ backgroundColor: 'white', borderRadius: 20,  width: "85%", height: 550, paddingVertical: 20, paddingHorizontal: 10 }}>
+                        <View style={[styles.textBox, { flew: 1, flexDirection: 'row', borderColor: '#FFB4BF' }]}>
                             <Image
                                 source={require('../assets/Home/blood01-icon.png')}
                             />
-                            <View style={{ paddingTop: 3, paddingLeft: 5 }}>
-                                <Text style={[styles.textNormal]}>{selectedColor}</Text>
-                            </View>
+                            <Text style={[styles.textNormal]}>{selectedColor}</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <View>
@@ -134,11 +156,11 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                         {/* <Text> {dataColor} </Text> */}
 
                         {/* เลือกปริมาณประจำเดือนที่ต้องการอัพเดต */}
-                        <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
+                        <View style={[styles.textBox, { flew: 0, flexDirection: 'row' , borderColor: '#89DCFF'}]}>
                             <Image style={{ marginTop: -5, marginLeft: -5 }}
                                 source={require('../assets/Home/sanitarypad02-icon.png')}
                             />
-                            <Text style={[styles.textNormal, { paddingTop: 3, paddingLeft: 2 }]}>
+                            <Text style={[styles.textNormal, { justifyContent: 'center' }]}>
                                 {selectedVolume}
                             </Text>
                         </View>
@@ -176,7 +198,7 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
 
                         {/* เลือกสีอาการเพิ่มเติมที่ต้องการอัพเดต */}
                         <View>
-                            <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
+                            <View style={[styles.textBox, { flexDirection: 'row', borderColor: '#B579CF' }]}>
                                 <Image
                                     source={require('../assets/Home/notes02-icon.png')}
                                 />
@@ -184,28 +206,32 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                                     {selectedNotes}
                                 </Text>
                             </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', fontSize: 14 }}>
-                                <RadioButton
-                                    value='อาการปวดท้องรุนแรง'
-                                    status={dataNotes === 'อาการปวดท้องรุนแรง' ? 'checked' : 'unchecked'}
-                                    onPress={() => setDataNotes('อาการปวดท้องรุนแรง')}
-                                    color='#FF0000'
-                                />
-                                <Text style={styles.modalText}>อาการปวดท้องรุนแรง</Text>
+                            <View style={{ backgroundColor: 'white', borderRadius: 20, width: 250, height: 250, paddingHorizontal: 10, paddingVertical: 20, alignSelf: 'center' }}>
+                                <ScrollView vertical showsVerticalScrollIndicator={false}>
+                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+
+                                        {tags.map((tag) => (
+                                            <TouchableOpacity key={tag}
+                                                style={[
+                                                    styles.tag,
+                                                    { backgroundColor: selectedTags.includes(tag) ? '#9F79EB' : '#e8e8e8' },
+                                                ]}
+                                                onPress={() => {
+                                                    toggleTag(tag);
+                                                }}
+                                            >
+                                                <Text style={[styles.tagText, { color: selectedTags.includes(tag) ? 'white' : 'black' }]}>{tag}</Text>
+                                            </TouchableOpacity>
+                                        ))}
+
+
+                                    </View>
+                                </ScrollView>
                             </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton
-                                    value='ประจำเดือนมาหลายวันเกินไป'
-                                    status={dataNotes === 'ประจำเดือนมาหลายวันเกินไป' ? 'checked' : 'unchecked'}
-                                    onPress={() => setDataNotes('ประจำเดือนมาหลายวันเกินไป')}
-                                    color='#FF0000'
-                                />
-                                <Text style={styles.modalText}>ประจำเดือนมาหลายวันเกินไป</Text>
-                            </View>
-                            {/* <Text> {dataNotes} </Text> */}
                         </View>
 
-                        <View style={{ marginLeft: 170 }}>
+                        {/* <View style={{ marginLeft: 170 }}> */}
+                        <View style={{position:'absolute', bottom: -15, right: -15}}>
                             <TouchableOpacity onPress={UpdateMonthlySummary}>
                                 <Image
 
@@ -215,7 +241,7 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{ marginLeft: 210, marginTop: -590 }}>
+                    <View style={{position:'absolute', top: -25, right: 5}}>
                         <TouchableOpacity onPress={onClose}>
                             <Image
 
@@ -266,20 +292,39 @@ const styles = StyleSheet.create({
         fontFamily: 'MitrRegular'
     },
     textBox: {
-        margin: 2,
-        backgroundColor: 'white',
+        margin: 5,
+        alignSelf: 'center',
         width: 250,
         height: 40,
         borderRadius: 30,
         paddingHorizontal: 10,
         paddingVertical: 5,
-        borderColor: 'pink',
         borderWidth: 1
     },
     textNormal: {
         fontFamily: 'MitrRegular',
         fontSize: 16,
     },
+
+    //tags
+      tag: {
+        justifyContent: 'center',
+        height: 30,
+        paddingHorizontal: 10,
+        borderRadius: 10,
+        marginRight: 10,
+        marginBottom: 10,
+      },
+      tagText: {
+        fontSize: 15,
+        fontFamily: "MitrRegular",
+      },
+      selectedTagsText: {
+        marginBottom: 10,
+        fontSize: 16,
+        fontFamily: "MitrRegular",
+        color: '#A43BA6',
+      },
 })
 
 export default EditInfo;

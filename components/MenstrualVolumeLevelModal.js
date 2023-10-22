@@ -53,7 +53,8 @@ const MenstrualVolumeLevelModel = ({ visible, onClose, navigation }) => {
                     <View style={{position:'absolute', bottom: 10, right: 10}}>
                         <TouchableOpacity onPress={() => {
                             navigation.navigate("Home", {dataVolumeModel});
-                            return console.log("dataVolumeModel to home =>", dataVolumeModel)
+                            console.log("dataVolumeModel to home =>", dataVolumeModel)
+                            onClose()
                         }}>
                             <Image
                                 source={require('../assets/Home/save02-icon.png')}
