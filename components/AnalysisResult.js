@@ -33,7 +33,7 @@ const AnalysisResult = (props) => {
 
         if (startDate && endDate) {
             console.log(startDate, endDate, activeUser.key)
-            const monthlyDoc = firebase.firestore().collection("monthly_summary")
+            const monthlyDoc = firebase.firestore().collection("dailyRecord")
             .where("date", ">=", startDate)
             .where("date", "<=", endDate)
             .where("user_id", "==", activeUser.key ? activeUser.key : route.params.activeUser);

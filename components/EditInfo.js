@@ -38,7 +38,7 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
 
     //update data ลง firebase
     const UpdateMonthlySummary = () => {
-        const databaseRef = firebase.firestore().collection("monthly_summary").doc(selectedId[0]);
+        const databaseRef = firebase.firestore().collection("dailyRecord").doc(selectedId[0]);
 
         const updatedData = {
             menstrual_color: dataColor,
