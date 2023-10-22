@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect  } from 'react'
 import { StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import { RadioButton } from 'react-native-paper';
@@ -9,23 +9,30 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
     const [dataColor, setDataColor] = useState(selectedColor); //เก็บข้อมูลสีประจำเดือนที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
     const [dataVolume, setDataVolume] = useState(selectedVolume); //เก็บข้อมูลปริมาณประจำเดือนที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
     // const [dataNotes, setDataNotes] = useState(selectedNotes); //เก็บข้อมูลอาการเพิ่มเติมที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
-    // console.log('dataNotes :>> ', dataNotes);
+    
+    const [selectedTags, setSelectedTags] = useState([]);
+
+    useEffect(() => {
+        setSelectedTags(selectedNotes);
+    }, [selectedNotes]);
     console.log('selectedNotes :>> ', selectedNotes);
 
-    const [selectedTags, setSelectedTags] = useState([selectedNotes]);
-        const toggleTag = (tag) => {
-            if (selectedTags.includes(tag)) {
-                setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
-            } else {
-                setSelectedTags([...selectedTags, tag]);
-            }
-        };
+    
+    console.log('selectedTags :>> ', selectedTags);
+
+    const toggleTag = (tag) => {
+        if (selectedTags.includes(tag)) {
+          setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
+        } else {
+          setSelectedTags([...selectedTags, tag]);
+        }
+    };
         // console.log('selectedTags : ', selectedTags)
 
         const tags = [
             'เปลี่ยนผ้าอนามัยทุกชม.',
             'พักผ่อนน้อย',
-            'มีกลิ่น อาการคัน',
+            'มีกลิ่น', 'มีอาการคัน',
             'มีเลือดออกกะปริบกะปรอย',
             'มีลิ่มเลือดก้อนใหญ่กว่า 1 นิ้ว',
             'ปวดท้องอย่างรุนแรง',
@@ -209,12 +216,9 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                                 />
                                 <View style={{ justifyContent: 'center', paddingLeft: 10, paddingRight: 5, flex: 1 }}>
                                     <Text style={styles.textNormal}>
-                                        {selectedTags === 'บันทึกข้อมูลเพิ่มเติม' || '' ? 'บันทึกข้อมูลเพิ่มเติม' : selectedTags.map(note => `\u2022 ${note}`).join('\n')}
+                                        {selectedTags.flat().map(selectedTag => `\u2022 ${selectedTag}\n`)}
                                     </Text>
                                 </View>
-                                {/* <Text style={[styles.textNormal, { paddingTop: 3, paddingLeft: 10 }]} numberOfLines={1} ellipsizeMode="tail">
-                                    {selectedTags}
-                                </Text> */}
                             </View>
                             <View>
                                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>

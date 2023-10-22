@@ -34,7 +34,7 @@ class ArticleScreen extends Component {
             // console.log("res: ", res);
             // console.log("res.data() : ", res.data());
     
-          const { name, nameImg, title, description, date, coverImg } = res.data();
+          const { name, nameImg, title, description, date, coverImg, engname } = res.data();
           all_data.push({
             key: res.id,
             name,
@@ -43,6 +43,7 @@ class ArticleScreen extends Component {
             description,
             date,
             coverImg,
+            engname,
           });
         });
         // console.log("all_data : ", all_data);
@@ -60,14 +61,19 @@ class ArticleScreen extends Component {
         this.unsubscribe();
     }
 
+    clearSearchTerm = () => {
+        this.setState({ searchTerm: '' });
+      };
+
       render() {
         const {navigation} = this.props
 
         const { article_list, searchTerm, displaySearch } = this.state;
 
-        // Filter articles based on the search term
         const filteredArticles = article_list.filter((item) =>
-            item.name.toLowerCase().includes(searchTerm.toLowerCase())
+            item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.engname.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
 
@@ -89,11 +95,17 @@ class ArticleScreen extends Component {
                             />
                         </Pressable>
                         <Text style={{...styles.subheading, display: displaySearch ? 'none' : 'flex'}}>ค้นหา</Text>
-                        <TextInput
-                            style={{...styles.searchInput, display: displaySearch ? 'flex' : 'none'}}
-                            // placeholder="ค้นหา..."
+                            <TextInput
+                            style={{ ...styles.searchInput, display: displaySearch ? 'flex' : 'none' }}
+                            placeholder='  ค้นหา...'
                             onChangeText={(text) => this.setState({ searchTerm: text })}
-                        />      
+                            value={this.state.searchTerm}
+                            />
+                            {this.state.searchTerm.length > 0 && (
+                            <TouchableOpacity onPress={this.clearSearchTerm} style={styles.clearButton}>
+                                <Image source={require('../assets/profile/close.png')} style={styles.clearIcon} />
+                            </TouchableOpacity>
+                            )}
                         <Pressable onPress={() => {
                                 this.setState(() => ({
                                     displaySearch: !displaySearch,
@@ -285,7 +297,17 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         borderRadius: 10,
         backgroundColor: 'white'
-    }
+    },
+    clearButton: {
+        position: 'absolute',
+        top: 8,
+        right: 10,
+      },
+      clearIcon: {
+        width: 15,
+        height: 15,
+        resizeMode: 'contain',
+      },
 });
 
 export default ArticleScreen

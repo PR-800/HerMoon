@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { TimeDatePicker, Modes } from "react-native-time-date-picker";
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -87,6 +87,7 @@ const CalendarScreen = (props) => {
   const selectedVolume = renderData("volume");
   const selectedNotes = renderData("notes");
   const selectedId = renderData("id");
+  // console.log('selectedNotes :>> ', selectedNotes);
 
   return (
 
@@ -125,39 +126,58 @@ const CalendarScreen = (props) => {
       />
 
       <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.box}>
-        <Text style={styles.textNormal}>วันที่ : {dateTime}</Text>
-        <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
-          <Image
-            source={require('../assets/Home/blood01-icon.png')}
-          />
-          <View style={{ paddingTop: 3, paddingLeft: 15 }}>
-            <Text style={styles.textNormal}>{selectedColor}</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Text style={[styles.textNormal, {fontSize: 17, textAlign: 'center', color: 'white'}]}>
+            วันที่ : {dateTime}
+          </Text>
+
+          <TouchableOpacity onPress={EditIcon}>
+          <View style={[styles.textBox, {  height: 40, }]}>
+          <View style={{ alignContent: 'center', marginLeft: 5}}>
+            <Image
+              source={require('../assets/Home/blood01-icon.png')}
+            />
+
           </View>
-        </View>
-        <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
-          <Image style={{ marginTop: -5, marginLeft: -5 }}
-            source={require('../assets/Home/sanitarypad02-icon.png')}
-          />
-          <View style={{ paddingTop: 4, paddingLeft: 10 }}>
-            <Text style={styles.textNormal}>{selectedVolume}</Text>
+            <View style={{paddingTop: 3, paddingLeft: 15 }}>
+              <Text style={styles.textNormal}>{selectedColor}</Text>
+            </View>
           </View>
-        </View>
-        <View style={[styles.textBox, { flew: 0, flexDirection: 'row' }]}>
-          <Image
-            source={require('../assets/Home/notes02-icon.png')}
-          />
-          <View style={{ paddingTop: 4, paddingLeft: 15 }}>
-            <Text style={styles.textNormal}>{selectedNotes}</Text>
+
+          <View style={[styles.textBox, { height: 40, }]}>
+          <View style={{ alignSelf: 'center',}}>
+            <Image
+              source={require('../assets/Home/sanitarypad02-icon.png')}
+            />
           </View>
-        </View>
-        <TouchableOpacity onPress={EditIcon}>
-          <Image style={{ marginLeft: 250, marginVertical: 10, width: 30, height: 30 }}
-            source={require('../assets/Home/edit01-icon.png')}
-          />
-        </TouchableOpacity>
-        <EditInfo visible={modalVisibleEdit} onClose={EditIcon} selectedColor={selectedColor} selectedVolume={selectedVolume} selectedNotes={selectedNotes} selectedId={selectedId}/>
-        <View >
-        </View>
+            <View style={{ paddingTop: 4, paddingLeft: 10 }}>
+              <Text style={styles.textNormal}>{selectedVolume}</Text>
+            </View>
+          </View>
+
+          <View style={[styles.textBox, {marginBottom: 15,}]}>
+            <View style={{ justifyContent: 'center', marginLeft: 5, }}>
+              <Image
+                source={require('../assets/Home/notes02-icon.png')}
+              />
+            </View>
+            <View style={{ justifyContent: 'center', paddingLeft: 10, }}>
+              <Text style={[styles.textNormal,]}>
+                {selectedNotes.flat().map(selectedNote => `\u2022 ${selectedNote}\n`)}
+              </Text>
+            </View>
+          </View>
+
+          {/* <TouchableOpacity onPress={EditIcon}> */}
+            <Image style={{ marginLeft: 250, marginVertical: 10, width: 30, height: 30 }}
+              source={require('../assets/Home/edit01-icon.png')}
+            />
+          </TouchableOpacity>
+          <EditInfo visible={modalVisibleEdit} onClose={EditIcon} selectedColor={selectedColor} selectedVolume={selectedVolume} selectedNotes={selectedNotes} selectedId={selectedId}/>
+          <View >
+          </View>
+
+        </ScrollView>
       </LinearGradient>
 
     </View>
@@ -177,23 +197,25 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   box: {
+    // position: 'absolute',
     width: 350,
-    height: 230,
+    height: 280,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     marginTop: -40,
-    justifyContent: "center",
     alignItems: "center",
     paddingTop: 15
   },
   textBox: {
+    flew: 0, flexDirection: 'row',
+    justifyContent: 'flex-start',
     margin: 5,
     backgroundColor: 'white',
     width: 300,
-    height: 40,
+    // height: 40,
     borderRadius: 30,
+    paddingVertical: 5,
     paddingHorizontal: 10,
-    paddingVertical: 5
   },
   textNormal: {
     fontFamily: 'MitrRegular',
