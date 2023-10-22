@@ -8,9 +8,11 @@ import firebase from '../data/firebaseDB';
 const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNotes, selectedId }) => {
     const [dataColor, setDataColor] = useState(selectedColor); //เก็บข้อมูลสีประจำเดือนที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
     const [dataVolume, setDataVolume] = useState(selectedVolume); //เก็บข้อมูลปริมาณประจำเดือนที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
-    const [dataNotes, setDataNotes] = useState(selectedNotes); //เก็บข้อมูลอาการเพิ่มเติมที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
+    // const [dataNotes, setDataNotes] = useState(selectedNotes); //เก็บข้อมูลอาการเพิ่มเติมที่ต้องการอัพเดต ถ้าไม่เลือกจะใช้ข้อมูลเก่า
+    // console.log('dataNotes :>> ', dataNotes);
+    console.log('selectedNotes :>> ', selectedNotes);
 
-    const [selectedTags, setSelectedTags] = useState([]);
+    const [selectedTags, setSelectedTags] = useState([selectedNotes]);
         const toggleTag = (tag) => {
             if (selectedTags.includes(tag)) {
                 setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
@@ -41,8 +43,9 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
         const updatedData = {
             menstrual_color: dataColor,
             menstrual_volume: dataVolume,
-            menstrual_notes: dataNotes,
+            menstrual_notes: selectedTags,
         };
+        console.log('menstrual_notes :>> ', updatedData.menstrual_notes);
 
         // ทำการอัปเดตข้อมูล
         databaseRef.update(updatedData)
@@ -77,7 +80,8 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
 
                     {/* เลือกสีประจำเดือนที่ต้องการอัพเดต */}
                     <View style={{ backgroundColor: 'white', borderRadius: 20,  width: "85%", height: 550, paddingVertical: 20, paddingHorizontal: 10 }}>
-                        <View style={[styles.textBox, { flew: 1, flexDirection: 'row', borderColor: '#FFB4BF' }]}>
+                    <ScrollView vertical showsVerticalScrollIndicator={false}>
+                        <View style={[styles.textBox, { borderColor: '#FFB4BF', height: 40,  }]}>
                             <Image
                                 source={require('../assets/Home/blood01-icon.png')}
                             />
@@ -156,8 +160,9 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                         {/* <Text> {dataColor} </Text> */}
 
                         {/* เลือกปริมาณประจำเดือนที่ต้องการอัพเดต */}
-                        <View style={[styles.textBox, { flew: 0, flexDirection: 'row' , borderColor: '#89DCFF'}]}>
-                            <Image style={{ marginTop: -5, marginLeft: -5 }}
+                        <View style={[styles.textBox, { borderColor: '#89DCFF', height: 40, }]}>
+                            <Image 
+                            style={{ alignSelf: 'center' }}
                                 source={require('../assets/Home/sanitarypad02-icon.png')}
                             />
                             <Text style={[styles.textNormal, { justifyContent: 'center' }]}>
@@ -197,56 +202,55 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                         </View>
 
                         {/* เลือกสีอาการเพิ่มเติมที่ต้องการอัพเดต */}
-                        <View>
                             <View style={[styles.textBox, { flexDirection: 'row', borderColor: '#B579CF' }]}>
                                 <Image
+                                style={{ alignSelf: 'center' }}
                                     source={require('../assets/Home/notes02-icon.png')}
                                 />
-                                <Text style={[styles.textNormal, { paddingTop: 3, paddingLeft: 10 }]} numberOfLines={1} ellipsizeMode="tail">
-                                    {selectedNotes}
-                                </Text>
+                                <View style={{ justifyContent: 'center', paddingLeft: 10, paddingRight: 5, flex: 1 }}>
+                                    <Text style={styles.textNormal}>
+                                        {selectedTags === 'บันทึกข้อมูลเพิ่มเติม' || '' ? 'บันทึกข้อมูลเพิ่มเติม' : selectedTags.map(note => `\u2022 ${note}`).join('\n')}
+                                    </Text>
+                                </View>
+                                {/* <Text style={[styles.textNormal, { paddingTop: 3, paddingLeft: 10 }]} numberOfLines={1} ellipsizeMode="tail">
+                                    {selectedTags}
+                                </Text> */}
                             </View>
-                            <View style={{ backgroundColor: 'white', borderRadius: 20, width: 250, height: 250, paddingHorizontal: 10, paddingVertical: 20, alignSelf: 'center' }}>
-                                <ScrollView vertical showsVerticalScrollIndicator={false}>
-                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+                            <View>
+                                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
 
-                                        {tags.map((tag) => (
-                                            <TouchableOpacity key={tag}
-                                                style={[
-                                                    styles.tag,
-                                                    { backgroundColor: selectedTags.includes(tag) ? '#9F79EB' : '#e8e8e8' },
-                                                ]}
-                                                onPress={() => {
-                                                    toggleTag(tag);
-                                                }}
-                                            >
-                                                <Text style={[styles.tagText, { color: selectedTags.includes(tag) ? 'white' : 'black' }]}>{tag}</Text>
-                                            </TouchableOpacity>
-                                        ))}
+                                    {tags.map((tag) => (
+                                        <TouchableOpacity key={tag}
+                                            style={[
+                                                styles.tag,
+                                                { backgroundColor: selectedTags.includes(tag) ? '#9F79EB' : '#e8e8e8' },
+                                            ]}
+                                            onPress={() => {
+                                                toggleTag(tag);
+                                            }}
+                                        >
+                                            <Text style={[styles.tagText, { color: selectedTags.includes(tag) ? 'white' : 'black' }]}>{tag}</Text>
+                                        </TouchableOpacity>
+                                    ))}
 
 
-                                    </View>
-                                </ScrollView>
+                                </View>
                             </View>
-                        </View>
 
                         {/* <View style={{ marginLeft: 170 }}> */}
-                        <View style={{position:'absolute', bottom: -15, right: -15}}>
+                        </ScrollView>
+                    </View>
+                        <View style={{position:'absolute', bottom: 8, right: 5, borderRadius: 25,}}>
                             <TouchableOpacity onPress={UpdateMonthlySummary}>
                                 <Image
-
                                     source={require('../assets/Home/save01-icon.png')}
-                                    style={styles.image}
                                 />
                             </TouchableOpacity>
                         </View>
-                    </View>
                     <View style={{position:'absolute', top: -25, right: 5}}>
                         <TouchableOpacity onPress={onClose}>
                             <Image
-
                                 source={require('../assets/Home/arrow-left-icon.png')}
-                                style={styles.image}
                             />
                         </TouchableOpacity>
                     </View>
@@ -292,10 +296,12 @@ const styles = StyleSheet.create({
         fontFamily: 'MitrRegular'
     },
     textBox: {
+        flew: 1, flexDirection: 'row',
         margin: 5,
+        marginVertical: 10,
         alignSelf: 'center',
         width: 250,
-        height: 40,
+        // height: 40,
         borderRadius: 30,
         paddingHorizontal: 10,
         paddingVertical: 5,
@@ -303,7 +309,8 @@ const styles = StyleSheet.create({
     },
     textNormal: {
         fontFamily: 'MitrRegular',
-        fontSize: 16,
+        fontSize: 15,
+        // paddingLeft: 5,
     },
 
     //tags

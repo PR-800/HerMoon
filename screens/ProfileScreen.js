@@ -122,6 +122,7 @@ class ProfileScreen extends Component {
           new_user: this.state.new_user,
           img: this.state.img,
         };
+        console.log('this.state.img :>> ', this.state.img);
       
         updateImgDoc
           .update(updatedData)
@@ -171,10 +172,10 @@ class ProfileScreen extends Component {
                             // source={require('../assets/profile/blank-profile.jpg')}
                             source={{
                                 uri: this.state.img ? this.state.img
-                                : 'https://media.discordapp.net/attachments/1165602535554424882/1165602801280352358/Group_1603.png?ex=65477333&is=6534fe33&hm=f7b04fc43eb7b07634afd3da68ed71ee3a6f5994cfb500148ec77bab7b9caa2f&=&width=277&height=287'
+                                : 'https://media.discordapp.net/attachments/1165602535554424882/1165602800965796010/Group_1606.png?ex=65477333&is=6534fe33&hm=8544235bc99fd8c5bf2ab79839021c2b361953dc1651f68bb0c08ae255f9b206&='
                               }}            
                               
-                            style={styles.image}
+                            style={styles.profileImage}
                         />
 
                     {/* })} */}
@@ -374,12 +375,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-    image: {
+    profileImage: {
         width: 157, 
         height: 157, 
-        // resizeMode: "contain", 
-        // borderRadius: "50%",
-        // borderRadius: 75,
+        borderRadius: 75,
         marginTop: 20,
     },
     headers: {

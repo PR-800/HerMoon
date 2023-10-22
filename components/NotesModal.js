@@ -71,6 +71,7 @@ const NotesModal = ({ visible, onClose, navigation }) => {
                             onPress={() => {
                                 navigation.navigate("Home", { selectedTags });
                                 console.log('selectedTags2 :>> ', selectedTags);
+                                onClose()
                             }}>
                             <Image
                                 source={require('../assets/Home/save03-icon.png')}
