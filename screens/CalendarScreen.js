@@ -16,7 +16,7 @@ const CalendarScreen = (props) => {
 
   const [activeUser, setActiveUser] = useState({});
 
-  const databaseRef = firebase.firestore().collection("monthly_summary");//สำหรับเรียกข้อมูลใน firebase
+  const databaseRef = firebase.firestore().collection("dailyRecord");//สำหรับเรียกข้อมูลใน firebase
 
   const [dataMSummary, setDataMSummary] = useState({});//เก็บข้อมูลทั้งหมดที่อยู่ใน firebase
   const [modalVisibleEdit, setModalVisibleEdit] = useState(false);

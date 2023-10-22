@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 
 import * as Font from 'expo-font';
 
@@ -161,22 +162,47 @@ class SignUpScreen extends Component {
                             })  
                             if (this.state.username != "" && this.state.password != "" && this.state.confirmPassword != "") {
                                 if (match === true) {
-                                    alert("ขออภัย ชื่อผู้ใช้นี้ถูกใช้แล้ว")
+                                    Dialog.show({
+                                        type: ALERT_TYPE.WARNING,
+                                        title: (
+                                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>ขออภัย ชื่อผู้ใช้นี้ถูกใช้แล้ว</Text>
+                                        ),
+                                        button: 'OK',
+                                    });
                                 }
                                 else if ((this.state.password != this.state.confirmPassword)) {
-                                    alert("โปรดตรวจสอบความถูกต้องของข้อมูล")
+                                    Dialog.show({
+                                        type: ALERT_TYPE.WARNING,
+                                        title: (
+                                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>โปรดตรวจสอบความถูกต้องของข้อมูล</Text>
+                                        ),
+                                        button: 'OK',
+                                    });
                                 }
                                 else {
                                     this.storeAccount()
                                     this.state.username = ""
                                     this.state.password = ""
                                     this.state.confirmPassword = ""
-                                    alert('สมัครสมาชิกสำเร็จ')
-                                    this.props.navigation.navigate("login", {});
+                                    Dialog.show({
+                                        type: ALERT_TYPE.SUCCESS,
+                                        title: (
+                                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>สมัครสมาชิกสำเร็จ</Text>
+                                        ),
+                                        button: 'OK',
+                                    });
+                                    // alert("sssss")
+                                    // this.props.navigation.navigate("login", {});
                                 }
                             }
                             else {
-                                alert('โปรดกรอกข้อมูลให้ครบถ้วน')
+                                Dialog.show({
+                                    type: ALERT_TYPE.WARNING,
+                                    title: (
+                                        <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>โปรดกรอกข้อมูลให้ครบถ้วน</Text>
+                                    ),
+                                    button: 'OK',
+                                });
                             }
                         }}
                     >
@@ -202,6 +228,9 @@ class SignUpScreen extends Component {
                     </TouchableOpacity>
                         
                 </LinearGradient>
+                            {/* เรียกใช้ alert */}
+            <AlertNotificationRoot>
+            </AlertNotificationRoot>
             </View>
         );
     }
