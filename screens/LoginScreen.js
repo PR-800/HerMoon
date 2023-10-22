@@ -19,7 +19,8 @@ class LoginScreen extends Component {
             all_data: [], 
             showPassword: true, 
             appIsReady: false, 
-            activeUser: null,};
+            activeUser: null,
+        };
     }
        
     inputValueUpdate = (val, prop) => {
@@ -122,7 +123,7 @@ class LoginScreen extends Component {
                         />
                     </View>
     
-                    <TouchableOpacity 
+                    {/* <TouchableOpacity 
                         onPress={() => {
                             // navigation.navigate("tutorial", {});
                             alert("นึกให้ออกสิ สู้ ๆ นะ")
@@ -137,7 +138,7 @@ class LoginScreen extends Component {
                             }]}>
                             ลืมรหัสผ่าน
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
     
                     <TouchableOpacity
                         style={styles.button}
@@ -145,7 +146,7 @@ class LoginScreen extends Component {
                             this.state.all_data.map((item, i) => {
                                 if (this.state.username === item.username && this.state.password === item.password) {
                                     match = true
-                                    if(item.new_user === false) {
+                                    if(item.new_user == false) {
                                         this.props.navigation.navigate("homePage", {
                                             screen: "Profile",
                                             params: {

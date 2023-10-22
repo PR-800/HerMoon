@@ -97,7 +97,7 @@ class TutorialScreen extends Component {
                     height: doc.height,
                     weight: doc.weight,
                     dob: doc.dob,
-                    periodCycle: doc.periodCycle,
+                    cycle: doc.periodCycle,
                     freq: doc.freq,
                     new_user: doc.new_user,
                     img: doc.img,
