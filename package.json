@@ -49,6 +49,7 @@
     "react-native-radio-buttons": "^1.0.0",
     "react-native-search-filter": "^0.1.5",
     "react-native-slideable-calendar-strip": "^0.4.0",
+    "react-native-tab-view": "^3.5.2",
     "react-native-time-date-picker": "^1.2.0",
     "react-native-web": "~0.19.6",
     "react-native-web-hover": "^0.2.9",

@@ -39,7 +39,7 @@ const BottomNavigator = createBottomTabNavigator();
 function MyPageNavigator() {
     return (
         <PageNavigator.Navigator>
-            <PageNavigator.Screen name="login" component={LoginScreen}
+            {/* <PageNavigator.Screen name="login" component={LoginScreen}
                 options={{
                     headerShown: false
                 }}
@@ -68,7 +68,7 @@ function MyPageNavigator() {
                 options={{
                     headerShown: false
                 }}
-            />
+            /> */}
             <PageNavigator.Screen name="History" component={HistoryScreen} 
                 options={{
                     headerShown: false
