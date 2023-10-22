@@ -115,7 +115,7 @@ class TutorialScreen extends Component {
             const month = this.state.dob.getMonth() + 1;
             const year = this.state.dob.getFullYear();
         
-            const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+            const formattedDate = `${day < 10 ? '0' : ''}${day}/${month < 10 ? '0' : ''}${month}/${year}`;
             return formattedDate;
         } 
         else {

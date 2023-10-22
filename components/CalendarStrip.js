@@ -35,7 +35,7 @@ const CalendarStripC = () => {
                 ref={calenderRef}
                 selectedDate={newdate}
                 onDateSelected={value => {
-                    setDate(moment(value).format('YYYY-MM-DD'));
+                    setDate(moment(value).format('DD/MM/YYYY'));
                 }}
                 daySelectionAnimation={{
                     type: 'border',

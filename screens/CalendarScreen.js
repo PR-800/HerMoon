@@ -116,7 +116,7 @@ const CalendarScreen = (props) => {
           //   moment(selected).format("DD/MM/YYYY HH:mm"),
           // ); // 2022/04/13 13:35
           // setdateTime(moment(selected).format("DD/MM/YYYY"))
-          setdateTime(moment(selected).format("YYYY-MM-DD"))
+          setdateTime(moment(selected).format("DD/MM/YYYY"))
         }}
         onTimeChange={(time) => {
           // console.log("time: ", time); // 1643331840000

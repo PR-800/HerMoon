@@ -113,7 +113,7 @@ const HomeScreen = () => {
     const AddMonthlySummary = () => {
         // สร้างวันที่
         const desiredDate = new Date();
-        const formattedDate = moment(desiredDate).format("YYYY-MM-DD");
+        const formattedDate = moment(desiredDate).format("DD/MM/YYYY");
 
         // สร้าง reference ไปยัง collection "monthly_summary"
         const databaseRef = firebase.firestore().collection("monthly_summary");
@@ -139,7 +139,7 @@ const HomeScreen = () => {
                 }
                 else {
                     const dataToAdd = {
-                        date: moment(desiredDate).format("YYYY-MM-DD"),
+                        date: moment(desiredDate).format("DD/MM/YYYY"),
                         menstrual_color: colorM,
                         menstrual_volume: volumM,
                         menstrual_notes: notesM,
