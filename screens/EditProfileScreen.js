@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, Text, View, Image, Button, Pressable, Modal, TouchableOpacity, ScrollView, } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -39,7 +39,7 @@ const EditProfileScreen = ({ route, navigation }) => {
     'มีเลือดออกกะปริบกะปรอย',
     'มาห่างเกิน 38 วัน',
     'มีการใช้ยาฮอร์โมน',
-    'มีฮอร์โมนเอสโตเจนต่ำ', 
+    'มีฮอร์โมนเอสโตเจนต่ำ',
   ];
 
   const [activeUser, setActiveUser] = useState({});
@@ -53,7 +53,7 @@ const EditProfileScreen = ({ route, navigation }) => {
   const [dob, setDob] = useState();
   const [img, setImg] = useState();
   const [detail, setDetail] = useState();
-  
+
 
 
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
@@ -62,38 +62,38 @@ const EditProfileScreen = ({ route, navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const cycleList = [
     {
-        label: "20 - 23 วัน",
-        value: 20,
+      label: "20 - 23 วัน",
+      value: 20,
     },
     {
-        label: "24 - 27 วัน",
-        value: 24,
+      label: "24 - 27 วัน",
+      value: 24,
     },
     {
-        label: "28 - 31 วัน",
-        value: 28,
+      label: "28 - 31 วัน",
+      value: 28,
     },
     {
-        label: "32 - 35 วัน",
-        value: 32,
+      label: "32 - 35 วัน",
+      value: 32,
     },
   ]
   const freqList = [
     {
-        label: "2 - 4 วัน",
-        value: 2,
+      label: "2 - 4 วัน",
+      value: 2,
     },
     {
-        label: "3 - 5 วัน",
-        value: 3,
+      label: "3 - 5 วัน",
+      value: 3,
     },
     {
-        label: "4 - 6 วัน",
-        value: 4,
+      label: "4 - 6 วัน",
+      value: 4,
     },
     {
-        label: "5 - 7 วัน",
-        value: 5,
+      label: "5 - 7 วัน",
+      value: 5,
     },
   ]
 
@@ -104,30 +104,31 @@ const EditProfileScreen = ({ route, navigation }) => {
   const responseListener = useRef();
 
   useEffect(() => {
-    { route.params.activeUser ? setActiveUser(route.params.activeUser) : ""}
+    { route.params.activeUser ? setActiveUser(route.params.activeUser) : "" }
     console.log("--- EditProfile")
     console.log(activeUser)
     // console.log(route.params)
 
-    if(route.params.activeUser) {
+    if (route.params.activeUser) {
       const accountDoc = firebase.firestore().collection("accounts")
-      .doc(route.params.activeUser.key);
+        .doc(route.params.activeUser.key);
 
       accountDoc.get().then((res) => {
-          if (res.exists) {
-              const doc = res.data();
-              setName(doc.name);
-              setHeight(doc.height);
-              setWeight(doc.weight);
-              setCycle(doc.periodCycle);
-              setFreq(doc.freq);
-              setDob(doc.dob);
-              setImg(doc.img);
-              setDetail(doc.detail);
-          }
-          else {
-              console.log("Document does not exist");
-          }
+        if (res.exists) {
+          const doc = res.data();
+          setName(doc.name);
+          setHeight(doc.height);
+          setWeight(doc.weight);
+          setCycle(doc.periodCycle);
+          setFreq(doc.freq);
+          setDob(doc.dob);
+          setImg(doc.img);
+          setDetail(doc.detail);
+          console.log('route.params.name => ', doc)
+        }
+        else {
+          console.log("Document does not exist");
+        }
       });
     }
 
@@ -154,10 +155,10 @@ const EditProfileScreen = ({ route, navigation }) => {
       .doc(route.params.activeUser.key);
 
     accountDoc
-    .set({
+      .update({
         username: activeUser.username,
         password: activeUser.password,
-        name: name, 
+        name: name,
         height: height,
         weight: weight,
         dob: dob,
@@ -166,7 +167,13 @@ const EditProfileScreen = ({ route, navigation }) => {
         new_user: false,
         img: img,
         // detail: detail,
-    })
+      })
+      .then(() => {
+        console.log("ข้อมูลถูกอัปเดตเรียบร้อย");
+      })
+      .catch((error) => {
+        console.error("เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ", error);
+      });
   }
 
   const formatDate = (date) => {
@@ -175,7 +182,7 @@ const EditProfileScreen = ({ route, navigation }) => {
       const month = date.getMonth() + 1;
       const year = date.getFullYear();
 
-      const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+      const formattedDate = `${day < 10 ? '0' : ''}${day}/${month < 10 ? '0' : ''}${month}/${year}`;
       return formattedDate;
     } else {
       return '';
@@ -197,31 +204,31 @@ const EditProfileScreen = ({ route, navigation }) => {
   });
 
   if (!loaded) {
-      return null;
+    return null;
   }
 
   return (
-      <View style={styles.screen}>
-        <View style={styles.headerGroup}>
-          <Pressable onPress={() => {
-                      navigation.navigate("Profile", {});
-                  }}>
-            <Image
-              source={require('../assets/profile/arrow-left.png')}
-              style={styles.arrowleft}
-            />
-          </Pressable>
-          <Text style={styles.header}>แก้ไขข้อมูล</Text>
-        </View>
+    <View style={styles.screen}>
+      <View style={styles.headerGroup}>
+        <Pressable onPress={() => {
+          navigation.navigate("Profile", {});
+        }}>
+          <Image
+            source={require('../assets/profile/arrow-left.png')}
+            style={styles.arrowleft}
+          />
+        </Pressable>
+        <Text style={styles.header}>แก้ไขข้อมูล</Text>
+      </View>
 
-        <ScrollView vertical contentContainerStyle={{alignItems: 'center', marginTop: 10}} >
+      <ScrollView vertical contentContainerStyle={{ alignItems: 'center', marginTop: 10 }} >
 
-        <TextInput 
-          style={styles.input} 
-          theme={{ 
-            roundness: 50, 
-            colors: { onSurfaceVariant: 'grey'} 
-          }} 
+        <TextInput
+          style={styles.input}
+          theme={{
+            roundness: 50,
+            colors: { onSurfaceVariant: 'grey' }
+          }}
           underlineColor="transparent"
           activeUnderlineColor="grey"
           textColor="grey"
@@ -231,82 +238,82 @@ const EditProfileScreen = ({ route, navigation }) => {
           value={activeUser.username}
         />
 
-        <TextInput 
-            style={styles.input} 
-            theme={{ 
-                roundness: 50, 
-                colors: { onSurfaceVariant: 'grey'} 
-            }} 
+        <TextInput
+          style={styles.input}
+          theme={{
+            roundness: 50,
+            colors: { onSurfaceVariant: 'grey' }
+          }}
+          underlineColor="transparent"
+          activeUnderlineColor="grey"
+          textColor="black"
+
+          label="ชื่อที่แสดง"
+          onChangeText={(val) => setName(val)}
+          value={name != null ? name + "" : ""}
+        />
+
+        <View style={{ flexDirection: 'row', marginBottom: 15 }}>
+          <TextInput
+            style={[styles.input, { width: 140, marginHorizontal: 10 }]}
+            theme={{
+              roundness: 50,
+              colors: { onSurfaceVariant: 'grey' }
+            }}
             underlineColor="transparent"
             activeUnderlineColor="grey"
             textColor="black"
 
-            label="ชื่อที่แสดง"
-            onChangeText = {(val) => setName(val)}
-            value = {name != null ? name + "" : ""}
-        />
-
-        <View style={{flexDirection: 'row', marginBottom: 15}}>
-          <TextInput 
-              style={[styles.input, {width: 140, marginHorizontal: 10}]} 
-              theme={{ 
-                  roundness: 50, 
-                  colors: { onSurfaceVariant: 'grey'} 
-              }} 
-              underlineColor="transparent"
-              activeUnderlineColor="grey"
-              textColor="black"
-
-              label="ส่วนสูง (ซม.)"
-              onChangeText={(val) => setHeight(val)}
-              value={height != null ? height + "" : ""}
+            label="ส่วนสูง (ซม.)"
+            onChangeText={(val) => setHeight(val)}
+            value={height != null ? height + "" : ""}
           />
-          <TextInput 
-              style={[styles.input, {width: 140, marginHorizontal: 10}]}
-              theme={{ 
-                  roundness: 50, 
-                  colors: { onSurfaceVariant: 'grey'} 
-              }} 
-              underlineColor="transparent"
-              activeUnderlineColor="grey"
-              textColor="black"
-              keyboardType = 'numeric'
+          <TextInput
+            style={[styles.input, { width: 140, marginHorizontal: 10 }]}
+            theme={{
+              roundness: 50,
+              colors: { onSurfaceVariant: 'grey' }
+            }}
+            underlineColor="transparent"
+            activeUnderlineColor="grey"
+            textColor="black"
+            keyboardType='numeric'
 
-              label="นํ้าหนัก (กก.)"
-              onChangeText={(val) => setWeight(val)}
-              value={weight != null ? weight + "" : ""}
+            label="นํ้าหนัก (กก.)"
+            onChangeText={(val) => setWeight(val)}
+            value={weight != null ? weight + "" : ""}
           />
         </View>
 
-        <View style={{flexDirection: 'row'}}>
-          <TextInput 
-              style={[styles.input, {marginTop: -5, width: 240}]} 
-              theme={{ 
-                  roundness: 50, 
-                  colors: { onSurfaceVariant: 'grey'} 
-              }} 
-              underlineColor="transparent"
-              activeUnderlineColor="grey"
-              textColor="black"
-              editable={false}
+        <View style={{ flexDirection: 'row' }}>
+          <TextInput
+            style={[styles.input, { marginTop: -5, width: 240 }]}
+            theme={{
+              roundness: 50,
+              colors: { onSurfaceVariant: 'grey' }
+            }}
+            underlineColor="transparent"
+            activeUnderlineColor="grey"
+            textColor="black"
+            editable={false}
 
-              label="วันเกิด"
-              onChangeText={(val) => setDob(val)}
-              value={dob != null ? dob + "" : ""} 
+            label="วันเกิด"
+            onChangeText={(val) => setDob(val)}
+            value={dob != null ? dob + "" : ""}
           />
-          <MaterialCommunityIcons 
-              name={'calendar'} 
-              size={24} 
-              color="black"
-              onPress={() => setIsDatePickerVisible(true)}
-              style={{fontSize: 40, marginRight: 20,}}
+          <MaterialCommunityIcons
+            name={'calendar'}
+            size={24}
+            color="black"
+            onPress={() => setIsDatePickerVisible(true)}
+            style={{ fontSize: 40, marginRight: 20, }}
           />
         </View>
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
           mode="date"
           onConfirm={(date) => {
-            setDob(date); 
+            setDob(date);
             const formattedDate = formatDate(date);
             setDob(formattedDate);
             setIsDatePickerVisible(false);
@@ -317,37 +324,37 @@ const EditProfileScreen = ({ route, navigation }) => {
         />
 
         <View style={styles.smallDropdown}>
-            <DropDownPicker
-                style={styles.dropdownBox}
-                zIndex={20} 
-                placeholder='รอบเดือน'
-                open={cycleDropDown}
-                value={cycle}
-                items={cycleList}
-                setOpen={(cycleDropDown) => setCycleDropDown(cycleDropDown)}
-                setValue={(valueCallback) => {
-                    const selectedValue = valueCallback();
-                    setCycle(selectedValue)
-                }}
-                placeholderStyle={{
-                    marginLeft: 10,
-                    fontSize: 16,
-                    color: 'grey',
-                }}
-                labelStyle={{
-                    marginLeft: 10,
-                    fontSize: 16,
-                }}
-                itemStyle={{
-                    marginLeft: 10,
-                    fontSize: 16,
-                }}
-            />
+          <DropDownPicker
+            style={styles.dropdownBox}
+            zIndex={20}
+            placeholder='รอบเดือน'
+            open={cycleDropDown}
+            value={cycle}
+            items={cycleList}
+            setOpen={(cycleDropDown) => setCycleDropDown(cycleDropDown)}
+            setValue={(valueCallback) => {
+              const selectedValue = valueCallback();
+              setCycle(selectedValue)
+            }}
+            placeholderStyle={{
+              marginLeft: 10,
+              fontSize: 16,
+              color: 'grey',
+            }}
+            labelStyle={{
+              marginLeft: 10,
+              fontSize: 16,
+            }}
+            itemStyle={{
+              marginLeft: 10,
+              fontSize: 16,
+            }}
+          />
         </View>
         <View style={styles.smallDropdown}>
           <DropDownPicker
             style={styles.dropdownBox}
-            zIndex={10} 
+            zIndex={10}
             placeholder='จำนวนวัน'
             placeholderTextColor="grey"
             open={freqDropDown}
@@ -355,34 +362,34 @@ const EditProfileScreen = ({ route, navigation }) => {
             items={freqList}
             setOpen={(freqDropDown) => setFreqDropDown(freqDropDown)}
             setValue={(valueCallback) => {
-                const selectedValue = valueCallback();
-                setFreq(selectedValue)
+              const selectedValue = valueCallback();
+              setFreq(selectedValue)
             }}
             placeholderStyle={{
-                marginLeft: 10,
-                fontSize: 16,
-                color: 'grey',
+              marginLeft: 10,
+              fontSize: 16,
+              color: 'grey',
             }}
             labelStyle={{
-                marginLeft: 10,
-                fontSize: 16,
+              marginLeft: 10,
+              fontSize: 16,
             }}
             itemStyle={{
-                marginLeft: 10,
-                fontSize: 16,
+              marginLeft: 10,
+              fontSize: 16,
             }}
           />
-        </View> 
+        </View>
 
         <Pressable
           style={[styles.button, styles.buttonOpen]}
           onPress={() => setModalVisible(true)}
         >
           <Text style={styles.textStyle}>ระบุรายละเอียดเพิ่มเติม</Text>
-          <Text style={{...styles.selectedTagsText, margin: 3}}>{selectedTags.length >= 1 ? 'รายการที่เลือก : '+  selectedTags.join(', ') : ''}</Text>
+          <Text style={{ ...styles.selectedTagsText, margin: 3 }}>{selectedTags.length >= 1 ? 'รายการที่เลือก : ' + selectedTags.join(', ') : ''}</Text>
         </Pressable>
-        
-        </ScrollView>
+
+      </ScrollView>
 
       <Text>Your expo push token: {expoPushToken}</Text>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -398,83 +405,91 @@ const EditProfileScreen = ({ route, navigation }) => {
       />
 
 
-        {/* Submit */}
-        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+      {/* Submit */}
+      <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
         colors={['#9F79EB', '#FC7D7B',]}
         style={styles.linearGradient}
-        >
-          <Pressable onPress={() => {
-            updateAccount()
-            navigation.navigate("Profile", {});
-                return console.log("SUBMITED")
-          }}>
-            <Text style={{color: "white", fontSize: 20, fontFamily: "MitrMedium",}}>
+      >
+        <Pressable onPress={() => {
+          updateAccount()
+          setName(name);
+          setHeight(height);
+          setWeight(weight);
+          setDob(dob);
+          setCycle(cycle);
+          setFreq(freq);
+          setImg(img);
+          navigation.navigate("Profile", {});
+          return console.log("SUBMITED")
+        }}>
+          <Text style={{ color: "white", fontSize: 20, fontFamily: "MitrMedium", }}>
             ยืนยัน
-            </Text>
-          </Pressable>
-        </LinearGradient>
+          </Text>
+        </Pressable>
+      </LinearGradient>
 
-          {/* modal */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            statusBarTranslucent={false}
-            onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
-              setModalVisible(!modalVisible);
-            }}>
-            <TouchableOpacity
-              style={styles.modalBackdrop}
-              activeOpacity={1}
-            >
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>โรคประจำตัว และอื่น ๆ</Text>
+      {/* modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        statusBarTranslucent={false}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <TouchableOpacity
+          style={styles.modalBackdrop}
+          activeOpacity={1}
+        >
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>โรคประจำตัว และอื่น ๆ</Text>
 
 
-                <View style={{ backgroundColor: 'white', borderRadius: 20, width: 250, height: 275, paddingHorizontal: 10, paddingVertical: 20, alignSelf: 'center', }}>
-                  <ScrollView vertical showsVerticalScrollIndicator={false}>
-                    {tags.map((tag) => (
-                      <TouchableOpacity
-                        key={tag}
-                        style={[
-                          styles.tag,
-                          { backgroundColor: selectedTags.includes(tag) ? '#9F79EB' : '#e8e8e8' },
-                        ]}
-                        onPress={() => toggleTag(tag)}
-                      >
-                        <Text style={[styles.tagText, { color: selectedTags.includes(tag) ? 'white' : 'black' }]}>{tag}</Text>
-                      </TouchableOpacity>
-                    ))}
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center',}}>
-
-                    </View>
-                  </ScrollView>
-
-                </View>
-                <View>
-                  <Text style={{ ...styles.selectedTagsText }}>{selectedTags.length >= 1 ? 'รายการที่เลือก : ' + selectedTags.join(', ') : ''}</Text>
-                </View>
-
-                <Pressable
-                  // style={[styles.buttonClose]}
-                  onPress={() => {setModalVisible(!modalVisible)
-                    // setDetail(selectedTags)
-                  }}>
-                  <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-                    colors={['#9F79EB', '#FC7D7B',]}
-                    style={styles.linearGradientModal}
+            <View style={{ backgroundColor: 'white', borderRadius: 20, width: 250, height: 275, paddingHorizontal: 10, paddingVertical: 20, alignSelf: 'center', }}>
+              <ScrollView vertical showsVerticalScrollIndicator={false}>
+                {tags.map((tag) => (
+                  <TouchableOpacity
+                    key={tag}
+                    style={[
+                      styles.tag,
+                      { backgroundColor: selectedTags.includes(tag) ? '#9F79EB' : '#e8e8e8' },
+                    ]}
+                    onPress={() => toggleTag(tag)}
                   >
-                    <Text style={styles.buttonClose}>ยืนยัน</Text>
-                  </LinearGradient>
-                </Pressable>
+                    <Text style={[styles.tagText, { color: selectedTags.includes(tag) ? 'white' : 'black' }]}>{tag}</Text>
+                  </TouchableOpacity>
+                ))}
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', }}>
 
-              </View>
+                </View>
+              </ScrollView>
 
-            </TouchableOpacity>
-          </Modal>
+            </View>
+            <View>
+              <Text style={{ ...styles.selectedTagsText }}>{selectedTags.length >= 1 ? 'รายการที่เลือก : ' + selectedTags.join(', ') : ''}</Text>
+            </View>
 
-      </View>
+            <Pressable
+              // style={[styles.buttonClose]}
+              onPress={() => {
+                setModalVisible(!modalVisible)
+                // setDetail(selectedTags)
+              }}>
+              <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                colors={['#9F79EB', '#FC7D7B',]}
+                style={styles.linearGradientModal}
+              >
+                <Text style={styles.buttonClose}>ยืนยัน</Text>
+              </LinearGradient>
+            </Pressable>
+
+          </View>
+
+        </TouchableOpacity>
+      </Modal>
+
+    </View>
 
 
 
@@ -493,7 +508,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: "MitrMedium",
     lineHeight: 50,
-},
+  },
   input: {
     width: 300,
     height: 55,
@@ -504,12 +519,12 @@ const styles = StyleSheet.create({
   },
   smallinput: {
     display: "flex",
-    borderRadius: 15, 
+    borderRadius: 15,
     width: 165,
     height: 50,
     margin: 10,
     marginVertical: 15,
-    overflow : "hidden",
+    overflow: "hidden",
   },
   group: {
     flexDirection: "row",
@@ -520,7 +535,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   dropdownBox: {
-    backgroundColor:"#e7e0ec",
+    backgroundColor: "#e7e0ec",
     height: 55,
     borderColor: "white",
     borderRadius: 50,
@@ -549,11 +564,11 @@ const styles = StyleSheet.create({
 
   // modal zone
   modalBackdrop: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(0,0,0,0.5)'
-    },
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
   centeredView: {
     // flex: 1,
     // justifyContent: 'center',
@@ -578,18 +593,18 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    borderRadius: 15, 
+    borderRadius: 15,
     width: 350,
     // height: 55,
     margin: 20,
-    
+
     justifyContent: 'center',
     // alignItems: 'flex-start',
     // overflow : "hidden",
   },
   buttonOpen: {
     backgroundColor: '#e7e0ec',
-    
+
   },
   buttonClose: {
     color: 'white',
