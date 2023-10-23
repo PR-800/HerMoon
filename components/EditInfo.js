@@ -45,9 +45,6 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
             setSelectedTags([...selectedTags, tag]);
         }
     };
-    
-    
-        // console.log('selectedTags : ', selectedTags)
 
         const tags = [
             'เปลี่ยนผ้าอนามัยทุกชม.',
@@ -66,33 +63,40 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
         }
 
 
-    //update data ลง firebase
-    const UpdateMonthlySummary = () => {
-        const databaseRef = firebase.firestore().collection("dailyRecord").doc(selectedId[0]);
-
-        const updatedData = {
-            menstrual_color: dataColor,
-            menstrual_volume: dataVolume,
-            menstrual_notes: selectedTags.flat(),
-        };
-        console.log('menstrual_notes :>> ', updatedData.menstrual_notes);
-
-        // ทำการอัปเดตข้อมูล
-        databaseRef.update(updatedData)
-            .then(() => {
+        const UpdateMonthlySummary = () => {
+            const databaseRef = firebase.firestore().collection("dailyRecord").doc(selectedId[0]);
+        
+            if (dataColor.length === 0 || dataVolume.length === 0) {
                 Dialog.show({
-                    type: ALERT_TYPE.SUCCESS,
+                    type: ALERT_TYPE.WARNING,
                     title: (
-                        <Text style={{fontFamily: 'MitrRegular', fontSize: 18}}>อัพเดตข้อมูลรอบเดือนสำเร็จ</Text>
+                        <Text style={styles.textNormal}>กรุณากรอกระดับสีและปริมาณ</Text>
                     ),
                     button: 'OK',
                 });
-                // console.log('อัปเดตข้อมูลสำเร็จ');
-            })
-            .catch((error) => {
-                console.error('เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ', error);
-            });
-    }
+            } else {
+                const updatedData = {
+                    menstrual_color: dataColor,
+                    menstrual_volume: dataVolume,
+                    menstrual_notes: selectedTags.flat(),
+                };
+        
+                databaseRef
+                    .update(updatedData)
+                    .then(() => {
+                        Dialog.show({
+                            type: ALERT_TYPE.SUCCESS,
+                            title: (
+                                <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>อัพเดตข้อมูลรอบเดือนสำเร็จ</Text>
+                            ),
+                            button: 'OK',
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ", error);
+                    });
+            }
+        };
 
     const colors = [
         { value: 'สีแดงสด', hex: '#FF0000' },

@@ -193,7 +193,7 @@ const HomeScreen = () => {
                     Dialog.show({
                         type: ALERT_TYPE.WARNING,
                         title: (
-                            <Text style={styles.textNormal}>กรุณากรอกข้อมูลให้ครบถ้วน</Text>
+                            <Text style={styles.textNormal}>กรุณากรอกระดับสีและปริมาณ</Text>
                         ),
                         button: 'OK',
                     });
