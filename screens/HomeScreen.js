@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import firebase from '../data/firebaseDB';
 import moment from 'moment';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import * as Notifications from 'expo-notifications';
 
 //import component
 import MenstrualLevelModal from '../components/MenstrualLevelModal';
@@ -21,6 +22,8 @@ const HomeScreen = () => {
     const [name, setName] = useState(); //เก็บชื่อที่ให้แสดง
     const [image, setImage] = useState(); //เก็บรูปปัจจุบัน
     const [dataImage, setDataImage] = useState(); //เก็บรุปที่อัพเดต
+    const [cycle, setCycle] = useState(); //เก็บรอบเดือน
+    const [freq, setFreq] = useState(); //เก็บว่าเป็นระยะเวลากี่วัน
 
     const [modalVisibleBlood, setModalVisibleBlood] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualLevelModal
     const [modalVisibleSanitaryPad, setModalVisibleSanitaryPad] = useState(false); //เก็บค่า boolean เพื่อใช้ในการการเปิดและปิด component MenstrualVolumeLevelModel
@@ -33,8 +36,64 @@ const HomeScreen = () => {
 
     const date = new Date(); //สำหรับแสดงวันที่
 
+    // ตั้งเวลาแจ้งเตือน
+    const scheduleNotificationAtDate = async (title, body) => {
+        try {
+            const currentDate = new Date(); //วันที่ปัจจุบัน
+            const daysToAdd = freq + cycle; // อีก ... วันจะให้แจ้งเตือน
+            const targetDate = new Date(currentDate.getTime() + (daysToAdd * 24 * 60 * 60 * 1000));
+            // const targetDate = new Date('2023-10-24T03:00:00'); // ใช้ทดสอบ
+            const timeDiff = targetDate - currentDate;
+            console.log('targetDate', targetDate)
+            // แปลงความต่างเวลาให้เป็นวินาที
+            const secondsFromNow = timeDiff / 1000;
+
+            if (secondsFromNow > 0) {
+                await Notifications.scheduleNotificationAsync({
+                    content: {
+                        title: title,
+                        body: body,
+                        sound: 'default',
+                    },
+                    trigger: {
+                        seconds: secondsFromNow,
+                    },
+                });
+            } else {
+                console.log('ไม่สามารถตั้งเวลาแจ้งเตือนในอดีต');
+            }
+        } catch (error) {
+            console.error('เกิดข้อผิดพลาดในการตั้งเวลาการแจ้งเตือน:', error);
+        }
+    };
+
+    // ตรวจสอบและขออนุญาตใช้การแจ้งเตือน
+    const askForNotificationPermission = async () => {
+        try {
+            const { status } = await Notifications.getPermissionsAsync();
+
+            if (status === 'granted') {
+                // ผู้ใช้มีสิทธิ์การแจ้งเตือนแล้ว
+                // จากที่นี้คุณสามารถเรียกใช้ `scheduleNotification`
+                // const targetDate = new Date('2023-10-24T02:43:40'); // ตั้งเวลาในอนาคต (ให้แก้ไขค่านี้ตามวันที่และเวลาที่ต้องการ)
+                // scheduleNotificationAtDate('คำเตือน', 'อย่าลืมพกผ้าอนามัยนะ', targetDate);
+                scheduleNotificationAtDate('คำเตือน', 'อย่าลืมพกผ้าอนามัยนะ');
+                console.log('อย่าลืมพกผ้าอนามัยนะ')
+            } else {
+                // ผู้ใช้ไม่ได้รับสิทธิ์การแจ้งเตือน
+            }
+        } catch (error) {
+            console.error('เกิดข้อผิดพลาดในการขอสิทธิ์การแจ้งเตือน: askForNotificationPermission', error);
+        }
+    };
+
     //เก็บค่าลงใน state
     useEffect(() => {
+        // ขออนุญาตการแจ้งเตือนและตั้งเวลาการแจ้งเตือน
+        const setupNotification = async () => {
+            await askForNotificationPermission();
+        };
+        setupNotification();
 
         { route.params.activeUser ? setActiveUser(route.params.activeUser) : "" }
         // console.log("--- Home")
@@ -61,8 +120,10 @@ const HomeScreen = () => {
             accountDoc.get().then((res) => {
                 if (res.exists) {
                     const doc = res.data();
-                    setName(doc.name);
+                    setName(doc.name)
                     setImage(doc.img)
+                    setFreq(doc.freq)
+                    setCycle(doc.periodCycle)
                 }
                 else {
                     console.log("Document does not exist");
@@ -240,7 +301,7 @@ const HomeScreen = () => {
 
             <View style={{ marginTop: -30, marginBottom: 20 }}>
                 <Image
-                    source={{ uri: dataImage ? dataImage : image}}
+                    source={{ uri: dataImage ? dataImage : image }}
                     style={{ width: 230, height: 230, borderRadius: 115 }}
                 />
             </View>

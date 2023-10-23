@@ -15,10 +15,10 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
     useEffect(() => {
         setSelectedTags(selectedNotes);
     }, [selectedNotes]);
-    console.log('selectedNotes :>> ', selectedNotes);
+    // console.log('selectedNotes :>> ', selectedNotes);
 
     
-    console.log('selectedTags :>> ', selectedTags);
+    // console.log('selectedTags :>> ', selectedTags);
 
     // const toggleTag = (tag) => {
     //     if (selectedTags.includes(tag)) {

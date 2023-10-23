@@ -9,18 +9,27 @@ import { useFonts } from 'expo-font';
 const NotificationScreen = ({ route, navigation }) => {
 
     // ตั้งเวลาแจ้งเตือน
-    const scheduleNotification = async (title, body, secondsFromNow) => {
+    const scheduleNotificationAtDate = async (title, body, targetDate) => {
         try {
-            await Notifications.scheduleNotificationAsync({
-                content: {
-                    title: title,
-                    body: body,
-                    sound: 'default',
-                },
-                trigger: {
-                    seconds: secondsFromNow,
-                },
-            });
+            const currentDate = new Date();
+            const timeDiff = targetDate - currentDate;
+            // แปลงความต่างเวลาให้เป็นวินาที
+            const secondsFromNow = timeDiff / 1000;
+
+            if (secondsFromNow > 0) {
+                await Notifications.scheduleNotificationAsync({
+                    content: {
+                        title: title,
+                        body: body,
+                        sound: 'default',
+                    },
+                    trigger: {
+                        seconds: secondsFromNow,
+                    },
+                });
+            } else {
+                console.log('ไม่สามารถตั้งเวลาแจ้งเตือนในอดีต');
+            }
         } catch (error) {
             console.error('เกิดข้อผิดพลาดในการตั้งเวลาการแจ้งเตือน:', error);
         }
@@ -34,7 +43,8 @@ const NotificationScreen = ({ route, navigation }) => {
             if (status === 'granted') {
                 // ผู้ใช้มีสิทธิ์การแจ้งเตือนแล้ว
                 // จากที่นี้คุณสามารถเรียกใช้ `scheduleNotification`
-                scheduleNotification('คำเตือน', 'อย่าลืมพกผ้าอนามัยนะ', 10);
+                const targetDate = new Date('2023-10-24T02:38:40'); // ตั้งเวลาในอนาคต (ให้แก้ไขค่านี้ตามวันที่และเวลาที่ต้องการ)
+                scheduleNotificationAtDate('คำเตือน', 'อย่าลืมพกผ้าอนามัยนะ', targetDate);
                 console.log('อย่าลืมพกผ้าอนามัยนะ')
             } else {
                 // ผู้ใช้ไม่ได้รับสิทธิ์การแจ้งเตือน
