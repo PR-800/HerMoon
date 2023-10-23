@@ -69,9 +69,6 @@ const AnalysisResult = (props) => {
 
     return (
         <View>
-            {/* <Text>{activeUser.username}</Text>
-            <Text>{startDate + ""}</Text>
-            <Text>{endDate + ""}</Text> */}
             <View style={{ marginTop: 10 }}>
                 <Text style={styles.text}>เราตรวจพบว่าคุณมีภาวะประจำเดือนที่ผิดปกติ</Text>
                 <Text style={styles.text}>เป็นเวลา {queryResult.length} วัน </Text>
