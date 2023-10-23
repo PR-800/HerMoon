@@ -200,7 +200,7 @@ class ProfileScreen extends Component {
                         ระยะห่าง : {this.state.periodCycle} วัน {'\n'}
                         จำนวนวันที่เป็น : {this.state.freq} วัน
                     </Text> */}
-                    <View style={styles.box} >
+                    <View style={[styles.box, {marginTop: 20}]} >
                         <Pressable onPress={() => {
                             console.log("Active user from Profile")
                             console.log(this.state.activeUser)
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
         display: "flex",
         // flex: 1,
         width: 350,
-        marginTop: 30,
+        marginBottom: 30,
         padding: 15,
         backgroundColor: "white",
 
@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     logoutButton: {
-        marginTop: 25, paddingHorizontal: 10, backgroundColor: 'white', borderRadius: 25,
+        marginTop: 10, paddingHorizontal: 10, backgroundColor: 'white', borderRadius: 25,
         // shadow
         // borderWidth: 2,
         // borderColor: "black",

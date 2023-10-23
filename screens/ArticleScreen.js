@@ -201,8 +201,9 @@ const styles = StyleSheet.create({
     gradientBackground: {
         position: 'relative',
         width: '100%',
-        height: '25%',
+        height: '23%',
         justifyContent: 'center',
+        marginBottom: 10,
         // alignItems: 'center'
     },
     navbar: {
@@ -234,6 +235,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         // flexDirection: "row",
         margin: 20,
+        marginVertical: 10,
         padding: 15,
         width: "90%",
         backgroundColor: "white",

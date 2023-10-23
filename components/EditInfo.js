@@ -15,20 +15,6 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
     useEffect(() => {
         setSelectedTags(selectedNotes);
     }, [selectedNotes]);
-    // console.log('selectedNotes :>> ', selectedNotes);
-
-    
-    // console.log('selectedTags :>> ', selectedTags);
-
-    // const toggleTag = (tag) => {
-    //     if (selectedTags.includes(tag)) {
-    //         setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
-    //     } else {
-    //         setSelectedTags([...selectedTags, tag]);
-    //     }
-    // };
-    
-
 
     const toggleTag = (tag) => {
         const isSelected = selectedTags.some((selectedTag) => {
@@ -59,31 +45,6 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
             setSelectedTags([...selectedTags, tag]);
         }
     };
-
-    // const toggleTag = (tag) => {
-    //     const tagIndex = selectedTags.findIndex((selectedTag) => {
-    //         if (Array.isArray(selectedTag)) {
-    //             return selectedTag.includes(tag);
-    //         } else {
-    //             return selectedTag === tag;
-    //         }
-    //     });
-    
-    //     let updatedTags;
-    
-    //     if (tagIndex !== -1) {
-    //         // ถ้า tag มีอยู่แล้วใน selectedTags ให้นำออก
-    //         updatedTags = [...selectedTags];
-    //         updatedTags.splice(tagIndex, 1);
-    //     } else {
-    //         // ถ้า tag ยังไม่มีใน selectedTags ให้เพิ่มเข้าไป
-    //         updatedTags = [...selectedTags, tag];
-    //     }
-    
-    //     setSelectedTags(updatedTags);
-    // };
-    
-    
     
     
         // console.log('selectedTags : ', selectedTags)

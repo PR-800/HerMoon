@@ -124,7 +124,7 @@ class LoginScreen extends Component {
                         />
                     </View>
 
-                    {/* <TouchableOpacity 
+                    <TouchableOpacity 
                         onPress={() => {
                             // navigation.navigate("tutorial", {});
                             alert("นึกให้ออกสิ สู้ ๆ นะ")
@@ -139,7 +139,7 @@ class LoginScreen extends Component {
                             }]}>
                             ลืมรหัสผ่าน
                         </Text>
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.button}

@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, Text, View, Image, Button, Pressable, Modal, TouchableOpacity, ScrollView, } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { TextInput, HelperText } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 
 import { useFonts } from 'expo-font';
 
 import firebase from '../data/firebaseDB';
 import { setDayOfYear } from 'date-fns';
 import * as Notifications from 'expo-notifications';
+import { tr } from 'date-fns/locale';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -23,6 +25,7 @@ Notifications.setNotificationHandler({
 const EditProfileScreen = ({ route, navigation }) => {
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalChangeVisible, setModalChangeVisible] = useState(false);
 
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -54,12 +57,19 @@ const EditProfileScreen = ({ route, navigation }) => {
   const [img, setImg] = useState();
   const [detail, setDetail] = useState();
 
+  const [oldPassword, setOldPassword] = useState();
+  const [newPassword, setNewPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
+  const [oldPasswordShow, setOldPasswordShow] = useState(false);
+  const [newPasswordShow, setNewPasswordShow] = useState(false);
+  const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
 
+  const [helperCycle, setHelperCycle] = useState(false)
+  const [helperFreq, setHelperFreq] = useState(false)
 
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [cycleDropDown, setCycleDropDown] = useState(false);
   const [freqDropDown, setFreqDropDown] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const cycleList = [
     {
       label: "20 - 23 วัน",
@@ -131,23 +141,6 @@ const EditProfileScreen = ({ route, navigation }) => {
         }
       });
     }
-
-    //noti
-    // registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-
-    // notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-    //   setNotification(notification);
-    // });
-
-    // responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-    //   console.log(response);
-    // });
-
-    // return () => {
-    //   Notifications.removeNotificationSubscription(notificationListener.current);
-    //   Notifications.removeNotificationSubscription(responseListener.current);
-    // };
-
   }, [route.params]);
 
   const updateAccount = () => {
@@ -166,7 +159,7 @@ const EditProfileScreen = ({ route, navigation }) => {
         freq: freq,
         new_user: false,
         img: img,
-        // detail: detail,
+        detail: selectedTags,
       })
       .then(() => {
         console.log("ข้อมูลถูกอัปเดตเรียบร้อย");
@@ -174,6 +167,8 @@ const EditProfileScreen = ({ route, navigation }) => {
       .catch((error) => {
         console.error("เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ", error);
       });
+      console.log('detail :>> ', detail);
+      console.log('selectedTags in detail :>> ', selectedTags);
   }
 
   const formatDate = (date) => {
@@ -196,7 +191,7 @@ const EditProfileScreen = ({ route, navigation }) => {
       setSelectedTags([...selectedTags, tag]);
     }
   };
-  console.log('selectedTags : ', selectedTags)
+  // console.log('selectedTags : ', selectedTags)
 
   const [loaded] = useFonts({
     MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
@@ -221,7 +216,7 @@ const EditProfileScreen = ({ route, navigation }) => {
         <Text style={styles.header}>แก้ไขข้อมูล</Text>
       </View>
 
-      <ScrollView vertical contentContainerStyle={{ alignItems: 'center', marginTop: 10 }} >
+      <ScrollView vertical showsVerticalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center', marginTop: 10 }} >
 
         <TextInput
           style={styles.input}
@@ -252,6 +247,12 @@ const EditProfileScreen = ({ route, navigation }) => {
           onChangeText={(val) => setName(val)}
           value={name != null ? name + "" : ""}
         />
+        <Pressable
+        onPress={() => setModalChangeVisible(true)}>
+          <Text style={styles.changepassText}>
+            เปลี่ยนรหัสผ่าน
+          </Text>
+        </Pressable>
 
         <View style={{ flexDirection: 'row', marginBottom: 15 }}>
           <TextInput
@@ -309,6 +310,7 @@ const EditProfileScreen = ({ route, navigation }) => {
             style={{ fontSize: 40, marginRight: 20, }}
           />
         </View>
+        
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
           mode="date"
@@ -323,62 +325,100 @@ const EditProfileScreen = ({ route, navigation }) => {
           }}
         />
 
-        <View style={styles.smallDropdown}>
-          <DropDownPicker
-            style={styles.dropdownBox}
-            zIndex={20}
-            placeholder='รอบเดือน'
-            open={cycleDropDown}
-            value={cycle}
-            items={cycleList}
-            setOpen={(cycleDropDown) => setCycleDropDown(cycleDropDown)}
-            setValue={(valueCallback) => {
-              const selectedValue = valueCallback();
-              setCycle(selectedValue)
-            }}
-            placeholderStyle={{
-              marginLeft: 10,
-              fontSize: 16,
-              color: 'grey',
-            }}
-            labelStyle={{
-              marginLeft: 10,
-              fontSize: 16,
-            }}
-            itemStyle={{
-              marginLeft: 10,
-              fontSize: 16,
-            }}
-          />
-        </View>
-        <View style={styles.smallDropdown}>
-          <DropDownPicker
-            style={styles.dropdownBox}
-            zIndex={10}
-            placeholder='จำนวนวัน'
-            placeholderTextColor="grey"
-            open={freqDropDown}
-            value={freq}
-            items={freqList}
-            setOpen={(freqDropDown) => setFreqDropDown(freqDropDown)}
-            setValue={(valueCallback) => {
-              const selectedValue = valueCallback();
-              setFreq(selectedValue)
-            }}
-            placeholderStyle={{
-              marginLeft: 10,
-              fontSize: 16,
-              color: 'grey',
-            }}
-            labelStyle={{
-              marginLeft: 10,
-              fontSize: 16,
-            }}
-            itemStyle={{
-              marginLeft: 10,
-              fontSize: 16,
-            }}
-          />
+        <View style={{flexDirection: 'row'}}>
+        <View style={{...styles.smallDropdown, width: 140,  marginBottom: 0 }}>
+            
+            <DropDownPicker
+                style={[styles.dropdownBox]}
+              zIndex={20}
+              placeholder='รอบเดือน'
+              open={cycleDropDown}
+              value={cycle}
+              items={cycleList}
+              setOpen={(cycleDropDown) => setCycleDropDown(cycleDropDown)}
+              dropDownDirection='TOP'
+              setValue={(valueCallback) => {
+                const selectedValue = valueCallback();
+                setCycle(selectedValue)
+              }}
+              labelProps={'name'}
+              placeholderStyle={{
+                marginLeft: 10,
+                fontSize: 16,
+                color: 'grey',
+              }}
+              labelStyle={{
+                marginLeft: 10,
+                fontSize: 16,
+              }}
+              itemStyle={{
+                marginLeft: 10,
+                fontSize: 16,
+              }}
+              controller={(instance) => (dropdownController.current = instance)}
+            />
+            <View style={{ flexDirection: 'row', marginTop: 5 }}>
+              <MaterialCommunityIcons 
+                  name={'information'} 
+                  size={20} 
+                  color="lightgray"
+                  onPress={() => {
+                    setHelperCycle(!helperCycle)
+                  }}
+                  style={{ left:10, top: 3, zIndex: 10 }}
+              />
+              <HelperText type="info" visible={helperCycle}
+                  style={[styles.tagText, {marginLeft: 3}]}>
+                  รอบเดือน
+              </HelperText>
+            </View>
+          </View>
+
+          <View style={{...styles.smallDropdown, width: 140, marginBottom: 0 }}>
+            <DropDownPicker
+              style={styles.dropdownBox}
+              zIndex={10}
+              placeholder='จำนวนวัน'
+              placeholderTextColor="grey"
+              open={freqDropDown}
+              value={freq}
+              items={freqList}
+              setOpen={(freqDropDown) => setFreqDropDown(freqDropDown)}
+              dropDownDirection='TOP'
+              setValue={(valueCallback) => {
+                const selectedValue = valueCallback();
+                setFreq(selectedValue)
+              }}
+              placeholderStyle={{
+                marginLeft: 10,
+                fontSize: 16,
+                color: 'grey',
+              }}
+              labelStyle={{
+                marginLeft: 10,
+                fontSize: 16,
+              }}
+              itemStyle={{
+                marginLeft: 10,
+                fontSize: 16,
+              }}
+            />
+            <View style={{ flexDirection: 'row', marginTop: 5 }}>
+              <MaterialCommunityIcons 
+                  name={'information'} 
+                  size={20} 
+                  color="lightgray"
+                  onPress={() => {
+                    setHelperFreq(!helperFreq)
+                  }}
+                  style={{ left:10, top: 3, zIndex: 10 }}
+              />
+              <HelperText type="info" visible={helperFreq}
+                  style={[styles.tagText, {marginLeft: 3}]}>
+                  จำนวนวัน
+              </HelperText>
+            </View>
+          </View>
         </View>
 
         <Pressable
@@ -390,19 +430,6 @@ const EditProfileScreen = ({ route, navigation }) => {
         </Pressable>
 
       </ScrollView>
-
-      {/* <Text>Your expo push token: {expoPushToken}</Text>
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Title: {notification && notification.request.content.title} </Text>
-        <Text>Body: {notification && notification.request.content.body}</Text>
-        <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
-      </View>
-      <Button
-        title="Press to schedule a notification"
-        onPress={async () => {
-          await schedulePushNotification();
-        }}
-      /> */}
 
 
       {/* Submit */}
@@ -474,7 +501,8 @@ const EditProfileScreen = ({ route, navigation }) => {
               // style={[styles.buttonClose]}
               onPress={() => {
                 setModalVisible(!modalVisible)
-                // setDetail(selectedTags)
+                setDetail(selectedTags)
+                console.log('selectedTags :>> ', selectedTags);
               }}>
               <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
                 colors={['#9F79EB', '#FC7D7B',]}
@@ -483,6 +511,163 @@ const EditProfileScreen = ({ route, navigation }) => {
                 <Text style={styles.buttonClose}>ยืนยัน</Text>
               </LinearGradient>
             </Pressable>
+
+          </View>
+
+        </TouchableOpacity>
+      </Modal>
+
+      {/* ChangePasswordModal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalChangeVisible}
+        statusBarTranslucent={false}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalChangeVisible(!modalChangeVisible);
+        }}>
+        <TouchableOpacity
+          style={styles.modalBackdrop}
+          activeOpacity={1}
+        >
+          <View style={[styles.modalView, {paddingVertical: 30}]}>
+            <Text style={[styles.modalText, {marginVertical: 10}]}>เปลี่ยนรหัสผ่าน</Text>
+            {/* <TouchableOpacity 
+              onPress={() => {setModalChangeVisible(!modalChangeVisible)}}
+              style={{position: 'absolute', top: 5,}}>
+              <Image source={require('../assets/profile/close.png')} style={{width: 25, height: 25}} />
+            </TouchableOpacity> */}
+
+
+            <View style={{ backgroundColor: 'white', borderRadius: 20, width: '90%', height: 275, alignSelf: 'center'}}>
+              <ScrollView vertical showsVerticalScrollIndicator={false}>
+                  <TextInput
+                    style={[styles.input, {alignSelf: 'center', width: 265}]}
+                    theme={{
+                      roundness: 50,
+                      colors: { onSurfaceVariant: 'grey' }
+                    }}
+                    underlineColor="transparent"
+                    activeUnderlineColor="grey"
+                    label="รหัสผ่านเดิม"
+                    secureTextEntry={oldPasswordShow}
+                    onChangeText={(val) => setOldPassword(val)}
+                    value={oldPassword}
+                  />
+                  <MaterialCommunityIcons
+                      name={oldPasswordShow ? 'eye-off' : 'eye'}
+                      size={25}
+                      color="#aaa"
+                      onPress={() => {
+                        setOldPasswordShow(!oldPasswordShow)
+                      }}                      
+                      style={{ position: 'absolute', right: 30, top: 30 }}
+                  />
+
+                <TextInput
+                  style={[styles.input, {alignSelf: 'center', width: 265}]}
+                  theme={{
+                    roundness: 50,
+                    colors: { onSurfaceVariant: 'grey' }
+                  }}
+                  underlineColor="transparent"
+                  activeUnderlineColor="grey"
+                  label="รหัสผ่านใหม่"
+                  secureTextEntry={newPasswordShow}
+                  onChangeText={(val) => setNewPassword(val)}
+                  value={newPassword}
+                />
+                <MaterialCommunityIcons
+                    name={newPasswordShow ? 'eye-off' : 'eye'}
+                    size={25}
+                    color="#aaa"
+                    onPress={() => {
+                      setNewPasswordShow(!newPasswordShow)
+                    }}
+                    style={{ position: 'absolute', right: 30, top: 115 }}
+                />
+
+                <TextInput
+                  style={[styles.input, {alignSelf: 'center', width: 265}]}
+                  theme={{
+                    roundness: 50,
+                    colors: { onSurfaceVariant: 'grey' }
+                  }}
+                  underlineColor="transparent"
+                  activeUnderlineColor="grey"
+                  label="ยืนยันรหัสผ่านใหม่"
+                  secureTextEntry={confirmPasswordShow}
+                  onChangeText={(val) => setConfirmPassword(val)}
+                  value={confirmPassword}
+                />
+                <MaterialCommunityIcons
+                      name={confirmPasswordShow ? 'eye-off' : 'eye'}
+                      size={25}
+                      color="#aaa"
+                      onPress={() => {
+                        setConfirmPasswordShow(!confirmPasswordShow)
+                      }}
+                      style={{ position: 'absolute', right: 30, top: 200 }}
+                  />
+
+              </ScrollView>
+            </View>
+
+            {/* Button */}
+            <View style={{flexDirection:'row'}}>
+              <Pressable
+                onPress={() => {
+                  if (activeUser.password === oldPassword) {
+                    if (newPassword === confirmPassword) {
+                      activeUser.password = newPassword
+                      updateAccount()
+                      setOldPassword(''); setNewPassword(''); setConfirmPassword('')
+                      Dialog.show({
+                        type: ALERT_TYPE.SUCCESS,
+                        title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>เปลี่ยนรหัสผ่านสำเร็จ</Text>,
+                        button: 'OK',
+                      });
+                    }
+                    else {
+                      setOldPassword(''); setNewPassword(''); setConfirmPassword('')
+                      Dialog.show({
+                        type: ALERT_TYPE.WARNING,
+                        title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>โปรดตรวจสอบรหัสผ่านอีกครั้ง</Text>,
+                        button: 'OK',
+                      });
+                    }
+                  } else {
+                    setOldPassword(''); setNewPassword(''); setConfirmPassword('')
+                    Dialog.show({
+                      type: ALERT_TYPE.WARNING,
+                      title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>โปรดตรวจสอบรหัสผ่านอีกครั้ง</Text>,
+                      button: 'OK',
+                    });
+                  }
+                  setModalChangeVisible(!modalChangeVisible)
+                }}>
+                <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                  colors={['#9F79EB', '#FC7D7B',]}
+                  style={[styles.linearGradientModal, {width: 130, marginHorizontal: 10}]}
+                >
+                  <Text style={styles.buttonClose}>ยืนยัน</Text>
+                </LinearGradient>
+              </Pressable>
+              <Pressable
+              onPress={() => {
+                setOldPassword(''); setNewPassword(''); setConfirmPassword('')
+                setModalChangeVisible(!modalChangeVisible)
+              }}>
+              <View
+              style={[styles.linearGradientModal, {width: 130, marginHorizontal: 10, backgroundColor: '#cfcaca', }]}
+              >
+                <Text style={[styles.buttonClose, {}]}>ยกเลิก</Text>
+              </View>
+            </Pressable>
+
+            </View>
+            
 
           </View>
 
@@ -530,7 +715,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   smallDropdown: {
-    width: 300,
+    // width: 300,
     marginVertical: 15,
     marginHorizontal: 10,
   },
@@ -594,7 +779,7 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     borderRadius: 15,
-    width: 350,
+    width: 320,
     // height: 55,
     margin: 20,
 
@@ -626,7 +811,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   modalText: {
-    fontSize: 19,
+    fontSize: 21,
     fontFamily: "MitrMedium",
   },
 
@@ -649,6 +834,17 @@ const styles = StyleSheet.create({
     fontFamily: "MitrRegular",
     color: '#A43BA6',
   },
+  changepassText: {
+    backgroundColor: "#e7e0ec",
+    width: 300,
+    height: 55,
+    margin: 15,
+    borderRadius: 50,
+    padding: 15,
+    textAlign: 'center',
+    fontSize: 16,
+    fontFamily: 'MitrRegular',
+  }
 
 });
 
