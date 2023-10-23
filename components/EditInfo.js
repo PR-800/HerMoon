@@ -132,6 +132,16 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                 console.error('เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ', error);
             });
     }
+
+    const colors = [
+        { value: 'สีแดงสด', hex: '#FF0000' },
+        { value: 'สีแดงส้ม', hex: '#FD4400' },
+        { value: 'สีแดงเข้ม', hex: '#BE0A01' },
+        { value: 'สีชมพู', hex: '#FF97C5' },
+        { value: 'สีน้ำตาล', hex: '#7A601C' },
+        { value: 'สีแดงอมเทาปนเขียว', hex: '#576458' },
+        { value: 'สีดำ', hex: 'black' },
+    ];
     return (
         <Modal
             transparent={true}
@@ -154,78 +164,20 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                             <Image
                                 source={require('../assets/Home/blood01-icon.png')}
                             />
-                            <Text style={[styles.textNormal]}>{selectedColor}</Text>
+                            <Text style={[styles.textNormal]}>{dataColor == '' ? selectedColor : dataColor}</Text>
                         </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <RadioButton
-                                        value='สีแดงสด'
-                                        status={dataColor === 'สีแดงสด' ? 'checked' : 'unchecked'}
-                                        onPress={() => setDataColor('สีแดงสด')}
-                                        color='#FF0000'
-                                    />
-                                    <Text style={styles.modalText}>สีแดงสด</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <RadioButton
-                                        value='สีแดงส้ม'
-                                        status={dataColor === 'สีแดงส้ม' ? 'checked' : 'unchecked'}
-                                        onPress={() => setDataColor('สีแดงส้ม')}
-                                        color='#FD4400'
-                                    />
-                                    <Text style={styles.modalText}>สีแดงส้ม</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <RadioButton
-                                        value='สีแดงเข้ม'
-                                        status={dataColor === 'สีแดงเข้ม' ? 'checked' : 'unchecked'}
-                                        onPress={() => setDataColor('สีแดงเข้ม')}
-                                        color='#BE0A01'
-                                    />
-                                    <Text style={styles.modalText}>สีแดงเข้ม</Text>
-                                </View>
+                        
+                        {colors.map((color) => (
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }} key={color.value}>
+                                <RadioButton
+                                    value={color.value}
+                                    status={dataColor === color.value ? 'checked' : 'unchecked'}
+                                    onPress={() => setDataColor(color.value)}
+                                    color={color.hex}
+                                />
+                                <Text style={styles.textNormal}>{color.value}</Text>
                             </View>
-
-                            <View style={{ marginLeft: 30 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <RadioButton
-                                        value='สีชมพู'
-                                        status={dataColor === 'สีชมพู' ? 'checked' : 'unchecked'}
-                                        onPress={() => setDataColor('สีชมพู')}
-                                        color='#FF97C5'
-                                    />
-                                    <Text style={styles.modalText}>สีชมพู</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <RadioButton
-                                        value='สีน้ำตาล'
-                                        status={dataColor === 'สีน้ำตาล' ? 'checked' : 'unchecked'}
-                                        onPress={() => setDataColor('สีน้ำตาล')}
-                                        color='#7A601C'
-                                    />
-                                    <Text style={styles.modalText}>สีน้ำตาล</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <RadioButton
-                                        value='สีดำ'
-                                        status={dataColor === 'สีดำ' ? 'checked' : 'unchecked'}
-                                        onPress={() => setDataColor('สีดำ')}
-                                        color='black'
-                                    />
-                                    <Text style={styles.modalText}>สีดำ</Text>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value='สีแดงอมเทาปนและสีเขียว'
-                                status={dataColor === 'สีแดงอมเทาปนและสีเขียว' ? 'checked' : 'unchecked'}
-                                onPress={() => setDataColor('สีแดงอมเทาปนและสีเขียว')}
-                                color='#576458'
-                            />
-                            <Text style={styles.modalText}>สีแดงอมเทาปนและสีเขียว</Text>
-                        </View>
+                        ))}
                         {/* <Text> {dataColor} </Text> */}
 
                         {/* เลือกปริมาณประจำเดือนที่ต้องการอัพเดต */}
@@ -235,7 +187,7 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                                 source={require('../assets/Home/sanitarypad02-icon.png')}
                             />
                             <Text style={[styles.textNormal, { justifyContent: 'center' }]}>
-                                {selectedVolume}
+                            {dataVolume == '' ? selectedVolume : dataVolume}
                             </Text>
                         </View>
 
