@@ -133,20 +133,20 @@ const EditProfileScreen = ({ route, navigation }) => {
     }
 
     //noti
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    // registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
+    // notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+    //   setNotification(notification);
+    // });
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
+    // responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+    //   console.log(response);
+    // });
 
-    return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current);
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
+    // return () => {
+    //   Notifications.removeNotificationSubscription(notificationListener.current);
+    //   Notifications.removeNotificationSubscription(responseListener.current);
+    // };
 
   }, [route.params]);
 
@@ -391,7 +391,7 @@ const EditProfileScreen = ({ route, navigation }) => {
 
       </ScrollView>
 
-      <Text>Your expo push token: {expoPushToken}</Text>
+      {/* <Text>Your expo push token: {expoPushToken}</Text>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text>Title: {notification && notification.request.content.title} </Text>
         <Text>Body: {notification && notification.request.content.body}</Text>
@@ -402,7 +402,7 @@ const EditProfileScreen = ({ route, navigation }) => {
         onPress={async () => {
           await schedulePushNotification();
         }}
-      />
+      /> */}
 
 
       {/* Submit */}

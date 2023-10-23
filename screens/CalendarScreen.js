@@ -161,17 +161,17 @@ const CalendarScreen = (props) => {
                 source={require('../assets/Home/notes02-icon.png')}
               />
             </View>
-            <View style={{ justifyContent: 'center', paddingLeft: 10, }}>
+            <View style={{ justifyContent: 'center', paddingLeft: 10, padding: 5 }}>
               <Text style={[styles.textNormal,]}>
-                {selectedNotes.flat().map(selectedNote => `\u2022 ${selectedNote}\n`)}
+                {selectedNotes == 'บันทึกข้อมูลเพิ่มเติม' || '' ? 'บันทึกข้อมูลเพิ่มเติม' :  selectedNotes.flat().map(selectedTag => `\u2022 ${selectedTag}`).join('\n')}
               </Text>
             </View>
           </View>
 
           {/* <TouchableOpacity onPress={EditIcon}> */}
-            <Image style={{ marginLeft: 250, marginVertical: 10, width: 30, height: 30 }}
+            {/* <Image style={{ marginLeft: 250, marginVertical: 10, width: 30, height: 30 }}
               source={require('../assets/Home/edit01-icon.png')}
-            />
+            /> */}
           </TouchableOpacity>
           <EditInfo visible={modalVisibleEdit} onClose={EditIcon} selectedColor={selectedColor} selectedVolume={selectedVolume} selectedNotes={selectedNotes} selectedId={selectedId}/>
           <View >

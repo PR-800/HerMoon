@@ -138,6 +138,18 @@ const HomeScreen = () => {
                     });
                 }
                 else {
+                    if (notesM == 'บันทึกข้อมูลเพิ่มเติม') {
+                        notesM = '';
+                        // const dataToAdd = {
+                        //     date: moment(desiredDate).format("DD/MM/YYYY"),
+                        //     menstrual_color: colorM,
+                        //     menstrual_volume: volumM,
+                        //     menstrual_notes: null,
+                        //     user_id: activeUser.key
+                        // };
+                    }
+                    // else {
+                    // }
                     const dataToAdd = {
                         date: moment(desiredDate).format("DD/MM/YYYY"),
                         menstrual_color: colorM,
@@ -283,7 +295,7 @@ const HomeScreen = () => {
                             </View>
                             <View style={{ justifyContent: 'center', paddingLeft: 10, paddingRight: 5, flex: 1 }}>
                                 <Text style={styles.textNormal}>
-                                    {notesM === 'บันทึกข้อมูลเพิ่มเติม' || '' ? 'บันทึกข้อมูลเพิ่มเติม' : notesM.map(note => `\u2022 ${note}`).join('\n')}
+                                    {notesM == 'บันทึกข้อมูลเพิ่มเติม' || null ? 'บันทึกข้อมูลเพิ่มเติม' : notesM.map(note => `\u2022 ${note}`).join('\n')}
                                 </Text>
                             </View>
                         </View>

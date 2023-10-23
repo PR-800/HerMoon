@@ -20,13 +20,72 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
     
     console.log('selectedTags :>> ', selectedTags);
 
+    // const toggleTag = (tag) => {
+    //     if (selectedTags.includes(tag)) {
+    //         setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
+    //     } else {
+    //         setSelectedTags([...selectedTags, tag]);
+    //     }
+    // };
+    
+
+
     const toggleTag = (tag) => {
-        if (selectedTags.includes(tag)) {
-          setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
+        const isSelected = selectedTags.some((selectedTag) => {
+            if (Array.isArray(selectedTag)) {
+                // ถ้า selectedTag เป็น array ให้เช็คว่า tag อยู่ในนั้นหรือไม่
+                return selectedTag.includes(tag);
+            } else {
+                // ถ้า selectedTag เป็น string ให้เช็คตรงๆ
+                return selectedTag === tag;
+            }
+        });
+
+        if (isSelected) {
+            // ถ้า tag มีอยู่แล้วใน selectedTags ให้นำออก
+            const updatedTags = selectedTags.map((selectedTag) => {
+                if (Array.isArray(selectedTag)) {
+                    // ถ้า selectedTag เป็น array ให้นำ tag ออก
+                    return selectedTag.filter((innerTag) => innerTag !== tag);
+                } else {
+                    // ถ้า selectedTag เป็น string ไม่ต้องทำอะไร
+                    return selectedTag;
+                }
+            });
+    
+            setSelectedTags(updatedTags);
         } else {
-          setSelectedTags([...selectedTags, tag]);
+            // ถ้า tag ยังไม่มีใน selectedTags ให้เพิ่มเข้าไป
+            setSelectedTags([...selectedTags, tag]);
         }
     };
+
+    // const toggleTag = (tag) => {
+    //     const tagIndex = selectedTags.findIndex((selectedTag) => {
+    //         if (Array.isArray(selectedTag)) {
+    //             return selectedTag.includes(tag);
+    //         } else {
+    //             return selectedTag === tag;
+    //         }
+    //     });
+    
+    //     let updatedTags;
+    
+    //     if (tagIndex !== -1) {
+    //         // ถ้า tag มีอยู่แล้วใน selectedTags ให้นำออก
+    //         updatedTags = [...selectedTags];
+    //         updatedTags.splice(tagIndex, 1);
+    //     } else {
+    //         // ถ้า tag ยังไม่มีใน selectedTags ให้เพิ่มเข้าไป
+    //         updatedTags = [...selectedTags, tag];
+    //     }
+    
+    //     setSelectedTags(updatedTags);
+    // };
+    
+    
+    
+    
         // console.log('selectedTags : ', selectedTags)
 
         const tags = [
@@ -41,6 +100,9 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
             'ประจำเดือนมานานเกิน 8 วัน',
         ]
 
+        if (selectedTags && selectedTags[0] && selectedTags[0].length === 0) {
+            selectedTags.shift();
+        }
 
 
     //update data ลง firebase
@@ -50,7 +112,7 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
         const updatedData = {
             menstrual_color: dataColor,
             menstrual_volume: dataVolume,
-            menstrual_notes: selectedTags,
+            menstrual_notes: selectedTags.flat(),
         };
         console.log('menstrual_notes :>> ', updatedData.menstrual_notes);
 
@@ -214,9 +276,9 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                                 style={{ alignSelf: 'center' }}
                                     source={require('../assets/Home/notes02-icon.png')}
                                 />
-                                <View style={{ justifyContent: 'center', paddingLeft: 10, paddingRight: 5, flex: 1 }}>
+                                <View style={{ justifyContent: 'center', paddingLeft: 10, padding: 5, flex: 1 }}>
                                     <Text style={styles.textNormal}>
-                                        {selectedTags.flat().map(selectedTag => `\u2022 ${selectedTag}\n`)}
+                                    {selectedTags === 'บันทึกข้อมูลเพิ่มเติม' ? 'บันทึกข้อมูลเพิ่มเติม' :  selectedTags.flat().map(selectedTag => `\u2022 ${selectedTag}`).join('\n')}
                                     </Text>
                                 </View>
                             </View>
@@ -227,13 +289,13 @@ const EditInfo = ({ visible, onClose, selectedColor, selectedVolume, selectedNot
                                         <TouchableOpacity key={tag}
                                             style={[
                                                 styles.tag,
-                                                { backgroundColor: selectedTags.includes(tag) ? '#9F79EB' : '#e8e8e8' },
+                                                { backgroundColor: selectedTags.flat().includes(tag) ? '#9F79EB' : '#e8e8e8' },
                                             ]}
                                             onPress={() => {
                                                 toggleTag(tag);
                                             }}
                                         >
-                                            <Text style={[styles.tagText, { color: selectedTags.includes(tag) ? 'white' : 'black' }]}>{tag}</Text>
+                                            <Text style={[styles.tagText, { color: selectedTags.flat().includes(tag) ? 'white' : 'black' }]}>{tag}</Text>
                                         </TouchableOpacity>
                                     ))}
 
