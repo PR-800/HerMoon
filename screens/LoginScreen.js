@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Modal, ScrollView, Pressable } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -21,7 +21,45 @@ class LoginScreen extends Component {
             showPassword: true,
             appIsReady: false,
             activeUser: null,
+
+            // modalChangePass
+            modalVisible: true,
+            usernameChecking: '',
+            newPassword: '',
+            confirmPassword: '',
+            // oldPasswordShowing: true,
+            newPasswordShowing: true,
+            confirmPasswordShowing: true,
+
         };
+    }
+
+    updateAccount = () => {
+        const accountDoc = firebase.firestore().collection("accounts")
+          .doc(route.params.activeUser.key);
+    
+        accountDoc
+            .update({
+            username: this.state.activeUser.username,
+            password: this.state.activeUser.password,
+            name: this.state.name,
+            height: this.state.height,
+            weight: this.state.weight,
+            dob: this.state.dob,
+            periodCycle: this.state.cycle,
+            freq: this.state.freq,
+            new_user: this.state.false,
+            img: this.state.img,
+            detail: this.state.selectedTags,
+            })
+            .then(() => {
+            console.log("ข้อมูลถูกอัปเดตเรียบร้อย");
+            })
+            .catch((error) => {
+            console.error("เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ", error);
+            });
+            console.log('detail :>> ', detail);
+            console.log('selectedTags in detail :>> ', selectedTags);
     }
 
     inputValueUpdate = (val, prop) => {
@@ -58,6 +96,7 @@ class LoginScreen extends Component {
         }
 
         let match = false;
+        let checkUsername = false;
 
         return (
             <View style={styles.screen}>
@@ -126,9 +165,10 @@ class LoginScreen extends Component {
 
                     <TouchableOpacity 
                         onPress={() => {
-                            // navigation.navigate("tutorial", {});
-                            alert("นึกให้ออกสิ สู้ ๆ นะ")
-                        }}
+                            this.setState((prevState) => ({
+                              modalVisible: !prevState.modalVisible,
+                            }));
+                          }}
                     >
                         <Text style={[styles.text, { 
                                 left: 80, 
@@ -208,6 +248,215 @@ class LoginScreen extends Component {
                     </Text>
 
                 </LinearGradient>
+
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={this.state.modalVisible}
+                    statusBarTranslucent={false}
+                    onRequestClose={() => {
+                        this.setState((prevState) => ({
+                            modalVisible: !prevState.modalVisible,
+                        }));
+                        console.log('this.state.modalVisible :>> ', this.state.modalVisible);
+                    }}>
+                    <TouchableOpacity
+                        style={styles.modalBackdrop}
+                        activeOpacity={1}
+                    >
+                        <View style={[styles.modalView, { paddingVertical: 30 }]}>
+                            <Text style={[styles.modalText, { marginVertical: 10 }]}>แก้ไขรหัสผ่าน</Text>
+
+                            <View style={{ backgroundColor: 'white', borderRadius: 20, width: '90%', height: 275, alignSelf: 'center' }}>
+                                {/* <ScrollView vertical showsVerticalScrollIndicator={false}> */}
+                                <TextInput
+                                    style={[styles.input, { alignSelf: 'center', width: 265 }]}
+                                    theme={{
+                                        roundness: 50,
+                                        colors: { onSurfaceVariant: 'grey' }
+                                    }}
+                                    underlineColor="transparent"
+                                    activeUnderlineColor="grey"
+                                    label="ชื่อผู้ใช้"
+                                    // secureTextEntry={this.state.oldPasswordShowing}
+                                    onChangeText={(text) => this.setState({ usernameChecking: text })}
+                                    value={this.state.usernameChecking}
+                                />
+
+                                    {/* <MaterialCommunityIcons
+                                        name={this.state.oldPasswordShowing ? 'eye-off' : 'eye'}
+                                        size={25}
+                                        color="#aaa"
+                                        onPress={() => {
+                                            this.setState((prevState) => ({
+                                                oldPasswordShowing: !prevState.oldPasswordShowing,
+                                            }));
+                                        }}
+                                        style={{ position: 'absolute', right: 30, top: 30 }}
+                                    /> */}
+
+                                    <TextInput
+                                        style={[styles.input, { alignSelf: 'center', width: 265 }]}
+                                        theme={{
+                                            roundness: 50,
+                                            colors: { onSurfaceVariant: 'grey' }
+                                        }}
+                                        underlineColor="transparent"
+                                        activeUnderlineColor="grey"
+                                        label="รหัสผ่านใหม่"
+                                        secureTextEntry={this.state.newPasswordShowing}
+                                        onChangeText={(text) => this.setState({ newPassword: text })}
+                                        value={this.state.newPassword}
+                                    />
+                                    <MaterialCommunityIcons
+                                        name={this.state.newPasswordShowing ? 'eye-off' : 'eye'}
+                                        size={25}
+                                        color="#aaa"
+                                        onPress={() => {
+                                            this.setState((prevState) => ({
+                                                newPasswordShowing: !prevState.newPasswordShowing,
+                                            }));
+                                        }}
+                                        style={{ position: 'absolute', right: 30, top: 115 }}
+                                    />
+
+                                    <TextInput
+                                        style={[styles.input, { alignSelf: 'center', width: 265 }]}
+                                        theme={{
+                                            roundness: 50,
+                                            colors: { onSurfaceVariant: 'grey' }
+                                        }}
+                                        underlineColor="transparent"
+                                        activeUnderlineColor="grey"
+                                        label="ยืนยันรหัสผ่านใหม่"
+                                        secureTextEntry={this.state.confirmPasswordShowing}
+                                        onChangeText={(text) => this.setState({ confirmPassword: text })}
+                                        value={this.state.confirmPassword}
+                                    />
+                                    <MaterialCommunityIcons
+                                        name={this.state.confirmPasswordShowing ? 'eye-off' : 'eye'}
+                                        size={25}
+                                        color="#aaa"
+                                        onPress={() => {
+                                            this.setState((prevState) => ({
+                                                confirmPasswordShowing: !prevState.confirmPasswordShowing,
+                                            }));
+                                        }}
+                                        style={{ position: 'absolute', right: 30, top: 200 }}
+                                    />
+
+                                {/* </ScrollView> */}
+                            </View>
+
+                            {/* Button */}
+                            <View style={{ flexDirection: 'row' }}>
+                                <Pressable
+                                    onPress={() => {
+                                        this.state.all_data.map((item, i) => {
+                                            console.log(this.state.usernameChecking + " + " + item.username)
+                                            if (this.state.usernameChecking === item.username) {
+                                                checkUsername = true
+                                            }
+                                        })
+                                        if (this.state.usernameChecking != "" && this.state.newPassword != "" && this.state.confirmPassword != "") {
+                                            if (checkUsername === true) {
+                                                if (this.state.newPassword == this.state.confirmPassword) {
+
+                                                    Dialog.show({
+                                                        type: ALERT_TYPE.SUCCESS,
+                                                        title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>เปลี่ยนรหัสผ่านสำเร็จ</Text>,
+                                                        button: 'OK',
+                                                    });
+
+                                                }
+                                            }
+                                            else {
+                                                console.log('ไม่เจ๋ง');
+                                            }
+
+                                        }
+                                        else {
+                                            console.log('ไม่กรอก');
+                                        }
+
+
+                                        // if (activeUser.name === oldPassword) {
+                                        //     if (newPassword === confirmPassword) {
+                                        //         activeUser.password = newPassword
+                                        //         updateAccount()
+                                        //         this.setState({
+                                        //             oldPassword: '',
+                                        //             newPassword: '',
+                                        //             confirmPassword: '',
+                                        //         })
+                                        //         Dialog.show({
+                                        //             type: ALERT_TYPE.SUCCESS,
+                                        //             title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>เปลี่ยนรหัสผ่านสำเร็จ</Text>,
+                                        //             button: 'OK',
+                                        //         });
+                                        //     }
+                                        //     else {
+                                        //         this.setState({
+                                        //             oldPassword: '',
+                                        //             newPassword: '',
+                                        //             confirmPassword: '',
+                                        //         })
+                                        //         Dialog.show({
+                                        //             type: ALERT_TYPE.WARNING,
+                                        //             title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>โปรดตรวจสอบรหัสผ่านอีกครั้ง</Text>,
+                                        //             button: 'OK',
+                                        //         });
+                                        //     }
+                                        // } else {
+                                        //     this.setState({
+                                        //         oldPassword: '',
+                                        //         newPassword: '',
+                                        //         confirmPassword: '',
+                                        //     })
+                                        //     Dialog.show({
+                                        //         type: ALERT_TYPE.WARNING,
+                                        //         title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>โปรดตรวจสอบรหัสผ่านอีกครั้ง</Text>,
+                                        //         button: 'OK',
+                                        //     });
+                                        // }
+                                        this.setState((prevState) => ({
+                                            modalVisible: !prevState.modalVisible,
+                                        }));
+                                    }}>
+
+                                    <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                                        colors={['#9F79EB', '#FC7D7B',]}
+                                        style={[styles.linearGradientModal, { width: 130, marginHorizontal: 10 }]}
+                                    >
+                                        <Text style={styles.buttonClose}>ยืนยัน</Text>
+                                    </LinearGradient>
+                                </Pressable>
+                                <Pressable
+                                    onPress={() => {
+                                        this.setState({
+                                            oldPassword: '',
+                                            newPassword: '',
+                                            confirmPassword: '',
+                                        })
+                                        this.setState((prevState) => ({
+                                            modalVisible: !prevState.modalVisible,
+                                        }));
+                                    }}>
+                                    <View
+                                        style={[styles.linearGradientModal, { width: 130, marginHorizontal: 10, backgroundColor: '#cfcaca', }]}
+                                    >
+                                        <Text style={[styles.buttonClose, {}]}>ยกเลิก</Text>
+                                    </View>
+                                </Pressable>
+
+                            </View>
+
+
+                        </View>
+
+                    </TouchableOpacity>
+                </Modal>
+
                 {/* เรียกใช้ alert */}
                 <AlertNotificationRoot>
                 </AlertNotificationRoot>
@@ -300,7 +549,75 @@ const styles = StyleSheet.create({
         color: "#FF9B80",
         fontSize: 20,
         fontFamily: 'MitrMedium',
-    }
+    },
+
+    // modal zone
+  modalBackdrop: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  centeredView: {
+    // flex: 1,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+  },
+  modalView: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 30,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: '90%'
+  },
+//   button: {
+//     borderRadius: 20,
+//     padding: 10,
+//     elevation: 2,
+//     borderRadius: 15,
+//     width: 320,
+//     // height: 55,
+//     margin: 20,
+
+//     justifyContent: 'center',
+//     // alignItems: 'flex-start',
+//     // overflow : "hidden",
+//   },
+  buttonOpen: {
+    backgroundColor: '#e7e0ec',
+
+  },
+  buttonClose: {
+    color: 'white',
+    fontFamily: "MitrMedium",
+    fontSize: 17,
+  },
+  linearGradientModal: {
+    width: 250,
+    height: 50,
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textStyle: {
+    color: 'black',
+    fontFamily: "MitrMedium",
+    fontSize: 17,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  modalText: {
+    fontSize: 21,
+    fontFamily: "MitrMedium",
+  },
 });
 
 export default LoginScreen;

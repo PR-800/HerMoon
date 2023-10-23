@@ -8,6 +8,7 @@ import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-a
 import * as Font from 'expo-font';
 
 import firebase from "../data/firebaseDB";
+import LoginScreen from "./LoginScreen";
 
 class SignUpScreen extends Component {
 
@@ -187,12 +188,16 @@ class SignUpScreen extends Component {
                                     Dialog.show({
                                         type: ALERT_TYPE.SUCCESS,
                                         title: (
-                                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>สมัครสมาชิกสำเร็จ</Text>
+                                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>สมัครสมาชิกสำเร็จ โปรเข้าสู่ระบบ</Text>
                                         ),
                                         button: 'OK',
+                                        onPress: () => {
+                                            // Add navigation logic here
+                                            this.props.navigation.navigate('login');
+                                        },
                                     });
-                                    // alert("sssss")
-                                    // this.props.navigation.navigate("login", {});
+                                    
+                                    
                                 }
                             }
                             else {
@@ -209,23 +214,30 @@ class SignUpScreen extends Component {
                         <Text style={styles.textButton}>สมัครสมาชิก</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity 
+                    <Text style={[styles.text, {
+                            top: 15,
+                            textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                            textShadowOffset: { width: -1, height: 2 },
+                            textShadowRadius: 15,
+                        }]}>
+                            มีบัญชีผู้ใช้อยู่แล้ว ?{" "}
+
+                    <TouchableOpacity
                         onPress={() => {
                             this.props.navigation.navigate("login", {});
                         }}
                     >
-                        <Text style={[styles.text, { 
-                            top: 15,
-                            textShadowColor: 'rgba(0, 0, 0, 0.5)',
-                            textShadowOffset: {width: -1, height: 2},
-                            textShadowRadius: 15,
-                        }]}>
-                            มีบัญชีผู้ใช้อยู่แล้ว ?{" "}
-                            <Text style={{ textDecorationLine: "underline"}}>
+                            <Text style={{...styles.text, 
+                                top: 3,
+                                textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                                textShadowOffset: { width: -1, height: 2 },
+                                textShadowRadius: 15,
+                                textDecorationLine: "underline"
+                            }}>
                                 เข้าสู่ระบบ
                             </Text>
-                        </Text>
                     </TouchableOpacity>
+                    </Text>
                         
                 </LinearGradient>
                             {/* เรียกใช้ alert */}
