@@ -15,41 +15,66 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import firebase from '../data/firebaseDB';
 
 const HistoryTab = () => {
-    const historyCollection = firebase.firestore().collection("histories");
     const [historyList, setHistoryList] = useState([]);
     const [isViewDetails, setIsViewDetails] = useState(false);
     const [detailItems, setDetailItems] = useState([]);
+    const [activeUser, setActiveUser] = useState({});
+
+    const route = useRoute();
 
     const getCollection = (querySnapshot) => {
         const allData = [];
         querySnapshot.forEach((res) => {
             const { 
                 date,
+                timeStamp,
                 startDate,
                 endDate,
                 queryColorResult,
                 queryNotesResult,
+                queryDetailResult,
             } = res.data();
             allData.push({ 
                 key: res.id, 
                 date,
+                timeStamp,
                 startDate,
                 endDate,
                 queryColorResult,
                 queryNotesResult,
+                queryDetailResult,
             });
         });
         setHistoryList(allData);
     };
 
     useEffect(() => {
+        { route.params.activeUser ? setActiveUser(route.params.activeUser) : ""}
+
+        const historyCollection = firebase.firestore().collection("histories")
+        .where("user_id", "==", activeUser.key ? activeUser.key : route.params.activeUser)
+
         const unsubscribe = historyCollection.onSnapshot(getCollection);
 
         return () => {
             unsubscribe();
         };
 
-    }, []);
+    }, [route.params, historyList]);
+
+    getDate = (date) => {
+        if (date instanceof Date) {
+            const day = date.getDate();
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear();
+        
+            const formattedDate = `${day < 10 ? '0' : ''}${day}/${month < 10 ? '0' : ''}${month}/${year}`;
+            return formattedDate;
+        } 
+        else {
+            return '';
+        }
+    };
 
     const parseDate = (dateString) => {
         if (dateString && typeof dateString === 'string') {
@@ -65,11 +90,9 @@ const HistoryTab = () => {
             }
             return null;
         }
-        
     };
 
     showDetails = (detailItems) => {
-        console.log(detailItems)        
         return (
             <>
                 <TouchableOpacity 
@@ -152,6 +175,41 @@ const HistoryTab = () => {
                                         ))}
                                     </View>
                                 ))}
+
+                                {detailItems.queryDetailResult.length > 0? (
+                                    <>
+                                        <Text></Text>
+                                        <View>
+                                            <Text style={[styles.text, { fontFamily: 'MitrMedium', fontSize: 17}]}>
+                                                นอกจากนี้ ยังมี {detailItems.queryDetailResult.length} ปัจจัยอื่นที่อาจส่งผลกระทบต่อการมีประจำเดือนของคุณ
+                                            </Text>
+                                            <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+                                                colors={['#9F79EB', '#FC7D7B']}
+                                                style={{
+                                                    borderRadius: 10, 
+                                                    padding: 2, 
+                                                    marginTop: 2,
+                                                }}
+                                            >
+                                            </LinearGradient>
+                                            {detailItems.queryDetailResult
+                                                .map((item, i) => (
+                                                <View key={i}>
+                                                    <Text style={[styles.text, { marginTop: 15, fontFamily: 'MitrMedium' }]}>{" \u2022 "}{item.detail}</Text>
+                                                    <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginLeft: 20 }}>
+                                                    <MaterialCommunityIcons
+                                                        name={'alert-circle'}
+                                                        size={15}
+                                                        color='#9F79EB'
+                                                        style={{ marginRight: 5, marginTop: 5 }}
+                                                    />
+                                                    <Text style={[styles.text, { color: '#9F79EB', width: 285 }]}>ผลกระทบ: {item.detailTips}</Text>
+                                            </View>
+                                                </View>
+                                            ))}
+                                        </View>
+                                    </>
+                                ) : ""}  
                             </View>
                         ) : ((detailItems.queryColorResult.length > 0) && (detailItems.queryNotesResult.length <= 0)) ? (
                             <View>
@@ -183,7 +241,41 @@ const HistoryTab = () => {
                                         </View>
                                     </View>
                                 ))}
-                                <Text></Text>
+
+                                {detailItems.queryDetailResult.length > 0? (
+                                    <>
+                                        <Text></Text>
+                                        <View>
+                                            <Text style={[styles.text, { fontFamily: 'MitrMedium', fontSize: 17}]}>
+                                                นอกจากนี้ ยังมี {detailItems.queryDetailResult.length} ปัจจัยอื่นที่อาจส่งผลกระทบต่อการมีประจำเดือนของคุณ
+                                            </Text>
+                                            <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+                                                colors={['#9F79EB', '#FC7D7B']}
+                                                style={{
+                                                    borderRadius: 10, 
+                                                    padding: 2, 
+                                                    marginTop: 2,
+                                                }}
+                                            >
+                                            </LinearGradient>
+                                            {detailItems.queryDetailResult
+                                                .map((item, i) => (
+                                                <View key={i}>
+                                                    <Text style={[styles.text, { marginTop: 15, fontFamily: 'MitrMedium' }]}>{" \u2022 "}{item.detail}</Text>
+                                                    <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginLeft: 20 }}>
+                                                    <MaterialCommunityIcons
+                                                        name={'alert-circle'}
+                                                        size={15}
+                                                        color='#9F79EB'
+                                                        style={{ marginRight: 5, marginTop: 5 }}
+                                                    />
+                                                    <Text style={[styles.text, { color: '#9F79EB', width: 285 }]}>ผลกระทบ: {item.detailTips}</Text>
+                                            </View>
+                                                </View>
+                                            ))}
+                                        </View>
+                                    </>
+                                ) : ""}  
                             </View>
                         ) : ((detailItems.queryColorResult.length <= 0) && (detailItems.queryNotesResult.length > 0)) ? (
                             <View>
@@ -216,6 +308,41 @@ const HistoryTab = () => {
                                         ))}
                                     </View>
                                 ))}
+
+                                {detailItems.queryDetailResult.length > 0? (
+                                    <>
+                                        <Text></Text>
+                                        <View>
+                                            <Text style={[styles.text, { fontFamily: 'MitrMedium', fontSize: 17}]}>
+                                                นอกจากนี้ ยังมี {detailItems.queryDetailResult.length} ปัจจัยอื่นที่อาจส่งผลกระทบต่อการมีประจำเดือนของคุณ
+                                            </Text>
+                                            <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+                                                colors={['#9F79EB', '#FC7D7B']}
+                                                style={{
+                                                    borderRadius: 10, 
+                                                    padding: 2, 
+                                                    marginTop: 2,
+                                                }}
+                                            >
+                                            </LinearGradient>
+                                            {detailItems.queryDetailResult
+                                                .map((item, i) => (
+                                                <View key={i}>
+                                                    <Text style={[styles.text, { marginTop: 15, fontFamily: 'MitrMedium' }]}>{" \u2022 "}{item.detail}</Text>
+                                                    <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginLeft: 20 }}>
+                                                    <MaterialCommunityIcons
+                                                        name={'alert-circle'}
+                                                        size={15}
+                                                        color='#9F79EB'
+                                                        style={{ marginRight: 5, marginTop: 5 }}
+                                                    />
+                                                    <Text style={[styles.text, { color: '#9F79EB', width: 285 }]}>ผลกระทบ: {item.detailTips}</Text>
+                                            </View>
+                                                </View>
+                                            ))}
+                                        </View>
+                                    </>
+                                ) : ""}  
                             </View>
                         ) : (
                             <View>
@@ -250,7 +377,11 @@ const HistoryTab = () => {
             ) : (
                     <ScrollView contentContainerStyle={{ width: '100%' }} showsVerticalScrollIndicator={false}>
                         {historyList
-                            .sort((a, b) => parseDate(b.date) - parseDate(a.date))
+                            .sort((a, b) => 
+                                (new Date(b.timeStamp.seconds * 1000 + b.timeStamp.nanoseconds / 1000000).getTime() )
+                                - (new Date(a.timeStamp.seconds * 1000 + a.timeStamp.nanoseconds / 1000000).getTime())
+                            )
+                            // .sort((a, b) => parseDate(b.date) - parseDate(a.date))
                             .map((item, i) => (
                             <View style={{flex: 1, width: 380 }} key={item.key}>
                                 <TouchableOpacity
@@ -258,7 +389,6 @@ const HistoryTab = () => {
                                     onPress={() => {
                                         setDetailItems(item)
                                         setIsViewDetails(true)
-                                        console.log(item)
                                     }}
                                 >
                                     <ListItem bottomDivider>

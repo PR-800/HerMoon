@@ -301,7 +301,7 @@ const HomeScreen = () => {
 
             <View style={{ marginTop: -30, marginBottom: 20 }}>
                 <Image
-                    source={{ uri: dataImage ? dataImage : image }}
+                    source={{ uri: dataImage ? dataImage : image ? image : 'https://media.discordapp.net/attachments/1165602535554424882/1165602800965796010/Group_1606.png?ex=65477333&is=6534fe33&hm=8544235bc99fd8c5bf2ab79839021c2b361953dc1651f68bb0c08ae255f9b206&=&width=277&height=286' }}
                     style={{ width: 230, height: 230, borderRadius: 115 }}
                 />
             </View>
