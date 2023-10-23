@@ -4,7 +4,7 @@ import {
     View,  
     ScrollView,  
     TouchableOpacity,
-    Text
+    Text 
 } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -26,8 +26,10 @@ const AnalysisTab = () => {
     const [canAnalyst, setCanAnalyst] = useState(true);
     const [queryColorResult, setQueryColorResult] = useState([]);
     const [queryNotesResult, setQueryNotesResult] = useState([]);
+    const [queryDetailResult, setQueryDetailResult] = useState([]);
     const [activeUser, setActiveUser] = useState({});
     const [dataPreapare, setDataPreapare] = useState();
+    const [detail, setDetail] = useState();
 
     const route = useRoute();
 
@@ -38,7 +40,20 @@ const AnalysisTab = () => {
             prepareData()
         }
 
-        console.log("prepareData : ", prepareData())
+        if (route.params.activeUser) {
+            const accountDoc = firebase.firestore().collection("accounts")
+            .doc(route.params.activeUser.key);
+      
+            accountDoc.get().then((res) => {
+                if (res.exists) {
+                    const doc = res.data();
+                    setDetail(doc.detail);
+                }
+                else {
+                    
+                }
+            });
+        }
         
     }, [isShowResult, queryColorResult, queryNotesResult]);
 
@@ -94,6 +109,21 @@ const AnalysisTab = () => {
         ];
         const notesCheck = abnormalNotes.map(item => item.note);
 
+        const abnormalDetail = [
+            {detail: "การใช้ยาคุมกำเนิด", tips: "สามารถมีผลต่อระบบประจำเดือนได้ขึ้นอยู่กับประเภทของยาและตัวยาเอง เช่น ประจำเดือนไม่มีหรือมีน้อยลง รอบประจำเดือนมีการเคลื่อนที่ ประจำเดือนหมดเร็วกว่าปกติ"}, 
+            {detail: "โรคอ้วน", tips: "ส่งผลต่อระบบการทำงานของร่างกายและฮอร์โมนที่ควบคุมระบบประจำเดือน เช่น รอบเดือนมาไม่ปกติ อาการปวดรอบเดือนเพิ่มมากขึ้น ผลกระทบต่อสมดุลฮอร์โมน ประจำเดือนไม่มีหรือมีน้อยลง"}, 
+            {detail: "โรคโลหิตจาง", tips: "มีสาเหตุจากขาดฮีมโฟลิลิสในระบบโลหิต ซึ่งมีผลต่อการมีประจำเดือน เช่น รอบเดือนมีระยะเวลายาวนานกว่าปกติ รอบเดือนมีปริมาณมาก มีอาการปวดท้องกว่าปกติ"}, 
+            {detail: "โรคกระดูกพรุน", tips: "การมีรอบประจำเดือนแปรปรวน การมีปริมาณประจำเดือนมากขึ้นหรือน้อยลงผิดปกติ มีอาการปวดท้องรุนแรง"},
+            {detail: "โรคต่อมใต้สมองขาดเลือด", tips: "ประจำเดือนไม่มา รอบประจำเดือนยาวหรือสั้นลง รอบเดือนมีการเคลื่อนที่ การควบคุมฮอร์โมน"},
+            {detail: "โรคเกี่ยวกับต่อมไทรอยด์", tips: "อาจส่งผลให้เกิดประจำเดือนขาดหรือมามากผิดปกติได้ แต่เมื่อรักษาจนฮอร์โมนไทรอยด์คงที่แล้ว ประจำเดือนจะเริ่มกลับมาเป็นปกติอีกครั้ง"},
+            {detail: "โรคช็อกโกแลตซีสต์", tips: "เกิดการปวดท้องประจำเดือนอย่างรุนแรง ประจำเดือนมามาก และมีบุตรยาก พบในสตรีวัยเจริญพันธุ์"},
+            {detail: "โรคเยื่อบุในมดลูกเจริญผิดที่", tips: "มีอาการปวดท้องน้อยบริเวณอุ้งเชิงกราน โดยจะมีอาการปวดเกร็งเกิดขึ้นในช่วงมีประจำเดือน ในหลายรายมีอาการหนัก และอาการปวดอาจเพิ่มขึ้นเรื่อย ๆ ในแต่ละรอบประจำเดือน "},
+            {detail: "ประจำเดือนไม่ค่อยมาตามรอบ", tips: "อาจเกิดขึ้นเนื่องจากความผันผวนของระดับฮอร์โมนในร่างกาย ซึ่งอาจส่งผลกระทบต่อระบบการมีบุตร"},
+            {detail: "มีการใช้ยาฮอร์โมน", tips: "ทำให้ประจำเดือนมีการเปลี่ยนแปลง มามาก มาน้อย หรืออาจไม่มาเลย การรักษาปัญหาสุขภาพ การรักษาโรคและอาการอื่นๆ"},
+            {detail: "มีฮอร์โมนเอสโตเจนต่ำ", tips: "ทำให้ประจำเดือนมาไม่สม่ำเสมอ ทำให้เกิดอาการก่อนมีประจำเดือนผิดปกติ เช่น อยากรับประทานของหวาน ตัวบวม น้ำหนักขึ้นไว ปวดไมเกรน คัดตึงเต้านม"},
+        ];
+        const detailCheck = abnormalDetail.map(item => item.detail);
+
         const colorDoc = firebase.firestore().collection("dailyRecord")
         .where("user_id", "==", activeUser.key ? activeUser.key : route.params.activeUser)
         .where("menstrual_color", "in", colorCheck)
@@ -116,7 +146,6 @@ const AnalysisTab = () => {
                 }   
             });
             setQueryColorResult(allData);
-            console.log("queryColorResult : " , queryColorResult)
         },
         (error) => {}
         );
@@ -148,10 +177,26 @@ const AnalysisTab = () => {
                 }
             });
             setQueryNotesResult(allData);
-            console.log("queryNotesResult : ", queryNotesResult)
         },
         (error) => {}
         );
+
+        detail.forEach((detail, i) => {
+            const isDetailInDetailCheck = detailCheck.includes(detail);
+        
+            if (isDetailInDetailCheck) {
+                const matchingDetail = abnormalDetail.find(item => item.detail === detail);
+                if (matchingDetail) {
+                    const { detail, tips } = matchingDetail;
+                    const allDetailData = {
+                        key: i, 
+                        detail: detail,
+                        detailTips: tips
+                    };
+                    queryDetailResult.push(allDetailData);
+                } 
+            } 
+        });
 
         return () => {
             unsubscribeColor();
@@ -162,10 +207,13 @@ const AnalysisTab = () => {
     prepareData = () => {
         setDataPreapare({
             date: getDate(new Date()),
+            timeStamp: new Date(),
             startDate: startDate,
             endDate: endDate,
             queryColorResult: queryColorResult,
             queryNotesResult: queryNotesResult,
+            queryDetailResult: queryDetailResult,
+            user_id: activeUser.key
         })
     }
 
@@ -245,6 +293,41 @@ const AnalysisTab = () => {
                                     ))}
                                 </View>
                             ))}
+
+                            {queryDetailResult.length > 0? (
+                                <>
+                                    <Text></Text>
+                                    <View>
+                                        <Text style={[styles.text, { fontFamily: 'MitrMedium', fontSize: 17}]}>
+                                            นอกจากนี้ ยังมี {queryDetailResult.length} ปัจจัยอื่นที่อาจส่งผลกระทบต่อการมีประจำเดือนของคุณ
+                                        </Text>
+                                        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+                                            colors={['#9F79EB', '#FC7D7B']}
+                                            style={{
+                                                borderRadius: 10, 
+                                                padding: 2, 
+                                                marginTop: 2,
+                                            }}
+                                        >
+                                        </LinearGradient>
+                                        {queryDetailResult
+                                            .map((item, i) => (
+                                            <View key={i}>
+                                                <Text style={[styles.text, { marginTop: 15, fontFamily: 'MitrMedium' }]}>{" \u2022 "}{item.detail}</Text>
+                                                <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginLeft: 20 }}>
+                                                <MaterialCommunityIcons
+                                                    name={'alert-circle'}
+                                                    size={15}
+                                                    color='#9F79EB'
+                                                    style={{ marginRight: 5, marginTop: 5 }}
+                                                />
+                                                <Text style={[styles.text, { color: '#9F79EB', width: 285 }]}>ผลกระทบ: {item.detailTips}</Text>
+                                        </View>
+                                            </View>
+                                        ))}
+                                    </View>
+                                </>
+                            ) : ""}  
                         </>
                     ) : ((queryColorResult.length > 0) && (queryNotesResult.length <= 0)) ? (
                         <>
@@ -278,7 +361,41 @@ const AnalysisTab = () => {
                                     </View>
                                 </View>
                             ))}
-                            <Text></Text>
+
+                            {queryDetailResult.length > 0? (
+                                <>
+                                    <Text></Text>
+                                    <View>
+                                        <Text style={[styles.text, { fontFamily: 'MitrMedium', fontSize: 17}]}>
+                                            นอกจากนี้ ยังมี {queryDetailResult.length} ปัจจัยอื่นที่อาจส่งผลกระทบต่อการมีประจำเดือนของคุณ
+                                        </Text>
+                                        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+                                            colors={['#9F79EB', '#FC7D7B']}
+                                            style={{
+                                                borderRadius: 10, 
+                                                padding: 2, 
+                                                marginTop: 2,
+                                            }}
+                                        >
+                                        </LinearGradient>
+                                        {queryDetailResult
+                                            .map((item, i) => (
+                                            <View key={i}>
+                                                <Text style={[styles.text, { marginTop: 15, fontFamily: 'MitrMedium' }]}>{" \u2022 "}{item.detail}</Text>
+                                                <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginLeft: 20 }}>
+                                                <MaterialCommunityIcons
+                                                    name={'alert-circle'}
+                                                    size={15}
+                                                    color='#9F79EB'
+                                                    style={{ marginRight: 5, marginTop: 5 }}
+                                                />
+                                                <Text style={[styles.text, { color: '#9F79EB', width: 285 }]}>ผลกระทบ: {item.detailTips}</Text>
+                                        </View>
+                                            </View>
+                                        ))}
+                                    </View>
+                                </>
+                            ) : ""}  
                         </>
                     ) : ((queryColorResult.length <= 0) && (queryNotesResult.length > 0)) ? (
                         <>
@@ -313,6 +430,41 @@ const AnalysisTab = () => {
                                     ))}
                                 </View>
                             ))}
+
+                            {queryDetailResult.length > 0? (
+                                <>
+                                    <Text></Text>
+                                    <View>
+                                        <Text style={[styles.text, { fontFamily: 'MitrMedium', fontSize: 17}]}>
+                                            นอกจากนี้ ยังมี {queryDetailResult.length} ปัจจัยอื่นที่อาจส่งผลกระทบต่อการมีประจำเดือนของคุณ
+                                        </Text>
+                                        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+                                            colors={['#9F79EB', '#FC7D7B']}
+                                            style={{
+                                                borderRadius: 10, 
+                                                padding: 2, 
+                                                marginTop: 2,
+                                            }}
+                                        >
+                                        </LinearGradient>
+                                        {queryDetailResult
+                                            .map((item, i) => (
+                                            <View key={i}>
+                                                <Text style={[styles.text, { marginTop: 15, fontFamily: 'MitrMedium' }]}>{" \u2022 "}{item.detail}</Text>
+                                                <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginLeft: 20 }}>
+                                                <MaterialCommunityIcons
+                                                    name={'alert-circle'}
+                                                    size={15}
+                                                    color='#9F79EB'
+                                                    style={{ marginRight: 5, marginTop: 5 }}
+                                                />
+                                                <Text style={[styles.text, { color: '#9F79EB', width: 285 }]}>ผลกระทบ: {item.detailTips}</Text>
+                                        </View>
+                                            </View>
+                                        ))}
+                                    </View>
+                                </>
+                            ) : ""}                    
                         </>
                     ) : (
                         <View>
@@ -378,10 +530,8 @@ const AnalysisTab = () => {
                     onConfirm={(date) => {
                         setStartDate(date)
                         setFullDate(date)
-                        console.log("full : ", fullDate )
                         const format = this.getDate(date)
                         setStartDate(format)
-                        console.log("start date : " + startDate)
                         setIsStartDatePickerVisible(!isStartDatePickerVisible)
                     }}
                     onCancel={() => {
@@ -427,7 +577,6 @@ const AnalysisTab = () => {
                         setEndDate(date)
                         const format = this.getDate(date)
                         setEndDate(format)
-                        console.log("end danalystate : " + endDate)
                         setIsEndDatePickerVisible(!isEndDatePickerVisible)
 
                     }}

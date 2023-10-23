@@ -60,21 +60,6 @@ class HistoryScreen extends Component {
     this.setState({ index });
   }
 
-  // getCollection = (querySnapshot) => {
-  //   const all_data = [];
-  //   querySnapshot.forEach((res) => {
-  //     const { uri, } = res.data();
-  //     all_data.push({
-  //       key: res.id,
-  //       uri,
-  //     });
-  //   });
-  //   // console.log('all_data :>> ', all_data);
-  //   this.setState({
-  //       profile_List: all_data,
-  //   });
-  // };
-
   async componentDidMount() {
     await Font.loadAsync({
       MitrMedium: require('../assets/fonts/Mitr-Medium.ttf'),
