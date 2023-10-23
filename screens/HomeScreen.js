@@ -194,7 +194,7 @@ const HomeScreen = () => {
                             <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>คุณได้เพิ่มรอบเดือนประจำวันแล้ว</Text>
                         ),
                         textBody: (
-                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 14 }}>หากคุณต้องการแก้ไขข้อมูล {'\n'} สามารถแก้ไขได้ที่หน้า Calendar ค่</Text>
+                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 14 }}>หากคุณต้องการแก้ไขข้อมูล {'\n'} สามารถแก้ไขได้ในหน้าปฏิทิน </Text>
                         ),
                         button: 'OK',
                     });
