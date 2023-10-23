@@ -90,7 +90,7 @@ const HistoryTab = () => {
                 <View style={[styles.tabContainer, { marginTop: 10, width: 350 }]}>
                     {((detailItems.queryColorResult.length > 0) && (detailItems.queryNotesResult.length > 0)) ? (
                         <View>
-                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมีสีประจำเดือน</Text>
+                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมี "สีประจำเดือน" </Text>
                             <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>ที่ผิดปกติเป็นเวลา {detailItems.queryColorResult.length} วัน </Text>
                             <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                                 colors={['#9F79EB', '#FC7D7B']}
@@ -120,7 +120,7 @@ const HistoryTab = () => {
                             ))}
                             <Text></Text>
 
-                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>และอาการร่วมอื่น ๆ ที่พบเจอ</Text>
+                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>และ "อาการร่วม" อื่น ๆ ที่พบเจอ</Text>
                             <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                                 colors={['#9F79EB', '#FC7D7B']}
                                 style={{
@@ -152,7 +152,7 @@ const HistoryTab = () => {
                         </View>
                     ) : ((detailItems.queryColorResult.length > 0) && (detailItems.queryNotesResult.length <= 0)) ? (
                         <View>
-                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมีสีประจำเดือน</Text>
+                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมี "สีประจำเดือน"</Text>
                             <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>ที่ผิดปกติเป็นเวลา {detailItems.queryColorResult.length} วัน </Text>
                             <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                                 colors={['#9F79EB', '#FC7D7B']}
@@ -184,7 +184,7 @@ const HistoryTab = () => {
                         </View>
                     ) : ((detailItems.queryColorResult.length <= 0) && (detailItems.queryNotesResult.length > 0)) ? (
                         <View>
-                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมีอาการร่วมอื่น ๆ ที่สามารถพบเจอได้ในระหว่างเป็นประจำเดือน</Text>
+                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมี "อาการร่วม" อื่น ๆ ที่สามารถพบเจอได้ในระหว่างเป็นประจำเดือน</Text>
                             <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                                 colors={['#9F79EB', '#FC7D7B']}
                                 style={{
