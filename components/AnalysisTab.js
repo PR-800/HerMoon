@@ -12,9 +12,6 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-
-import AnalysisResult from './AnalysisResult';
-
 import * as Font from 'expo-font';
 
 import firebase from '../data/firebaseDB';
@@ -30,6 +27,7 @@ const AnalysisTab = () => {
     const [queryColorResult, setQueryColorResult] = useState([]);
     const [queryNotesResult, setQueryNotesResult] = useState([]);
     const [activeUser, setActiveUser] = useState({});
+    // const [hasAddedHistory, setHasAddedHistory] = useState(false);
 
     const route = useRoute();
 
@@ -38,7 +36,14 @@ const AnalysisTab = () => {
         console.log("--- Analyst")
         console.log(activeUser)
         
+        // if (isShowResult && !hasAddedHistory) {
+        //     addHistory(queryColorResult, queryNotesResult);
+        //     console.log(queryColorResult, queryNotesResult)
+        //     setHasAddedHistory(true);
+        // }
+
     }, []);
+    // }, [queryColorResult, queryNotesResult, isShowResult, hasAddedHistory]);
 
     getDate = (date) => {
         if (date instanceof Date) {
@@ -62,7 +67,7 @@ const AnalysisTab = () => {
             const year = parseInt(parts[2], 10);
         
             if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
-                console.log("parse", new Date(year, month - 1, day))
+                // console.log("parse", new Date(year, month - 1, day))
                 return new Date(year, month - 1, day);
             }
         }
@@ -70,116 +75,118 @@ const AnalysisTab = () => {
     };
 
     analyst = () => {
-        // if (startDate && endDate) {
-            // console.log(startDate, endDate, activeUser.key)
-            console.log("10/09/2023 > 17/09/2023", "10/09/2023" > "17/09/2023")
-            console.log("19/09/2023 > 17/09/2023", "19/09/2023" > "17/09/2023")
-            console.log("10/12/2023 > 17/09/2023", "10/12/2023" > "17/09/2023")
-            console.log("10/01/2023 > 17/09/2023", "10/01/2023" > "17/09/2023")
-            console.log("-----------------------------------------------------")
-            console.log("2023-09-10 > 2023-09-17", "2023-09-10" > "2023-09-17")
-            console.log("2023-09-19 > 2023-09-17", "2023-09-19" > "2023-09-17")
-            console.log("2023-12-10 > 2023-09-17", "2023-09-19" > "2023-09-17")
-            console.log("2023-01-10 > 2023-09-17", "2023-09-19" > "2023-09-17")
+        const abnormalColor = [
+            {color: "สีแดงส้ม", tips: "ควรระวังเป็นพิเศษ มีความเสี่ยงติดเชื้อในช่องคลอด หรือโรคติดต่อทางเพศสัมพันธ์ แนะนำให้รีบพบแพทย์"}, 
+            {color: "สีชมพู", tips: "อาจเกิดจากบาดแผลภายใน หรือการผันผวนของระดับฮอร์โมนเอสโตรเจนต่ำ ซึ่งเป็นสัญญาณของการตั้งท้องอ่อน ๆ"}, 
+            {color: "สีแดงอมเทาปนเขียว", tips: "อาจเกิดจากการติดเชื้อแบคทีเรีย การติดเชื้อในอุ้งเชิงกราน"}, 
+            {color: "สีดำ", tips: "เป็นเพียงเลือดตกค้างในร่างกายเป็นระยะเวลานาน แต่มีความเป็นไปได้ที่อาจเกี่ยวข้องกับปัญหาสุขภาพหรือการติดเชื้อแบคทีเรีย"},
+        ];
+        const colorCheck = abnormalColor.map(item => item.color);
 
-            const start = parseDate(startDate);
-            const end = parseDate(endDate);
+        const abnormalNotes = [
+            {note: "มามาก เปลี่ยนทุกชม.", tips: "อาจเกิดจากความเครียด ความไม่สมดุลของฮอร์โมน หรือความผิดปกติของระบบอวัยวะสืบพันธุ์"},
+            {note: "มาน้อย ไม่เคยเต็มผ้าอนามัย", tips: "อาจเกิดจากความเครียด ความไม่สมดุลของฮอร์โมน หรือภาวะเลือดออกในช่องคลอด แนะนำให้ควบคุมน้ำหนัก รับประทานอาหารที่มีประโยชน์"},
+            {note: "มีกลิ่น", tips: "อาจเกิดจากการติดเชื้อในช่องคลอด หมั่นดูแลและรักษาความสะอาด"}, 
+            {note: "มีอาการคัน", tips: "อาจเกิดจากความอับชื้น แนะนำให้เปลี่ยนผ้าอนามัยบ่อย ๆ"}, 
+            {note: "ปวดท้องอย่างรุนแรง", tips: "เกิดจากกล้ามเนื้อมดลูกบีบตัว แนะนำให้ใช้การประคบร้อน"}, 
+            {note: "ปวดหลังส่วนล่างอย่างรุนแรง", tips: "อาจเป็นผลจากความผิดปกติในมดลูก รังไข่ หรือปีกมดลูก แนะนำให้อาบน้ำอุ่น หรืออาจใช้แผ่นแปะชนิดร้อนแปะ"}, 
+            {note: "มีลิ่มเลือดก้อนใหญ่กว่า 1 นิ้ว", tips: "อาจมีเนื้องอก ซีสต์ หรือพังผืดในมดลูก พยายามลดความเครียด ดื่มน้ำมาก ๆ กินอาหารเสริมธาตุเหล็กและแคลเซียม"},  
+            {note: "มีเลือดหยดช่วงที่ไม่มีประจำเดือน", tips: "อาจบ่งบอกถึงปัญหาสุขภาพ เช่น โรคติดต่อทางเพศสัมพันธ์ ปากมดลูกอักเสบ ช่องคลอดอักเสบ สามารถหายได้เอง"}, 
+            {note: "ประจำเดือนมานานเกิน 8 วัน", tips: "เกิดจากระดับฮอร์โมนไม่สมดุล การตกไข่ไม่สม่ำเสมอ ควรปรึกษาแพทย์เพื่อตรวจสุขภาพและรับคำแนะนำ"}, 
+        ];
+        const notesCheck = abnormalNotes.map(item => item.note);
 
-            const abnormalColor = [
-                {color: "สีแดงส้ม", tips: "A"}, 
-                {color: "สีชมพู", tips: "B"}, 
-                {color: "สีแดงอมเทาปนเขียว", tips: "C"}, 
-                {color: "สีดำ", tips: "D"},
-            ];
-            const colorCheck = abnormalColor.map(item => item.color);
+        const colorDoc = firebase.firestore().collection("dailyRecord")
+        // .where("date", ">=", startDate)
+        // .where("date", "<=", endDate)
+        .where("user_id", "==", activeUser.key ? activeUser.key : route.params.activeUser)
+        .where("menstrual_color", "in", colorCheck)
 
-            const abnormalNotes = [
-                {note: "มีกลิ่น อาการคัน", tips: "AA"}, 
-                {note: "ปวดท้องอย่างรุนแรง", tips: "BB"}, 
-                {note: "มีลิ่มเลือดก้อนใหญ่กว่า 1 นิ้ว", tips: "CC"},  
-                {note: "ประจำเดือนมานานเกิน 8 วัน", tips: "DD"}, 
-            ];
-            const notesCheck = abnormalNotes.map(item => item.note);
-
-            const colorDoc = firebase.firestore().collection("dailyRecord")
-            .where("date", ">=", startDate)
-            .where("date", "<=", endDate)
-            .where("user_id", "==", activeUser.key ? activeUser.key : route.params.activeUser)
-            .where("menstrual_color", "in", colorCheck)
-
-            const unsubscribeColor = colorDoc.onSnapshot((querySnapshot) => {
-                const allData = [];
-                querySnapshot.forEach((res) => {
-                    // console.log(res)
-                    const { 
-                        date, 
-                        menstrual_color,
-                    } = res.data();
-                    const colorTips = abnormalColor.find(item => item.color === menstrual_color)?.tips;
-                    allData.push({ 
+        const unsubscribeColor = colorDoc.onSnapshot((querySnapshot) => {
+            const allData = [];
+            querySnapshot.forEach((res) => {
+                // console.log(res)
+                const { 
+                    date, 
+                    menstrual_color,
+                } = res.data();
+                const colorTips = abnormalColor.find(item => item.color === menstrual_color)?.tips;
+                // console.log(date + "")
+                // console.log(new Date(date + ""))
+                // console.log(parseDate(date))
+                if (parseDate(date) >= parseDate(startDate) && parseDate(date) <= parseDate(endDate)) {
+                    queryColorResult.push({ 
                         key: res.id,
                         date, 
                         menstrual_color,
                         colorTips,
                     });
+                }   
+            });
+            // console.log("allData Colore: ", allData)
+            // setQueryColorResult(allData);
+            console.log("query color : " , queryColorResult)
+            // setQueryColorResult(allData);
+            // console.log("query color2 : " , queryColorResult)
+        },
+        (error) => {}
+        );
+
+        const notesDoc = firebase.firestore().collection("dailyRecord")
+        // .where("date", ">=", startDate)
+        // .where("date", "<=", endDate)
+        .where("user_id", "==", activeUser.key ? activeUser.key : route.params.activeUser)
+        .where("menstrual_notes", "array-contains-any", notesCheck)
+
+        const unsubscribeNotes = notesDoc.onSnapshot((querySnapshot) => {
+            const allData = [];
+            querySnapshot.forEach((res) => {
+                // console.log(res)
+                const { 
+                    date, 
+                    menstrual_notes,
+                } = res.data();
+
+                const filteredNotes = menstrual_notes.filter(note => notesCheck.includes(note));
+                const noteTips = filteredNotes.map(note => {
+                    const matchingNote = abnormalNotes.find(item => item.note === note);
+                    return matchingNote ? matchingNote.tips : "";
                 });
-                console.log(allData)
-                setQueryColorResult(allData);
-                // console.log(queryColorResult)
-            },
-            (error) => {}
-            );
-
-            const notesDoc = firebase.firestore().collection("dailyRecord")
-            .where("date", ">=", startDate)
-            .where("date", "<=", endDate)
-            .where("user_id", "==", activeUser.key ? activeUser.key : route.params.activeUser)
-            .where("menstrual_notes", "array-contains-any", notesCheck)
-
-            const unsubscribeNotes = notesDoc.onSnapshot((querySnapshot) => {
-                const allData = [];
-                querySnapshot.forEach((res) => {
-                    // console.log(res)
-                    const { 
-                        date, 
-                        menstrual_notes,
-                    } = res.data();
-
-                    const filteredNotes = menstrual_notes.filter(note => notesCheck.includes(note));
-                    const noteTips = filteredNotes.map(note => {
-                        const matchingNote = abnormalNotes.find(item => item.note === note);
-                        return matchingNote ? matchingNote.tips : "";
-                    });
-
+                if (parseDate(date) >= parseDate(startDate) && parseDate(date) <= parseDate(endDate)) {
                     allData.push({ 
                         key: res.id,
                         date, 
                         menstrual_notes: filteredNotes,
                         noteTips
                     });
-                });
-                setQueryNotesResult(allData);
-                // console.log(queryNotesResult)
-            },
-            (error) => {}
-            );
+                }
+            });
+            // console.log("allData Note: ", allData)
+            setQueryNotesResult(allData);
+            console.log("query note : ", queryNotesResult)
+        },
+        (error) => {}
+        );
 
-            return () => {
-                unsubscribeColor();
-                unsubscribeNotes();
-            };
-        // }
+        return () => {
+            unsubscribeColor();
+            unsubscribeNotes();
+        };
     }
 
-    addAccount = () => {
+    addHistory = () => {
         const historyCollection = firebase.firestore().collection("histories");
         historyCollection.add({
             date: getDate(new Date()),
-            details: showResult() + ""
+            startDate: startDate,
+            endDate: endDate,
+            queryColorResult: queryColorResult,
+            queryNotesResult: queryNotesResult,
         })
         .then((res) => {
             
         });
+        console.log("queryColorResult : ", queryColorResult)
     }
 
     showResult = () => {
@@ -199,18 +206,20 @@ const AnalysisTab = () => {
                                 }}
                             >
                             </LinearGradient>
-                            {queryColorResult.map((item, i) => (   
-                                <View key={i} style={styles.border}>
+                            {queryColorResult
+                                .sort((a, b) => parseDate(b.date) - parseDate(a.date))
+                                .map((item, i) => (   
+                                <View key={i}>
                                     <Text style={[styles.text, {marginTop: 15, fontFamily:'MitrMedium'}]}>{"   "}{item.date}</Text>
                                     <Text style={[styles.text, {marginVertical: 3}]}>{"     \u2022 "}{item.menstrual_color}</Text>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20 }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginLeft: 20 }}>
                                         <MaterialCommunityIcons
                                             name={'alert-circle'}
                                             size={15}
                                             color='#9F79EB'
-                                            style={{ marginRight: 5, marginTop: 2 }}
+                                            style={{ marginRight: 5, marginTop: 5 }}
                                         />
-                                        <Text style={[styles.text, { color: '#9F79EB' }]}>
+                                        <Text style={[styles.text, { color: '#9F79EB', width: 285 }]}>
                                         คำแนะนำ: {item.colorTips}
                                         </Text>
                                     </View>
@@ -218,7 +227,7 @@ const AnalysisTab = () => {
                             ))}
                             <Text></Text>
 
-                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>และ {queryNotesResult.length} อาการร่วมอื่น ๆ ที่พบเจอ</Text>
+                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>และอาการร่วมอื่น ๆ ที่พบเจอ</Text>
                             <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                                 colors={['#9F79EB', '#FC7D7B']}
                                 style={{
@@ -228,21 +237,23 @@ const AnalysisTab = () => {
                                 }}
                             >
                             </LinearGradient>
-                            {queryNotesResult.map((item, i) => (
+                            {queryNotesResult
+                                .sort((a, b) => parseDate(b.date) - parseDate(a.date))
+                                .map((item, i) => (
                                 <View key={i}>
-                                    <Text style={[styles.text, {marginTop: 15, fontFamily:'MitrMedium'}]}>{"   "}{item.date}</Text>
+                                    <Text style={[styles.text, { marginTop: 15, fontFamily: 'MitrMedium' }]}>{"   "}{item.date}</Text>
                                     {item.menstrual_notes.map((note, j) => (
-                                        <Text style={[styles.text, {marginVertical: 3}]} key={j}>{"     \u2022 "}{note}</Text>
-                                    ))}
-                                    {item.noteTips.map((tip, k) => (
-                                        <View key={k} style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20 }}>
-                                            <MaterialCommunityIcons
-                                                name={'alert-circle'}
-                                                size={15}
-                                                color='#9F79EB'
-                                                style={{ marginRight: 5, marginTop: 2 }}
-                                            />
-                                            <Text style={[styles.text, { color: '#9F79EB' }]}>คำแนะนำ: {tip}</Text>
+                                        <View key={j}>
+                                            <Text style={[styles.text, { marginVertical: 3 }]}>{"     \u2022 "}{note}</Text>
+                                            <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginLeft: 20 }}>
+                                                <MaterialCommunityIcons
+                                                    name={'alert-circle'}
+                                                    size={15}
+                                                    color='#9F79EB'
+                                                    style={{ marginRight: 5, marginTop: 5 }}
+                                                />
+                                                <Text style={[styles.text, { color: '#9F79EB', width: 285 }]}>คำแนะนำ: {item.noteTips[j]}</Text>
+                                            </View>
                                         </View>
                                     ))}
                                 </View>
@@ -261,27 +272,30 @@ const AnalysisTab = () => {
                                 }}
                             >
                             </LinearGradient>
-                            {queryColorResult.map((item, i) => (   
-                                <View key={i} style={styles.border}>
+                            {queryColorResult
+                                .sort((a, b) => parseDate(b.date) - parseDate(a.date))
+                                .map((item, i) => (   
+                                <View key={i}>
                                     <Text style={[styles.text, {marginTop: 15, fontFamily:'MitrMedium'}]}>{"   "}{item.date}</Text>
                                     <Text style={[styles.text, {marginVertical: 3}]}>{"     \u2022 "}{item.menstrual_color}</Text>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20 }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginLeft: 20 }}>
                                         <MaterialCommunityIcons
                                             name={'alert-circle'}
                                             size={15}
                                             color='#9F79EB'
-                                            style={{ marginRight: 5, marginTop: 2 }}
+                                            style={{ marginRight: 5, marginTop: 5 }}
                                         />
-                                        <Text style={[styles.text, { color: '#9F79EB' }]}>
+                                        <Text style={[styles.text, { color: '#9F79EB', width: 285 }]}>
                                         คำแนะนำ: {item.colorTips}
                                         </Text>
                                     </View>
                                 </View>
                             ))}
+                            <Text></Text>
                         </>
                     ) : ((queryColorResult.length <= 0) && (queryNotesResult.length > 0)) ? (
                         <>
-                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>และ {queryNotesResult.length} อาการร่วมอื่น ๆ ที่พบเจอ</Text>
+                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมีอาการร่วมอื่น ๆ ที่สามารถพบเจอได้ในระหว่างเป็นประจำเดือน</Text>
                             <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                                 colors={['#9F79EB', '#FC7D7B']}
                                 style={{
@@ -291,21 +305,23 @@ const AnalysisTab = () => {
                                 }}
                             >
                             </LinearGradient>
-                            {queryNotesResult.map((item, i) => (
+                            {queryNotesResult
+                                .sort((a, b) => parseDate(b.date) - parseDate(a.date))
+                                .map((item, i) => (
                                 <View key={i}>
-                                    <Text style={[styles.text, {marginTop: 15, fontFamily:'MitrMedium'}]}>{"   "}{item.date}</Text>
+                                    <Text style={[styles.text, { marginTop: 15, fontFamily: 'MitrMedium' }]}>{"   "}{item.date}</Text>
                                     {item.menstrual_notes.map((note, j) => (
-                                        <Text style={[styles.text, {marginVertical: 3}]} key={j}>{"     \u2022 "}{note}</Text>
-                                    ))}
-                                    {item.noteTips.map((tip, k) => (
-                                        <View key={k} style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20 }}>
-                                            <MaterialCommunityIcons
-                                                name={'alert-circle'}
-                                                size={15}
-                                                color='#9F79EB'
-                                                style={{ marginRight: 5, marginTop: 2 }}
-                                            />
-                                            <Text style={[styles.text, { color: '#9F79EB' }]}>คำแนะนำ: {tip}</Text>
+                                        <View key={j}>
+                                            <Text style={[styles.text, { marginVertical: 3 }]}>{"     \u2022 "}{note}</Text>
+                                            <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginLeft: 20 }}>
+                                                <MaterialCommunityIcons
+                                                    name={'alert-circle'}
+                                                    size={15}
+                                                    color='#9F79EB'
+                                                    style={{ marginRight: 5, marginTop: 5 }}
+                                                />
+                                                <Text style={[styles.text, { color: '#9F79EB', width: 285 }]}>คำแนะนำ: {item.noteTips[j]}</Text>
+                                            </View>
                                         </View>
                                     ))}
                                 </View>
@@ -405,7 +421,7 @@ const AnalysisTab = () => {
                         value={endDate ? endDate + '' : ''}
                     />
                     <MaterialCommunityIcons 
-                        name={'calendar'} 
+                        name={'calendar'} isShowResult
                         size={24} 
                         color={canAnalyst ? "grey" : "lightgrey"}
                         onPress={() => {
@@ -424,7 +440,7 @@ const AnalysisTab = () => {
                         setEndDate(date)
                         const format = this.getDate(date)
                         setEndDate(format)
-                        console.log("end date : " + endDate)
+                        console.log("end danalystate : " + endDate)
                         setIsEndDatePickerVisible(!isEndDatePickerVisible)
 
                     }}
@@ -445,7 +461,8 @@ const AnalysisTab = () => {
                                 setCanAnalyst(false)
                                 setIsShowResult(true)
                                 analyst()
-                                addAccount()
+                                console.log(queryColorResult, queryNotesResult)
+                                addHistory()
                             }
                             else {
                                 alert('โปรดระบุข้อมูลให้ครบถ้วน')
@@ -461,8 +478,9 @@ const AnalysisTab = () => {
                     onPress={() => {
                         setCanAnalyst(true)
                         setIsShowResult(false)
-                        console.log(canAnalyst)
-                        console.log(isShowResult)
+                        // setHasAddedHistory(false)
+                        // console.log(canAnalyst)
+                        // console.log(isShowResult)
                     }}
                 >
                     <MaterialCommunityIcons 
