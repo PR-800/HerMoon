@@ -182,23 +182,30 @@ class LoginScreen extends Component {
 
                     {/* <HomeScreen user={this.state.activeUser} /> */}
 
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.props.navigation.navigate("register", {});
-                        }}
-                    >
-                        <Text style={[styles.text, {
+                    <Text style={[styles.text, {
                             top: 15,
                             textShadowColor: 'rgba(0, 0, 0, 0.5)',
                             textShadowOffset: { width: -1, height: 2 },
                             textShadowRadius: 15,
                         }]}>
                             ไม่มีบัญชีผู้ใช้ ?{" "}
-                            <Text style={{ textDecorationLine: "underline" }}>
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.navigation.navigate("register", {});
+                        }}
+                    >
+                            <Text style={{...styles.text, 
+                                top: 3,
+                                textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                                textShadowOffset: { width: -1, height: 2 },
+                                textShadowRadius: 15,
+                                textDecorationLine: "underline"
+                            }}>
                                 สมัครสมาชิก
                             </Text>
-                        </Text>
                     </TouchableOpacity>
+                    </Text>
 
                 </LinearGradient>
                 {/* เรียกใช้ alert */}

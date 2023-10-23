@@ -21,7 +21,7 @@ class ArticleScreen extends Component {
             // Initialize your state variables here
             article_list: [],
             searchTerm: '',
-            displaySearch: true,
+            displaySearch: false,
         }
     }
 
@@ -77,7 +77,7 @@ class ArticleScreen extends Component {
         return ( 
             // navbar
             <KeyboardAvoidingView style={styles.screen}
-            behavior={Platform.OS === 'android' ? 500 : 180}
+            behavior={Platform.OS === 'android' ? 'height' : 'padding'}
             >
                 <LinearGradient
                 start={{x: 0, y: 0}} end={{x: 1, y: 1}}
@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     gradientBackground: {
+        position: 'relative',
         width: '100%',
         height: '25%',
         justifyContent: 'center',
