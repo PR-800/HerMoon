@@ -35,10 +35,17 @@ const AnalysisTab = () => {
         { route.params.activeUser ? setActiveUser(route.params.activeUser) : ""}
         console.log("--- Analyst")
         console.log(activeUser)
+        
+        // if (isShowResult && !hasAddedHistory) {
+        //     addHistory(queryColorResult, queryNotesResult);
+        //     console.log(queryColorResult, queryNotesResult)
+        //     setHasAddedHistory(true);
+        // }
 
     }, []);
+    // }, [queryColorResult, queryNotesResult, isShowResult, hasAddedHistory]);
 
-    const getDate = (date) => {
+    getDate = (date) => {
         if (date instanceof Date) {
             const day = date.getDate();
             const month = date.getMonth() + 1;
@@ -53,23 +60,21 @@ const AnalysisTab = () => {
     };
 
     const parseDate = (dateString) => {
-        if (dateString && typeof dateString === 'string') {
-            const parts = dateString.split('/');
-            if (parts.length === 3) {
-                const day = parseInt(parts[0], 10);
-                const month = parseInt(parts[1], 10);
-                const year = parseInt(parts[2], 10);
-            
-                if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
-                    // console.log("parse", new Date(year, month - 1, day))
-                    return new Date(year, month - 1, day);
-                }
+        const parts = dateString.split('/');
+        if (parts.length === 3) {
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10);
+            const year = parseInt(parts[2], 10);
+        
+            if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+                // console.log("parse", new Date(year, month - 1, day))
+                return new Date(year, month - 1, day);
             }
-            return null;
         }
+        return null;
     };
 
-    const analyst = () => {
+    analyst = () => {
         const abnormalColor = [
             {color: "สีแดงส้ม", tips: "ควรระวังเป็นพิเศษ มีความเสี่ยงติดเชื้อในช่องคลอด หรือโรคติดต่อทางเพศสัมพันธ์ แนะนำให้รีบพบแพทย์"}, 
             {color: "สีชมพู", tips: "อาจเกิดจากบาดแผลภายใน หรือการผันผวนของระดับฮอร์โมนเอสโตรเจนต่ำ ซึ่งเป็นสัญญาณของการตั้งท้องอ่อน ๆ"}, 
@@ -97,9 +102,8 @@ const AnalysisTab = () => {
         .where("user_id", "==", activeUser.key ? activeUser.key : route.params.activeUser)
         .where("menstrual_color", "in", colorCheck)
 
-        const allColorData = [];
         const unsubscribeColor = colorDoc.onSnapshot((querySnapshot) => {
-            
+            const allData = [];
             querySnapshot.forEach((res) => {
                 // console.log(res)
                 const { 
@@ -111,7 +115,7 @@ const AnalysisTab = () => {
                 // console.log(new Date(date + ""))
                 // console.log(parseDate(date))
                 if (parseDate(date) >= parseDate(startDate) && parseDate(date) <= parseDate(endDate)) {
-                    allColorData.push({ 
+                    queryColorResult.push({ 
                         key: res.id,
                         date, 
                         menstrual_color,
@@ -119,8 +123,11 @@ const AnalysisTab = () => {
                     });
                 }   
             });
-            setQueryColorResult(allColorData);
-            console.log("queryColorResult : " , queryColorResult)
+            // console.log("allData Colore: ", allData)
+            // setQueryColorResult(allData);
+            console.log("query color : " , queryColorResult)
+            // setQueryColorResult(allData);
+            // console.log("query color2 : " , queryColorResult)
         },
         (error) => {}
         );
@@ -131,9 +138,8 @@ const AnalysisTab = () => {
         .where("user_id", "==", activeUser.key ? activeUser.key : route.params.activeUser)
         .where("menstrual_notes", "array-contains-any", notesCheck)
 
-        const allNoteDataOut = [];
         const unsubscribeNotes = notesDoc.onSnapshot((querySnapshot) => {
-            const allNoteData = [];
+            const allData = [];
             querySnapshot.forEach((res) => {
                 // console.log(res)
                 const { 
@@ -147,7 +153,7 @@ const AnalysisTab = () => {
                     return matchingNote ? matchingNote.tips : "";
                 });
                 if (parseDate(date) >= parseDate(startDate) && parseDate(date) <= parseDate(endDate)) {
-                    allNoteData.push({ 
+                    allData.push({ 
                         key: res.id,
                         date, 
                         menstrual_notes: filteredNotes,
@@ -155,28 +161,12 @@ const AnalysisTab = () => {
                     });
                 }
             });
-            setQueryNotesResult(allNoteData);
-            console.log("allNoteData inside : " ,allNoteData)
-            const allNoteDataOut = [];
-            // console.log("queryNotesResult : " , queryNotesResult)
+            // console.log("allData Note: ", allData)
+            setQueryNotesResult(allData);
+            console.log("query note : ", queryNotesResult)
         },
         (error) => {}
         );
-
-        console.log("allColorData : ", allColorData)
-        // console.log("allNoteData : ", allNoteData)
-
-        const historyCollection = firebase.firestore().collection("histories");
-        historyCollection.add({
-            date: getDate(new Date()),
-            startDate: startDate,
-            endDate: endDate,
-            queryColorResult: allColorData,
-            queryNotesResult: allNoteDataOut,
-        })
-        .then((res) => {
-            
-        });
 
         return () => {
             unsubscribeColor();
@@ -184,8 +174,7 @@ const AnalysisTab = () => {
         };
     }
 
-    const addHistory =  () => {
-
+    addHistory = () => {
         const historyCollection = firebase.firestore().collection("histories");
         historyCollection.add({
             date: getDate(new Date()),
@@ -197,16 +186,16 @@ const AnalysisTab = () => {
         .then((res) => {
             
         });
-        // console.log("queryColorResult : ", queryColorResult)
+        console.log("queryColorResult : ", queryColorResult)
     }
 
-    const showResult = () => {
+    showResult = () => {
         return (
             <View style={{ width: 330}}>
                 <View style={{ marginTop: 10 }}>
                     {((queryColorResult.length > 0) && (queryNotesResult.length > 0)) ? (
                         <>
-                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมี "สีประจำเดือน"</Text>
+                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมีสีประจำเดือน</Text>
                             <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>ที่ผิดปกติเป็นเวลา {queryColorResult.length} วัน </Text>
                             <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                                 colors={['#9F79EB', '#FC7D7B']}
@@ -238,7 +227,7 @@ const AnalysisTab = () => {
                             ))}
                             <Text></Text>
 
-                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>และ "อาการร่วม" อื่น ๆ ที่พบเจอ</Text>
+                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>และอาการร่วมอื่น ๆ ที่พบเจอ</Text>
                             <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                                 colors={['#9F79EB', '#FC7D7B']}
                                 style={{
@@ -272,7 +261,7 @@ const AnalysisTab = () => {
                         </>
                     ) : ((queryColorResult.length > 0) && (queryNotesResult.length <= 0)) ? (
                         <>
-                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมี "สีประจำเดือน"</Text>
+                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมีสีประจำเดือน</Text>
                             <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>ที่ผิดปกติเป็นเวลา {queryColorResult.length} วัน </Text>
                             <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                                 colors={['#9F79EB', '#FC7D7B']}
@@ -306,7 +295,7 @@ const AnalysisTab = () => {
                         </>
                     ) : ((queryColorResult.length <= 0) && (queryNotesResult.length > 0)) ? (
                         <>
-                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมี "อาการร่วม" อื่น ๆ ที่สามารถพบเจอได้ในระหว่างเป็นประจำเดือน</Text>
+                            <Text style={[styles.text, {fontFamily: 'MitrMedium', fontSize: 17}]}>เราตรวจพบว่าคุณมีอาการร่วมอื่น ๆ ที่สามารถพบเจอได้ในระหว่างเป็นประจำเดือน</Text>
                             <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                                 colors={['#9F79EB', '#FC7D7B']}
                                 style={{
@@ -472,8 +461,8 @@ const AnalysisTab = () => {
                                 setCanAnalyst(false)
                                 setIsShowResult(true)
                                 analyst()
-                                // console.log(queryColorResult, queryNotesResult)
-                                // addHistory()
+                                console.log(queryColorResult, queryNotesResult)
+                                addHistory()
                             }
                             else {
                                 alert('โปรดระบุข้อมูลให้ครบถ้วน')
@@ -584,4 +573,3 @@ const styles = StyleSheet.create({
 });
 
 export default AnalysisTab;
-
