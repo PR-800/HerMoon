@@ -27,23 +27,20 @@ const AnalysisTab = () => {
     const [queryColorResult, setQueryColorResult] = useState([]);
     const [queryNotesResult, setQueryNotesResult] = useState([]);
     const [activeUser, setActiveUser] = useState({});
-    // const [hasAddedHistory, setHasAddedHistory] = useState(false);
+    const [dataPreapare, setDataPreapare] = useState();
 
     const route = useRoute();
 
     useEffect(() => {
         { route.params.activeUser ? setActiveUser(route.params.activeUser) : ""}
-        console.log("--- Analyst")
-        console.log(activeUser)
-        
-        // if (isShowResult && !hasAddedHistory) {
-        //     addHistory(queryColorResult, queryNotesResult);
-        //     console.log(queryColorResult, queryNotesResult)
-        //     setHasAddedHistory(true);
-        // }
 
-    }, []);
-    // }, [queryColorResult, queryNotesResult, isShowResult, hasAddedHistory]);
+        if(isShowResult) {
+            prepareData()
+        }
+
+        console.log("prepareData : ", prepareData())
+        
+    }, [isShowResult, queryColorResult, queryNotesResult]);
 
     getDate = (date) => {
         if (date instanceof Date) {
@@ -60,18 +57,19 @@ const AnalysisTab = () => {
     };
 
     const parseDate = (dateString) => {
-        const parts = dateString.split('/');
-        if (parts.length === 3) {
-            const day = parseInt(parts[0], 10);
-            const month = parseInt(parts[1], 10);
-            const year = parseInt(parts[2], 10);
-        
-            if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
-                // console.log("parse", new Date(year, month - 1, day))
-                return new Date(year, month - 1, day);
+        if (dateString && typeof dateString === 'string') {
+            const parts = dateString.split('/');
+            if (parts.length === 3) {
+                const day = parseInt(parts[0], 10);
+                const month = parseInt(parts[1], 10);
+                const year = parseInt(parts[2], 10);
+            
+                if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+                    return new Date(year, month - 1, day);
+                }
             }
+            return null;
         }
-        return null;
     };
 
     analyst = () => {
@@ -97,25 +95,19 @@ const AnalysisTab = () => {
         const notesCheck = abnormalNotes.map(item => item.note);
 
         const colorDoc = firebase.firestore().collection("dailyRecord")
-        // .where("date", ">=", startDate)
-        // .where("date", "<=", endDate)
         .where("user_id", "==", activeUser.key ? activeUser.key : route.params.activeUser)
         .where("menstrual_color", "in", colorCheck)
 
         const unsubscribeColor = colorDoc.onSnapshot((querySnapshot) => {
             const allData = [];
             querySnapshot.forEach((res) => {
-                // console.log(res)
                 const { 
                     date, 
                     menstrual_color,
                 } = res.data();
                 const colorTips = abnormalColor.find(item => item.color === menstrual_color)?.tips;
-                // console.log(date + "")
-                // console.log(new Date(date + ""))
-                // console.log(parseDate(date))
                 if (parseDate(date) >= parseDate(startDate) && parseDate(date) <= parseDate(endDate)) {
-                    queryColorResult.push({ 
+                    allData.push({ 
                         key: res.id,
                         date, 
                         menstrual_color,
@@ -123,25 +115,19 @@ const AnalysisTab = () => {
                     });
                 }   
             });
-            // console.log("allData Colore: ", allData)
-            // setQueryColorResult(allData);
-            console.log("query color : " , queryColorResult)
-            // setQueryColorResult(allData);
-            // console.log("query color2 : " , queryColorResult)
+            setQueryColorResult(allData);
+            console.log("queryColorResult : " , queryColorResult)
         },
         (error) => {}
         );
 
         const notesDoc = firebase.firestore().collection("dailyRecord")
-        // .where("date", ">=", startDate)
-        // .where("date", "<=", endDate)
         .where("user_id", "==", activeUser.key ? activeUser.key : route.params.activeUser)
         .where("menstrual_notes", "array-contains-any", notesCheck)
 
         const unsubscribeNotes = notesDoc.onSnapshot((querySnapshot) => {
             const allData = [];
             querySnapshot.forEach((res) => {
-                // console.log(res)
                 const { 
                     date, 
                     menstrual_notes,
@@ -161,9 +147,8 @@ const AnalysisTab = () => {
                     });
                 }
             });
-            // console.log("allData Note: ", allData)
             setQueryNotesResult(allData);
-            console.log("query note : ", queryNotesResult)
+            console.log("queryNotesResult : ", queryNotesResult)
         },
         (error) => {}
         );
@@ -174,22 +159,24 @@ const AnalysisTab = () => {
         };
     }
 
-    addHistory = () => {
-        const historyCollection = firebase.firestore().collection("histories");
-        historyCollection.add({
+    prepareData = () => {
+        setDataPreapare({
             date: getDate(new Date()),
             startDate: startDate,
             endDate: endDate,
             queryColorResult: queryColorResult,
             queryNotesResult: queryNotesResult,
         })
-        .then((res) => {
-            
-        });
-        console.log("queryColorResult : ", queryColorResult)
     }
 
-    showResult = () => {
+    addHistory = () => {
+        const historyCollection = firebase.firestore().collection("histories");
+        historyCollection
+        .add(dataPreapare)
+        .then((res) => {});
+    }
+
+    const showResult = () => {
         return (
             <View style={{ width: 330}}>
                 <View style={{ marginTop: 10 }}>
@@ -461,8 +448,10 @@ const AnalysisTab = () => {
                                 setCanAnalyst(false)
                                 setIsShowResult(true)
                                 analyst()
-                                console.log(queryColorResult, queryNotesResult)
-                                addHistory()
+                                setTimeout(() => {
+                                    addHistory()
+                                }, 1000);
+                                
                             }
                             else {
                                 alert('โปรดระบุข้อมูลให้ครบถ้วน')
@@ -478,9 +467,6 @@ const AnalysisTab = () => {
                     onPress={() => {
                         setCanAnalyst(true)
                         setIsShowResult(false)
-                        // setHasAddedHistory(false)
-                        // console.log(canAnalyst)
-                        // console.log(isShowResult)
                     }}
                 >
                     <MaterialCommunityIcons 
