@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity, Modal, Alert  } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -158,6 +158,11 @@ class ProfileScreen extends Component {
     render() {
         const {navigation} = this.props
 
+        let displayname = this.props.route.params.name
+
+        // console.log('displayname :>> ', displayname);
+        // console.log('this.state.name :>> ', this.state.name);
+
         // console.log('profilePictures:', profilePictures);
         // console.log('Selected picture:', this.state.selectedPicture);
 
@@ -189,12 +194,12 @@ class ProfileScreen extends Component {
                     </Pressable>
                     <Text style={styles.headers}>
                         {/* {this.state.activeUser.username} */}
-                        {this.state.name}
+                        {displayname ? displayname : this.state.name}
                     </Text>
-                    <Text style={styles.subheader}>
+                    {/* <Text style={styles.subheader}>
                         ระยะห่าง : {this.state.periodCycle} วัน {'\n'}
                         จำนวนวันที่เป็น : {this.state.freq} วัน
-                    </Text>
+                    </Text> */}
                     <View style={styles.box} >
                         <Pressable onPress={() => {
                             console.log("Active user from Profile")
@@ -384,8 +389,7 @@ const styles = StyleSheet.create({
     headers: {
         fontSize: 25,
         fontFamily: "MitrMedium",
-        marginTop: -40,
-        margin: 3,
+        marginTop: -30,
         color: "white",
 
         textShadowColor: 'rgba(0, 0, 0, 0.5)',

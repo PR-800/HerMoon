@@ -215,7 +215,7 @@ const HomeScreen = () => {
                 <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.todayborder}>
                     <Text style={styles.textHeader}>Today</Text>
                 </LinearGradient>
-                <Text style={[styles.textHeader, { paddingHorizontal: 22, color: 'black' }]}>{formatDate(date)}</Text>
+                <Text style={[styles.textHeader, { marginHorizontal: 15, color: 'black' }]}>{formatDate(date)}</Text>
             </View>
 
             <View style={{ marginBottom: 20, marginTop: 80, width: '80%' }}>

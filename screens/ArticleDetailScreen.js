@@ -4,7 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import firebase from '../data/firebaseDB';
 
-import ImageView from 'react-native-image-view';
+import ImageView from "react-native-image-viewing";
+
 
 import { format } from 'date-fns';
 import { th, tr } from 'date-fns/locale';
@@ -83,93 +84,80 @@ class ArticleDetailScreen extends Component {
 
     render() {
         const { navigation } = this.props
-
-        const coverImg = this.state
-        let viewImage = false;
-
-        try {
-            return (
-                <View style={styles.screen}>
-                    <LinearGradient
-                        start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-                        colors={['#9F79EB', '#FC7D7B',]}
-                        style={styles.gradientBackground}
-                    >
-                        <View style={styles.navbar}>
-                            <Pressable onPress={() => {
-                                navigation.navigate("Article", {});
-                            }}>
-                                <Image
-                                    style={styles.icon}
-                                    source={require('../assets/article/arrow-left-white.png')}
-                                />
-                            </Pressable>
-                            <View style={{ flex: 1, alignItems: 'center' }}>
-                                <Text style={styles.header} numberOfLines={2}>
-                                    {this.state.title}
-                                </Text>
-                            </View>
+          
+        return (
+            <View style={styles.screen}>
+                <LinearGradient
+                    start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                    colors={['#9F79EB', '#FC7D7B',]}
+                    style={styles.gradientBackground}
+                >
+                    <View style={styles.navbar}>
+                        <Pressable onPress={() => {
+                            navigation.navigate("Article", {});
+                        }}>
+                            <Image
+                                style={styles.icon}
+                                source={require('../assets/article/arrow-left-white.png')}
+                            />
+                        </Pressable>
+                        <View style={{ flex: 1, alignItems: 'center' }}>
+                            <Text style={styles.header} numberOfLines={2}>
+                                {this.state.title}
+                            </Text>
                         </View>
-                    </LinearGradient>
-    
-                    <View style={styles.box}>
-                        <ScrollView showsVerticalScrollIndicator={false}>
-                            <View style={{ minHeight: '100%' }}>
-                                <Text style={{fontFamily: 'MitrMedium', fontSize: 20, textAlign:'center'}}>
-                                    {this.state.title}
-                                </Text>
-    
-                                {this.state.coverImg && (
-                                    <Pressable onPress={() => {
-                                        viewImage = !viewImage
-                                        console.log('viewImage :>> ', viewImage);
-                                    }}>
-                                        <Image
-                                            style={{ alignSelf: 'center', margin: 20, width: '90%', aspectRatio: 3 / 3 }}
-                                            source={{ uri: this.state.coverImg }}
-                                        />
-                                    </Pressable>
-                                )}
-
-{/* Animated: `useNativeDriver` was not specified. This is a required option and must be explicitly set to `true` or `false` */}
-                                {/* <ImageView
-                                        images={[{
-                                            source: {
-                                                uri: 'https://cdn.pixabay.com/photo/2017/08/17/10/47/paris-2650808_960_720.jpg',
-                                            },
-                                                    title: 'Paris',
-                                                    width: 806,
-                                                    height: 720,
-                                                },
-                                            ]}
-                                        imageIndex={0}
-                                        isVisible={true}
-                                        // isVisible={this.state.viewImage}
-                                        // renderFooter={(currentImage) => (<View><Text>My footer</Text></View>)}
-                                    />
-     */}
-    
-                                <Text style={styles.detail}>
-                                {'\t'}{this.state.description}
-                                </Text>
-                                <Text style={{fontFamily: 'MitrRegular', textAlign: 'right', }} >
-                                    {'\n'}{'\n'}{this.state.formattedDate}
-                                    {'\n'}{/* Written by  */}
-                                    {this.state.name}
-                                </Text>
-                                
-                            </View>
-                        </ScrollView>
-    
                     </View>
-    
-    
-                </View>
-            );
+                </LinearGradient>
 
-        } catch (error) {
-            console.error('Image rendering error :', error);
-        }
+                <View style={styles.box}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <View style={{ minHeight: '100%' }}>
+                            <Text style={{fontFamily: 'MitrMedium', fontSize: 20, textAlign:'center'}}>
+                                {this.state.title}
+                            </Text>
+
+                            {this.state.coverImg && (
+                                <Pressable onPress={() => {
+                                    this.setState(prevState => ({ viewImage: !prevState.viewImage }));
+                                }}>
+                                    <Image
+                                        style={{ alignSelf: 'center', margin: 20, width: '90%', aspectRatio: 3 / 3 }}
+                                        source={{ uri: this.state.coverImg }}
+                                    />
+                                </Pressable>
+                            )}
+
+                            <ImageView
+                                images={[
+                                        {
+                                            uri: this.state.coverImg
+                                        },
+                                        ]}
+                                imageIndex={0}
+                                visible={this.state.viewImage}
+                                onRequestClose={() => {
+                                    this.setState({ viewImage: false });
+                                }}
+                            />
+
+
+                            <Text style={styles.detail}>
+                                {'\t'}{'\t'}{this.state.description}
+                            </Text>
+                            <Text style={{fontFamily: 'MitrRegular', textAlign: 'right', }} >
+                                {'\n'}{'\n'}{this.state.formattedDate}
+                                {'\n'}{/* Written by  */}
+                                {this.state.name}
+                            </Text>
+                            
+                        </View>
+                    </ScrollView>
+
+                </View>
+
+
+            </View>
+        );
 
     }
 }
