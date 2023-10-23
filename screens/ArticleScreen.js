@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { StyleSheet, Text, View, Image, Pressable, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable, ScrollView, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useFonts } from 'expo-font';
@@ -9,9 +9,6 @@ import { enableExpoCliLogging } from 'expo/build/logs/Logs';
 
 import { format } from 'date-fns';
 import { th, tr } from 'date-fns/locale';
-
-import SearchFilter from 'react-native-search-filter';
-
 
 
 class ArticleScreen extends Component {
@@ -24,7 +21,7 @@ class ArticleScreen extends Component {
             // Initialize your state variables here
             article_list: [],
             searchTerm: '',
-            displaySearch: false,
+            displaySearch: true,
         }
     }
 
@@ -79,7 +76,9 @@ class ArticleScreen extends Component {
 
         return ( 
             // navbar
-            <View style={styles.screen}>
+            <KeyboardAvoidingView style={styles.screen}
+            behavior={Platform.OS === 'android' ? 500 : 180}
+            >
                 <LinearGradient
                 start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                 colors={['#9F79EB', '#FC7D7B',]}
@@ -186,7 +185,7 @@ class ArticleScreen extends Component {
 
                 </ScrollView>
 
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 
@@ -244,7 +243,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 20,
-        // fontWeight: "bold",
+        paddingTop: 5,
         marginVertical: 5,
         lineHeight: 25,
         fontFamily: 'MitrMedium'
@@ -300,8 +299,8 @@ const styles = StyleSheet.create({
     },
     clearButton: {
         position: 'absolute',
-        top: 8,
-        right: 10,
+        top: 37,
+        right: 90,
       },
       clearIcon: {
         width: 15,
