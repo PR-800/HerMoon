@@ -14,6 +14,8 @@ import MenstrualVolumeLevelModel from '../components/MenstrualVolumeLevelModal';
 import NotesModal from '../components/NotesModal';
 import CalendarStripC from '../components/CalendarStrip';
 
+import { Icon } from '@iconify/react';
+
 const HomeScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
@@ -281,7 +283,7 @@ const HomeScreen = () => {
 
             <View style={{ marginBottom: 20, marginTop: 80, width: '80%' }}>
                 <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>สวัสดี !</Text>
-                <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', left: 0 }}>
+                <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', left: 0 }} numberOfLines={1}>
                     {/* {activeUser.username} */}
                     {name}
                 </Text>
@@ -294,8 +296,8 @@ const HomeScreen = () => {
                     });
                 }}>
                     <Image
-                        source={require('../assets/Home/clock-icon.png')}
-                        style={[styles.image, { width: 50, height: 50 }]}
+                        source={require('../assets/Home/analysis.png')}
+                        style={[styles.image, { width: 65, height: 65, left: 10, }]}
                     /></Pressable>
             </View>
 
@@ -308,11 +310,13 @@ const HomeScreen = () => {
 
 
             <Text style={styles.textNormal}>บันทึกข้อมูลรอบเดือน</Text>
-            <View style={{ marginTop: -40, marginBottom: 5, marginLeft: 250 }}>
+            <View style={{ marginTop: -40, marginBottom: 5, marginLeft: 200, }}>
                 <TouchableOpacity onPress={AddMonthlySummary}>
+                {/* <Icon icon="material-symbols:save-as" color="#b292f3" /> */}
                     <Image
-                        source={require('../assets/Home/save04-icon.png')}
-                        style={{ width: 50, height: 50, marginLeft: 10, }}
+                        source={require('../assets/Home/save.png')}
+                        // source={require('../assets/Home/save04-icon.png')}
+                        style={{ width: 40, height: 40, marginLeft: 5, }}
                     />
                 </TouchableOpacity></View>
 

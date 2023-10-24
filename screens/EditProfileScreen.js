@@ -56,13 +56,14 @@ const EditProfileScreen = ({ route, navigation }) => {
   const [dob, setDob] = useState();
   const [img, setImg] = useState();
   const [detail, setDetail] = useState();
+  console.log('detail :>> ', detail);
 
   const [oldPassword, setOldPassword] = useState();
   const [newPassword, setNewPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
-  const [oldPasswordShow, setOldPasswordShow] = useState(false);
-  const [newPasswordShow, setNewPasswordShow] = useState(false);
-  const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
+  const [oldPasswordShow, setOldPasswordShow] = useState(true);
+  const [newPasswordShow, setNewPasswordShow] = useState(true);
+  const [confirmPasswordShow, setConfirmPasswordShow] = useState(true);
 
   const [helperCycle, setHelperCycle] = useState(false)
   const [helperFreq, setHelperFreq] = useState(false)
@@ -134,7 +135,7 @@ const EditProfileScreen = ({ route, navigation }) => {
           setDob(doc.dob);
           setImg(doc.img);
           setDetail(doc.detail);
-          console.log('route.params.name => ', doc)
+          // console.log('route.params.name => ', doc)
         }
         else {
           console.log("Document does not exist");
@@ -426,7 +427,10 @@ const EditProfileScreen = ({ route, navigation }) => {
           onPress={() => setModalVisible(true)}
         >
           <Text style={styles.textStyle}>ระบุรายละเอียดเพิ่มเติม</Text>
-          <Text style={{ ...styles.selectedTagsText, margin: 3 }}>{selectedTags.length >= 1 ? 'รายการที่เลือก : ' + selectedTags.join(', ') : ''}</Text>
+          <Text style={{ ...styles.selectedTagsText, margin: 3 }}>
+
+            {detail ? detail.flat().map(detailList => `\u2022 ${detailList}`).join('\n') : selectedTags ?  selectedTags.flat().map(selectedTag => `\u2022 ${selectedTag}`).join('\n') : ''}
+            </Text>
         </Pressable>
 
       </ScrollView>
@@ -484,7 +488,7 @@ const EditProfileScreen = ({ route, navigation }) => {
                     ]}
                     onPress={() => toggleTag(tag)}
                   >
-                    <Text style={[styles.tagText, { color: selectedTags.includes(tag) ? 'white' : 'black' }]}>{tag}</Text>
+                    <Text style={[styles.tagText, { color: selectedTags.flat().includes(tag) ? 'white' : 'black' }]}>{tag}</Text>
                   </TouchableOpacity>
                 ))}
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', }}>
@@ -494,7 +498,7 @@ const EditProfileScreen = ({ route, navigation }) => {
 
             </View>
             <View>
-              <Text style={{ ...styles.selectedTagsText }}>{selectedTags.length >= 1 ? 'รายการที่เลือก : ' + selectedTags.join(', ') : ''}</Text>
+              <Text style={{ ...styles.selectedTagsText }}>{selectedTags.length >= 1 ? 'รายการที่เลือก : ' + selectedTags.flat().join(', ') : ''}</Text>
             </View>
 
             <Pressable
@@ -832,7 +836,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize: 16,
     fontFamily: "MitrRegular",
-    color: '#A43BA6',
+    // color: '#A43BA6',
   },
   changepassText: {
     backgroundColor: "#e7e0ec",
