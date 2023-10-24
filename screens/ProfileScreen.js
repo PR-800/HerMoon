@@ -192,7 +192,7 @@ class ProfileScreen extends Component {
                             style={{width:50, height:50,bottom:50, left:55, backgroundColor: 'white', borderRadius: 25}}
                         />
                     </Pressable>
-                    <Text style={styles.headers}>
+                    <Text style={styles.headers} numberOfLines={1}>
                         {/* {this.state.activeUser.username} */}
                         {displayname ? displayname : this.state.name}
                     </Text>
@@ -391,6 +391,7 @@ const styles = StyleSheet.create({
         fontFamily: "MitrMedium",
         marginTop: -30,
         color: "white",
+        width: 300,
 
         textShadowColor: 'rgba(0, 0, 0, 0.5)',
         textShadowOffset: {width: -1, height: 2},
