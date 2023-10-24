@@ -200,6 +200,7 @@ class TutorialScreen extends Component {
                                 underlineColor="transparent"
                                 activeUnderlineColor="grey"
                                 textColor="black"
+                                keyboardType = 'numeric'
 
                                 label="ส่วนสูง (ซม.)"
                                 onChangeText={(val) => this.inputValueUpdate(val, "height")}

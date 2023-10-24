@@ -265,6 +265,7 @@ const EditProfileScreen = ({ route, navigation }) => {
             underlineColor="transparent"
             activeUnderlineColor="grey"
             textColor="black"
+            keyboardType='numeric'
 
             label="ส่วนสูง (ซม.)"
             onChangeText={(val) => setHeight(val)}
