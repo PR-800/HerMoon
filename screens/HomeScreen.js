@@ -38,6 +38,8 @@ const HomeScreen = () => {
 
     const date = new Date(); //สำหรับแสดงวันที่
 
+    // console.log('route.params (home):>> ', route.params);
+
     // ตั้งเวลาแจ้งเตือน
     const scheduleNotificationAtDate = async (title, body) => {
         try {
@@ -285,7 +287,8 @@ const HomeScreen = () => {
                 <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>สวัสดี !</Text>
                 <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', left: 0 }} numberOfLines={1}>
                     {/* {activeUser.username} */}
-                    {name}
+                    {/* {name} */}
+                    {route.params.name}
                 </Text>
             </View>
 
@@ -316,7 +319,7 @@ const HomeScreen = () => {
                     <Image
                         source={require('../assets/Home/save.png')}
                         // source={require('../assets/Home/save04-icon.png')}
-                        style={{ width: 40, height: 40, marginLeft: 5, }}
+                        style={{ width: 50, height: 50, marginLeft: 5, }}
                     />
                 </TouchableOpacity></View>
 

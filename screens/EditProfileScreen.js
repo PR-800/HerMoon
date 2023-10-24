@@ -450,8 +450,8 @@ const EditProfileScreen = ({ route, navigation }) => {
           setCycle(cycle);
           setFreq(freq);
           setImg(img);
+          navigation.navigate("Home", { name: name });
           navigation.navigate("Profile", {name: name});
-          return console.log("SUBMITED")
         }}>
           <Text style={{ color: "white", fontSize: 20, fontFamily: "MitrMedium", }}>
             ยืนยัน

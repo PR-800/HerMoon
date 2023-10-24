@@ -43,7 +43,7 @@ const NotificationScreen = ({ route, navigation }) => {
             if (status === 'granted') {
                 // ผู้ใช้มีสิทธิ์การแจ้งเตือนแล้ว
                 // จากที่นี้คุณสามารถเรียกใช้ `scheduleNotification`
-                const targetDate = new Date('2023-10-24T02:38:40'); // ตั้งเวลาในอนาคต (ให้แก้ไขค่านี้ตามวันที่และเวลาที่ต้องการ)
+                const targetDate = new Date('2023-10-24T08:42:00'); // ตั้งเวลาในอนาคต (ให้แก้ไขค่านี้ตามวันที่และเวลาที่ต้องการ)
                 scheduleNotificationAtDate('คำเตือน', 'อย่าลืมพกผ้าอนามัยนะ', targetDate);
                 console.log('อย่าลืมพกผ้าอนามัยนะ')
             } else {
