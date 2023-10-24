@@ -23,7 +23,7 @@ class LoginScreen extends Component {
             activeUser: null,
 
             // modalChangePass
-            modalVisible: true,
+            modalVisible: false,
             usernameChecking: '',
             newPassword: '',
             confirmPassword: '',
@@ -31,35 +31,35 @@ class LoginScreen extends Component {
             newPasswordShowing: true,
             confirmPasswordShowing: true,
 
+            name: "",
+            img: '',
+            height: null,
+            weight: null,
+            dob: null,
+            periodCycle: 0,
+            freq: null,
+            new_user: true,
+            detail: []
+
         };
     }
 
-    updateAccount = () => {
+    updateAccount = (thisKey) => {
+
         const accountDoc = firebase.firestore().collection("accounts")
-          .doc(route.params.activeUser.key);
+        .doc(thisKey);
     
         accountDoc
-            .update({
-            username: this.state.activeUser.username,
-            password: this.state.activeUser.password,
-            name: this.state.name,
-            height: this.state.height,
-            weight: this.state.weight,
-            dob: this.state.dob,
-            periodCycle: this.state.cycle,
-            freq: this.state.freq,
-            new_user: this.state.false,
-            img: this.state.img,
-            detail: this.state.selectedTags,
-            })
-            .then(() => {
+        .update({
+            username: this.state.usernameChecking,
+            password: this.state.newPassword,
+        })
+        .then(() => {
             console.log("ข้อมูลถูกอัปเดตเรียบร้อย");
-            })
-            .catch((error) => {
+        })
+        .catch((error) => {
             console.error("เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ", error);
-            });
-            console.log('detail :>> ', detail);
-            console.log('selectedTags in detail :>> ', selectedTags);
+        });
     }
 
     inputValueUpdate = (val, prop) => {
@@ -70,14 +70,25 @@ class LoginScreen extends Component {
 
     getCollection = (querySnapshot) => {
         querySnapshot.forEach((res) => {
-            const { username, password, new_user } = res.data();
-            this.state.all_data.push({ key: res.id, username, password, new_user });
+            const { 
+                username, 
+                password, 
+                new_user,
+            } = res.data();
+            this.state.all_data.push({ 
+                key: res.id, 
+                username, 
+                password, 
+                new_user,
+            });
         });
     };
 
     componentDidMount() {
         this.prepareResources()
         this.unsubscribe = this.accountCollection.onSnapshot(this.getCollection);
+
+        console.log(this.state.key, " key")
     }
 
     componentWillUnmount() {
@@ -166,9 +177,9 @@ class LoginScreen extends Component {
                     <TouchableOpacity 
                         onPress={() => {
                             this.setState((prevState) => ({
-                              modalVisible: !prevState.modalVisible,
+                                modalVisible: !prevState.modalVisible,
                             }));
-                          }}
+                        }}
                     >
                         <Text style={[styles.text, { 
                                 left: 80, 
@@ -187,6 +198,7 @@ class LoginScreen extends Component {
                             this.state.all_data.map((item, i) => {
                                 if (this.state.username === item.username && this.state.password === item.password) {
                                     match = true
+                                    
                                     if (item.new_user == false) {
                                         this.props.navigation.navigate("homePage", {
                                             screen: "Profile",
@@ -209,9 +221,7 @@ class LoginScreen extends Component {
                             if (!match) {
                                 Dialog.show({
                                     type: ALERT_TYPE.WARNING,
-                                    title: (
-                                        <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>Invalid username or password</Text>
-                                    ),
+                                    title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</Text>,
                                     button: 'OK',
                                 });
                             }
@@ -265,7 +275,7 @@ class LoginScreen extends Component {
                         activeOpacity={1}
                     >
                         <View style={[styles.modalView, { paddingVertical: 30 }]}>
-                            <Text style={[styles.modalText, { marginVertical: 10 }]}>แก้ไขรหัสผ่าน</Text>
+                            <Text style={[styles.modalText, { marginVertical: 10 }]}>เปลี่ยนรหัสผ่าน</Text>
 
                             <View style={{ backgroundColor: 'white', borderRadius: 20, width: '90%', height: 275, alignSelf: 'center' }}>
                                 {/* <ScrollView vertical showsVerticalScrollIndicator={false}> */}
@@ -278,22 +288,9 @@ class LoginScreen extends Component {
                                     underlineColor="transparent"
                                     activeUnderlineColor="grey"
                                     label="ชื่อผู้ใช้"
-                                    // secureTextEntry={this.state.oldPasswordShowing}
                                     onChangeText={(text) => this.setState({ usernameChecking: text })}
                                     value={this.state.usernameChecking}
                                 />
-
-                                    {/* <MaterialCommunityIcons
-                                        name={this.state.oldPasswordShowing ? 'eye-off' : 'eye'}
-                                        size={25}
-                                        color="#aaa"
-                                        onPress={() => {
-                                            this.setState((prevState) => ({
-                                                oldPasswordShowing: !prevState.oldPasswordShowing,
-                                            }));
-                                        }}
-                                        style={{ position: 'absolute', right: 30, top: 30 }}
-                                    /> */}
 
                                     <TextInput
                                         style={[styles.input, { alignSelf: 'center', width: 265 }]}
@@ -352,15 +349,31 @@ class LoginScreen extends Component {
                             <View style={{ flexDirection: 'row' }}>
                                 <Pressable
                                     onPress={() => {
+                                        var thisKey = "";
                                         this.state.all_data.map((item, i) => {
                                             console.log(this.state.usernameChecking + " + " + item.username)
                                             if (this.state.usernameChecking === item.username) {
                                                 checkUsername = true
+                                                console.log(item.key)
+                                                this.setState({ key: item.key })
+                                                thisKey = item.key
+                                                console.log("key ", this.state.key)
                                             }
                                         })
                                         if (this.state.usernameChecking != "" && this.state.newPassword != "" && this.state.confirmPassword != "") {
                                             if (checkUsername === true) {
                                                 if (this.state.newPassword == this.state.confirmPassword) {
+
+                                                    console.log("thisKey ", thisKey)
+
+                                                    this.updateAccount(thisKey)
+
+                                                    this.setState({
+                                                        usernameChecking: '',
+                                                        oldPassword: '',
+                                                        newPassword: '',
+                                                        confirmPassword: '',
+                                                    })
 
                                                     Dialog.show({
                                                         type: ALERT_TYPE.SUCCESS,
@@ -369,59 +382,41 @@ class LoginScreen extends Component {
                                                     });
 
                                                 }
+                                                else {
+                                                    Dialog.show({
+                                                        type: ALERT_TYPE.WARNING,
+                                                        title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>โปรดตรวจสอบความถูกต้องของข้อมูล</Text>,
+                                                        button: 'OK',
+                                                    });
+                                                }
                                             }
                                             else {
-                                                console.log('ไม่เจ๋ง');
-                                            }
+                                                this.setState({
+                                                    usernameChecking: '',
+                                                    oldPassword: '',
+                                                    newPassword: '',
+                                                    confirmPassword: '',
+                                                })
 
+                                                Dialog.show({
+                                                    type: ALERT_TYPE.WARNING,
+                                                    title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>ขออภัย ไม่พบผู้ใช้ดังกล่าว</Text>,
+                                                    button: 'OK',
+                                                });
+                                            }
                                         }
                                         else {
-                                            console.log('ไม่กรอก');
+                                            Dialog.show({
+                                                type: ALERT_TYPE.WARNING,
+                                                title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>โปรดระบุข้อมูลให้ครบถ้วน</Text>,
+                                                button: 'OK',
+                                            });
                                         }
 
-
-                                        // if (activeUser.name === oldPassword) {
-                                        //     if (newPassword === confirmPassword) {
-                                        //         activeUser.password = newPassword
-                                        //         updateAccount()
-                                        //         this.setState({
-                                        //             oldPassword: '',
-                                        //             newPassword: '',
-                                        //             confirmPassword: '',
-                                        //         })
-                                        //         Dialog.show({
-                                        //             type: ALERT_TYPE.SUCCESS,
-                                        //             title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>เปลี่ยนรหัสผ่านสำเร็จ</Text>,
-                                        //             button: 'OK',
-                                        //         });
-                                        //     }
-                                        //     else {
-                                        //         this.setState({
-                                        //             oldPassword: '',
-                                        //             newPassword: '',
-                                        //             confirmPassword: '',
-                                        //         })
-                                        //         Dialog.show({
-                                        //             type: ALERT_TYPE.WARNING,
-                                        //             title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>โปรดตรวจสอบรหัสผ่านอีกครั้ง</Text>,
-                                        //             button: 'OK',
-                                        //         });
-                                        //     }
-                                        // } else {
-                                        //     this.setState({
-                                        //         oldPassword: '',
-                                        //         newPassword: '',
-                                        //         confirmPassword: '',
-                                        //     })
-                                        //     Dialog.show({
-                                        //         type: ALERT_TYPE.WARNING,
-                                        //         title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>โปรดตรวจสอบรหัสผ่านอีกครั้ง</Text>,
-                                        //         button: 'OK',
-                                        //     });
-                                        // }
                                         this.setState((prevState) => ({
                                             modalVisible: !prevState.modalVisible,
                                         }));
+
                                     }}>
 
                                     <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
@@ -434,6 +429,7 @@ class LoginScreen extends Component {
                                 <Pressable
                                     onPress={() => {
                                         this.setState({
+                                            usernameChecking: '',
                                             oldPassword: '',
                                             newPassword: '',
                                             confirmPassword: '',

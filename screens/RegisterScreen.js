@@ -60,8 +60,10 @@ class SignUpScreen extends Component {
             height: null,
             weight: null,
             dob: null,
-            periodCycle: 0,
+            periodCycle: null,
+            freq: null,
             new_user: true,
+            detail: [],
         })
         .then((res) => {
             this.setState({username: "", password: ""});
@@ -188,7 +190,7 @@ class SignUpScreen extends Component {
                                     Dialog.show({
                                         type: ALERT_TYPE.SUCCESS,
                                         title: (
-                                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>สมัครสมาชิกสำเร็จ โปรเข้าสู่ระบบ</Text>
+                                            <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>สมัครสมาชิกสำเร็จ โปรดเข้าสู่ระบบ</Text>
                                         ),
                                         button: 'OK',
                                         onPress: () => {
