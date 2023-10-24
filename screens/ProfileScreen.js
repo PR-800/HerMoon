@@ -276,7 +276,7 @@ class ProfileScreen extends Component {
         
                     </View>
 
-                    <View style={{...styles.logoutButton, justifyContent: 'flex-end'}}>
+                    <View style={{...styles.logoutButton, justifyContent: 'flex-end', zIndex:10}}>
                         <Pressable onPress={() => {
                             Alert.alert(
                                 "ยืนยันการออกจากระบบ",
@@ -392,6 +392,7 @@ const styles = StyleSheet.create({
         marginTop: -30,
         color: "white",
         width: 300,
+        textAlign: 'center',
 
         textShadowColor: 'rgba(0, 0, 0, 0.5)',
         textShadowOffset: {width: -1, height: 2},

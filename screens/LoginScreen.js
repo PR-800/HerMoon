@@ -39,7 +39,8 @@ class LoginScreen extends Component {
             periodCycle: 0,
             freq: null,
             new_user: true,
-            detail: []
+            detail: [],
+            
 
         };
     }
@@ -197,6 +198,7 @@ class LoginScreen extends Component {
                         onPress={() => {
                             this.state.all_data.map((item, i) => {
                                 if (this.state.username === item.username && this.state.password === item.password) {
+                                    console.log('valid')
                                     match = true
                                     
                                     if (item.new_user == false) {
@@ -219,9 +221,18 @@ class LoginScreen extends Component {
                                 }
                             })
                             if (!match) {
+                                console.log('!match')
                                 Dialog.show({
                                     type: ALERT_TYPE.WARNING,
                                     title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</Text>,
+                                    button: 'OK',
+                                });
+                            }
+                            else {
+                                console.log('match')
+                                Dialog.show({
+                                    type: ALERT_TYPE.SUCCESS,
+                                    title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>เข้าสู่ระบบเรียบร้อย</Text>,
                                     button: 'OK',
                                 });
                             }
