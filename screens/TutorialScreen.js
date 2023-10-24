@@ -5,6 +5,7 @@ import { TextInput, HelperText } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 
 import * as Font from 'expo-font';
 
@@ -362,7 +363,11 @@ class TutorialScreen extends Component {
                                     });
                                 }
                                 else {
-                                    alert("โปรดกรอกข้อมูลให้ครบถ้วน")
+                                    Dialog.show({
+                                        type: ALERT_TYPE.WARNING,
+                                        title: <Text style={{ fontFamily: 'MitrRegular', fontSize: 18 }}>โปรดกรอกข้อมูลให้ครบถ้วน</Text>,
+                                        button: 'OK',
+                                    });
                                 }
                             }}
                         >
