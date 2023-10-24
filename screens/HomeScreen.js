@@ -273,26 +273,23 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.screen}>
-
+            
             <CalendarStripC />
 
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -110 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: -115 }}>
                 <LinearGradient colors={['#9F79EB', '#FC7D7B',]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.todayborder}>
                     <Text style={styles.textHeader}>Today</Text>
                 </LinearGradient>
-                <Text style={[styles.textHeader, { marginHorizontal: 15, color: 'black' }]}>{formatDate(date)}</Text>
+                <Text style={[styles.textHeader, { marginHorizontal: 45, color: 'black' }]}>{formatDate(date)}</Text>
             </View>
 
-            <View style={{ marginBottom: 20, marginTop: 80, width: '80%' }}>
-                <Text style={{ fontSize: 15, color: "#8461D5", fontFamily: 'MitrRegular', }}>สวัสดี !</Text>
+            <View style={{ marginBottom: 20, marginTop: 90, width: '80%' }}>
+                <Text style={{ fontSize: 18, color: "#8461D5", fontFamily: 'MitrRegular', }}>Welcome !!</Text>
                 <Text style={{ fontSize: 20, fontFamily: 'MitrRegular', left: 0 }} numberOfLines={1}>
-                    {/* {activeUser.username} */}
-                    {/* {name} */}
-                    {route.params.name}
+                    {route.params.name ? route.params.name : name}
                 </Text>
-            </View>
 
-            <View style={{ marginLeft: -250 }}>
+                <View style={{ marginLeft: 260, marginTop: -50}}>
                 <Pressable onPress={() => {
                     navigation.navigate("History", {
                         activeUser: activeUser
@@ -303,6 +300,7 @@ const HomeScreen = () => {
                         style={[styles.image, { width: 65, height: 65, left: 10, }]}
                     /></Pressable>
             </View>
+            </View>
 
             <View style={{ marginTop: -30, marginBottom: 20 }}>
                 <Image
@@ -312,16 +310,8 @@ const HomeScreen = () => {
             </View>
 
 
-            <Text style={styles.textNormal}>บันทึกข้อมูลรอบเดือน</Text>
-            <View style={{ marginTop: -40, marginBottom: 5, marginLeft: 200, }}>
-                <TouchableOpacity onPress={AddMonthlySummary}>
-                {/* <Icon icon="material-symbols:save-as" color="#b292f3" /> */}
-                    <Image
-                        source={require('../assets/Home/save.png')}
-                        // source={require('../assets/Home/save04-icon.png')}
-                        style={{ width: 50, height: 50, marginLeft: 5, }}
-                    />
-                </TouchableOpacity></View>
+            <Text style={[styles.textNormal, {margin: 5, fontFamily: 'MitrMedium'}]}>บันทึกข้อมูลรอบเดือน</Text>
+           
 
             <ScrollView showsVerticalScrollIndicator={false} >
                 <View style={{ marginBottom: 20 }}>
@@ -369,6 +359,16 @@ const HomeScreen = () => {
                         </View>
                     </TouchableOpacity>
                     <NotesModal visible={modalVisibleNotes} onClose={NotesIcon} navigation={navigation}></NotesModal>
+                    <TouchableOpacity onPress={AddMonthlySummary}>
+                        <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                            colors={['#9F79EB', '#FC7D7B',]}
+                            style={[styles.linearGradientModal, { width: 300 }]}
+                        >
+                            <Text style={{ color: "white", fontSize: 16, fontFamily: "MitrMedium", }}>
+                                บันทึก
+                            </Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
             {/* เรียกใช้ alert */}
@@ -380,6 +380,7 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
     screen: {
+        marginTop: 10,
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
@@ -410,6 +411,12 @@ const styles = StyleSheet.create({
     textNormal: {
         fontFamily: 'MitrRegular',
         fontSize: 16
+    },
+    linearGradientModal: {
+        height: 45,
+        borderRadius: 25,
+        alignItems: "center",
+        justifyContent: "center",
     },
 
 });
